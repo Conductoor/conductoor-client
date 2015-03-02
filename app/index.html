@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>conductor</title>
+    <title>polymer projects</title>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/phases.css">
     <!-- endbuild-->
 
     <!-- build:js bower_components/webcomponentsjs/webcomponents.min.js -->
@@ -20,11 +21,34 @@
     <!-- endbuild-->
   </head>
   <body unresolved>
-    <div class="hero-unit">
-      <yo-greeting></yo-greeting>
-      <p>You now have</p>
-      <yo-list></yo-list>
-    </div>
+    
+    <core-scaffold id="core_scaffold">
+      <core-header-panel mode="seamed" id="core_header_panel" navigation flex>
+
+        <core-toolbar id="core_toolbar">
+          <div>Conductor</div>  
+        </core-toolbar>
+
+        <div id="phases-wrapper">
+          <!-- <core-menu selected="0">
+        
+            <div id="phase-title">Phases</div>
+            
+            <core-item label="testi">
+              <div class="phase">
+                <div class="phase-heading" onclick="document.querySelector('#phase1').toggle();">Phase x</div>
+                <core-collapse id="phase1">
+                  <div class="phase-content">Categories and workers here</div>
+                </core-collapse>
+              </div>
+            </core-item>
+
+          </core-menu> -->
+        </div>
+
+      </core-header-panel>
+      <div id="div" tool>Project name</div>
+    </core-scaffold>
 
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
