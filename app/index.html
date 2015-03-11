@@ -9,7 +9,6 @@
 
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/phases.css">
     <!-- endbuild-->
 
     <!-- build:js bower_components/webcomponentsjs/webcomponents.min.js -->
@@ -20,34 +19,73 @@
     <link rel="import" href="elements/elements.html">
     <!-- endbuild-->
   </head>
-  <body unresolved>
+  <body unresolved fullbleed>
     
     <core-scaffold id="core_scaffold">
-      <core-header-panel mode="seamed" id="core_header_panel" navigation flex>
 
-        <core-toolbar id="core_toolbar">
-          <div>Conductor</div>  
+
+      <!-- Toolbar: brand, links to pages, logout -->
+      <core-toolbar fullbleed tool flex>
+        <h1 flex>Project name</h1>
+
+        <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+                <core-menu>
+                    <core-item>My Projects</core-item>
+                    <core-item>Help</core-item>
+                    <core-item>Logout</core-item>
+                </core-menu>
+            </core-dropdown>
+        </core-menu-button>
+
+      </core-toolbar>
+
+
+
+      <!-- Left panel -->
+      <core-header-panel mode="seamed" id="core_header_panel" navigation flex>
+        
+        <core-toolbar tool>
+          <span flex id="app-name">Conductoor</span>  
         </core-toolbar>
 
-        <div id="phases-wrapper">
-          <!-- <core-menu selected="0">
-        
-            <div id="phase-title">Phases</div>
-            
-            <core-item label="testi">
-              <div class="phase">
-                <div class="phase-heading" onclick="document.querySelector('#phase1').toggle();">Phase x</div>
-                <core-collapse id="phase1">
-                  <div class="phase-content">Categories and workers here</div>
-                </core-collapse>
-              </div>
-            </core-item>
+        <core-menu class="phases-wrapper" selected="0">
+          <h2>Phases:</h2>
 
-          </core-menu> -->
-        </div>
+          <!-- TESTAUSTA -->
+          <div class="phase">
+            <paper-item class="phase-header" onclick="document.querySelector('#phase1').toggle();">Planning phase</paper-item>
+            <core-collapse id="phase1" class="phase-content">
+              <div class="phase-content">
+                <span flex>Skill category</span>
+                <div>worker</div>
+              </div>
+            </core-collapse>
+          </div>
+
+          <div class="phase">
+            <paper-item class="phase-header" onclick="document.querySelector('#phase2').toggle();">Design phase</paper-item>
+            <core-collapse id="phase2" class="phase-content">
+              <div class="phase-content">Categories and workers here</div>
+            </core-collapse>
+          </div>
+
+          <div class="phase">
+            <paper-item class="phase-header" onclick="document.querySelector('#phase3').toggle();">Implementation phase</paper-item>
+            <core-collapse id="phase3" class="phase-content">
+              <div class="phase-content">Categories and workers here</div>
+            </core-collapse>
+          </div>
+        </core-menu>
+
+
 
       </core-header-panel>
-      <div id="div" tool>Project name</div>
+
+
+
+
     </core-scaffold>
 
     <!-- build:js scripts/app.js -->

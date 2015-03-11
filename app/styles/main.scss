@@ -1,29 +1,69 @@
+// Color Palette:
+$primary: #3d6d8f;
+$secondary: #8ca6b8;
+$bg-primary: #ededed;
+$bg-secondary: #dcdcdc;
+$positive: #89bb87;
+$negative: #ba6f6f;
+$text-color: #303030;
+
+// Fonts:
+$basic-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$title-font: 'Trebuchet MS';
+
+
 body {
-  background: #7da6fe;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #333;
+  background: $bg-primary;
+  font-family: $basic-font;
+  color: $text-color;
 }
-
-.hero-unit {
-  margin: 50px auto 0 auto;
-  width: 300px;
+h1{
+  font-family: $title-font;
+  font-weight: 700;
+  font-size: 24px;
+}
+h2{
+  font-family: $title-font;
+  font-weight: 400;
   font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  background-color: #eee;
-  border-radius: 6px;
-  padding: 60px;
+}
+#app-name{
+  font-family: $title-font;
+  font-size: 20px;
+  color: #fff;
+}
+#app-name .logo{
+  height: 30px;
+  width: auto;
 }
 
-.hero-unit h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
+core-scaffold::shadow core-toolbar{
+  background: $primary;
+}
+core-header-panel::shadow #mainContainer{
+  background: $bg-primary;
 }
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+core-toolbar{
+  background: $primary;
 }
+
+// Nämä voisi varmaan siirtää omiin filuihin...
+
+/* Phases area */
+.phase.core-selected .phase-header{
+  background: $primary;
+}
+.phase-header{
+  background: $secondary;
+  color: #fff;
+  border-bottom: 1px solid $bg-secondary;
+}
+.phase-content{
+  margin: 5px;
+}
+/* END Phases area */
+
+
+
+
