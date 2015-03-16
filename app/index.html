@@ -44,46 +44,147 @@
 
 
       <!-- Left panel -->
-      <core-header-panel mode="seamed" id="core_header_panel" navigation flex>
+      <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
         
         <core-toolbar tool>
           <span flex id="app-name">Conductoor</span>  
         </core-toolbar>
 
+        <!-- Phases -->
         <core-menu class="phases-wrapper" selected="0">
           <h2>Phases:</h2>
 
-          <!-- TESTAUSTA -->
+          <!-- Layoutin rakennusta... -->
           <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase1').toggle();">Planning phase</paper-item>
+            <paper-item class="phase-header" onclick="document.querySelector('#phase1').toggle();">
+              Planning phase
+              <div class="phase-color-code"></div>
+            </paper-item>
             <core-collapse id="phase1" class="phase-content">
               <div class="phase-content">
-                <span flex>Skill category</span>
-                <div>worker</div>
+                <details>
+                  <summary>Skill category</summary>
+                  <div class="phase-skill-workers">
+                    <div flex>worker</div>
+                    <div flex>worker</div>
+                  </div>
+                </details>
+                <details>
+                  <summary>Skill category</summary>
+                  <div class="phase-skill-workers">
+                    <div flex>worker</div>
+                    <div flex>worker</div>
+                  </div>
+                </details>
               </div>
             </core-collapse>
           </div>
 
           <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase2').toggle();">Design phase</paper-item>
+            <paper-item class="phase-header" onclick="document.querySelector('#phase2').toggle();">
+              Design phase
+              <div class="phase-color-code"></div>
+            </paper-item>
             <core-collapse id="phase2" class="phase-content">
               <div class="phase-content">Categories and workers here</div>
             </core-collapse>
           </div>
 
           <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase3').toggle();">Implementation phase</paper-item>
+            <paper-item class="phase-header" onclick="document.querySelector('#phase3').toggle();">
+            Implementation phase
+            <div class="phase-color-code"></div>
+          </paper-item>
             <core-collapse id="phase3" class="phase-content">
               <div class="phase-content">Categories and workers here</div>
             </core-collapse>
           </div>
         </core-menu>
-
-
+        <!-- END Phases -->
 
       </core-header-panel>
+      <!-- END Left panel -->
 
 
+
+      <!-- Right panel -->
+      <div vertical layout fit class="right-panel">
+
+        <!-- Selected skill -->
+        <div horizontal layout class="selected-skill-preview">
+          <span class="skill-thumbnail">JS</span>
+          <div class="circle free">3</div>
+          <div class="circle reserved">8</div>
+        </div>
+
+        <div flex two relative class="resource-panel">
+
+          <!-- Skills, Resources, Worker profile -->
+          <div horizontal layout fit class="resource-panel-sections">
+            <div flex self-stretch class="section skills">
+              <h3>Skills:</h3>
+              <!-- Dummies -->
+              <div class="skill" layout horizontal>
+                <div flex>Skill name 1</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <div class="skill selected" layout horizontal>
+                <div flex>Skill name 2</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <div class="skill" layout horizontal>
+                <div flex>Skill name 3</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <!-- Toteutetaan core-listin avulla...
+              <core-list data="{{skills}}" flex>
+                <template>
+                  <div class="row" layout horizontal center>
+                    <div flex>{{skill.name}}</div>
+                    <div class="circle free small">{{skill.free}}</div>
+                    <div class="circle reserved small">{{skill.reserved}}</div>
+                  </div>
+                </template>
+              </core-list>-->
+            </div>
+            <div flex self-stretch class="section resources">
+              <h3>Resources:</h3>
+              <!-- Dummies -->
+              <div class="resource free selected">
+                <div class="resource-name">John Doe</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">John Doe</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">John Doe</div>
+              </div>
+              <!-- core-list... -->
+            </div>
+            <div flex self-stretch class="section profile">
+              <h3>Profile:</h3>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Timeline --> 
+        <div flex three class="timeline-panel">
+
+          <div class="timeline-header">
+            <h2 flex>Project timeline</h2>
+          </div>
+
+          <div class="timeline">
+          </div>
+          
+        </div>
+
+      </div>
+      <!-- END Right panel -->
 
 
     </core-scaffold>
