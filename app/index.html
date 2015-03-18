@@ -99,6 +99,15 @@
               <div class="phase-content">Categories and workers here</div>
             </core-collapse>
           </div>
+          <div class="phase">
+            <paper-item class="phase-header" onclick="document.querySelector('#phase4').toggle();">
+            Closure phase
+            <div class="phase-color-code"></div>
+          </paper-item>
+            <core-collapse id="phase4" class="phase-content">
+              <div class="phase-content">Categories and workers here</div>
+            </core-collapse>
+          </div>
         </core-menu>
         <!-- END Phases -->
 
@@ -111,34 +120,57 @@
       <div vertical layout fit class="right-panel">
 
         <!-- Selected skill -->
-        <div horizontal layout class="selected-skill-preview">
-          <span class="skill-thumbnail">JS</span>
-          <div class="circle free">3</div>
-          <div class="circle reserved">8</div>
+        <div horizontal layout center-justified class="selected-skill-preview">
+          <div><span class="selected-skill arrow-right">Javascript</span></div>
+          <div><div class="arrow-right"><div class="circle free">3</div></div></div>
+          <div><div class="arrow-right"><div class="circle reserved">4</div></div></div>
         </div>
 
+        <!-- Skills, Resources, Worker profile -->
         <div flex two relative class="resource-panel">
-
-          <!-- Skills, Resources, Worker profile -->
           <div horizontal layout fit class="resource-panel-sections">
+
+            <!-- Skills -->
             <div flex self-stretch class="section skills">
               <h3>Skills:</h3>
+              
               <!-- Dummies -->
-              <div class="skill" layout horizontal>
-                <div flex>Skill name 1</div>
+              <div class="skill" center layout horizontal>
+                <div flex>Graphical Design</div>
                 <div class="circle free small">3</div>
                 <div class="circle reserved small">4</div>
               </div>
-              <div class="skill selected" layout horizontal>
-                <div flex>Skill name 2</div>
+              <div class="skill selected" center layout horizontal>
+                <div flex>Javascript</div>
                 <div class="circle free small">3</div>
                 <div class="circle reserved small">4</div>
               </div>
-              <div class="skill" layout horizontal>
-                <div flex>Skill name 3</div>
+              <div class="skill" center layout horizontal>
+                <div flex>Python</div>
                 <div class="circle free small">3</div>
                 <div class="circle reserved small">4</div>
               </div>
+              <div class="skill" center layout horizontal>
+                <div flex>Python</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <div class="skill" center layout horizontal>
+                <div flex>Python</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <div class="skill" center layout horizontal>
+                <div flex>Python</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              <div class="skill" center layout horizontal>
+                <div flex>Python</div>
+                <div class="circle free small">3</div>
+                <div class="circle reserved small">4</div>
+              </div>
+              
               <!-- Toteutetaan core-listin avulla...
               <core-list data="{{skills}}" flex>
                 <template>
@@ -150,6 +182,8 @@
                 </template>
               </core-list>-->
             </div>
+
+            <!-- Resources -->
             <div flex self-stretch class="section resources">
               <h3>Resources:</h3>
               <!-- Dummies -->
@@ -157,31 +191,98 @@
                 <div class="resource-name">John Doe</div>
               </div>
               <div class="resource reserved">
-                <div class="resource-name">John Doe</div>
+                <div class="resource-name">Sarah Davidson</div>
               </div>
               <div class="resource reserved">
-                <div class="resource-name">John Doe</div>
+                <div class="resource-name">Dummy Dude</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Sarah Davidson</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Dummy Dude</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Sarah Davidson</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Dummy Dude</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Sarah Davidson</div>
+              </div>
+              <div class="resource reserved">
+                <div class="resource-name">Dummy Dude</div>
               </div>
               <!-- core-list... -->
             </div>
-            <div flex self-stretch class="section profile">
-              <h3>Profile:</h3>
+
+            <!-- Profile -->
+            <div flex self-stretch relative>
+              <div vertical layout fit class="section profile">
+
+                <div flex three relative class="profile-header">
+                  <div horizontal layout center fit>
+                    <div flex two>
+                      <div class="profile-img"><img src="images/no_image.png"></div>
+                    </div>
+                    <div flex three>
+                      <div class="profile-name">John Doe</div>
+                      <div class="profile-title">UI Designer</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div flex one relative class="profile-main-skill">
+                  <div horizontal layout center fit center-justified>
+                    <div>Main skill: UI Design</div>
+                  </div>
+                </div>
+
+                <div flex two relative class="profile-skills">
+                  <div horizontal layout fit>
+                    <div flex>
+                      <ul>
+                        <li>Skill 1</li>
+                        <li>Skill 2</li>
+                        <li>Skill 3</li>
+                        <li>Skill 4</li>
+                        <li>Skill 4</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div flex one relative class="profile-add">
+                  <div horizontal layout center center-justified fit>
+                    <div>
+                      <button>Add</button>
+                    </div>
+                  </div>
+                </div>
+                
+
+
+              </div>
             </div>
+
           </div>
-
         </div>
+        <!-- END Skills, Resources, Worker profile -->
 
-        <!-- Timeline --> 
+        <!-- Timeline -->
+        
         <div flex three class="timeline-panel">
-
           <div class="timeline-header">
-            <h2 flex>Project timeline</h2>
+            <h3>Project timeline</h3>
           </div>
 
           <div class="timeline">
           </div>
           
         </div>
+
+        <!-- END Timeline --> 
 
       </div>
       <!-- END Right panel -->

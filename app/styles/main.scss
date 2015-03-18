@@ -20,6 +20,7 @@ $extra-bold: Impact;
 body {
   background: $bg-primary;
   font-family: $basic-font;
+  font-size: 12px;
   color: $text-color;
 }
 h1{
@@ -32,6 +33,11 @@ h2{
   font-weight: 400;
   font-size: 18px;
 }
+h3{
+  margin: 5px 0px 5px 0px;
+  font-size: 16px;
+  font-family: $title-font;
+}
 #app-name{
   font-family: $title-font;
   font-size: 20px;
@@ -42,7 +48,8 @@ h2{
   width: auto;
 }
 .right-panel{
-  border-left: 2px solid $secondary;
+  border-left: 4px solid $bg-secondary;
+  background: $bg-secondary;
 }
 
 core-scaffold::shadow core-toolbar{
@@ -59,15 +66,21 @@ core-toolbar{
 // Nämä voisi varmaan siirtää omiin filuihin...
 
 /* Timeline */
-.timeline-header{
-  padding-left: 10px;
+.timeline-panel{
+  margin-top: 5px;
+  background: $bg-primary;
 }
+.timeline-header{
+  padding-left: 5px;
+}
+
 /* END Timeline */
 
 
 
 /* Resource panel */
 .resource-panel{
+  background: $bg-primary;
   border-bottom: 2px solid $secondary;
   -webkit-box-shadow: 0px 1px 8px 0px rgba(50, 50, 50, 0.2);
   -moz-box-shadow:    0px 1px 8px 0px rgba(50, 50, 50, 0.2);
@@ -78,13 +91,32 @@ core-toolbar{
   line-height: 40px;
   font-weight: 700;
   border-bottom: 2px solid $secondary;
-  font-size: 20px;
-
+  font-size: 14px;
+  background: $bg-secondary;
+  float: right;
 }
-.selected-skill-preview .skill-thumbnail{
-  font-family: $extra-bold;
-  font-size: 24px;
+.selected-skill-preview > div{
+  display: inline-block;
+  position: relative;
+  margin-right: 25px;
+}
+.selected-skill-preview .selected-skill{
+  font-family: $title-font;
   margin-right: 5px;
+}
+.arrow-right::after{
+  content: "";
+  display: block;
+  width: 28px;
+  height: 28px;
+  -webkit-transform: translateX(-50%) rotate(45deg);
+  transform: translateX(-50%) rotate(45deg);
+  background: transparent;
+  border-right: 2px solid $bg-primary;
+  border-top: 2px solid $bg-primary;
+  position: absolute;
+  top: 15%;
+  right: -28px;
 }
 .circle{
   height: 30px;
@@ -95,6 +127,7 @@ core-toolbar{
   border-radius: 40px;
   line-height: 30px;
   text-align: center;
+  color: #fff;
 }
 .circle.small{
   height: 20px;
@@ -108,21 +141,21 @@ core-toolbar{
 .circle.reserved{
   background: $negative;
 }
-.resource-panel-sections{
+.scroll-content{
+  overflow: scroll;
 }
 .resource-panel-sections .section{
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-}
-.resource-panel-sections .section h3{
-  margin: 0px 0px 5px 0px;
-  font-size: 16px;
-  font-family: $title-font;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .resource-panel-sections .section:nth-child(2){
   border-left: 2px solid $secondary;
   border-right: 2px solid $secondary;
+}
+/* Resources and Skills */
+.skills, .resources{
+  overflow: scroll;
+  margin-bottom: 5px;
 }
 .resource-panel-sections .skills core-list{
   height: 40px;
@@ -136,7 +169,7 @@ core-toolbar{
   padding-right: 5px;
   padding-left: 5px;
   margin-bottom: 3px;
-  color: $text-color;
+  color: #fff;
 }
 .skill.selected{
   background: $primary !important;
@@ -148,8 +181,51 @@ core-toolbar{
   background: $negative !important;
 }
 .resource.selected{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   border: 2px solid $primary;
 }
+/* END Resources and Skills */
+
+/* Profile */
+.profile .profile-main-skill{
+  font-size: 14px;
+  border-bottom: 2px solid $bg-secondary;
+}
+.profile .profile-img img{
+  width: 100%;
+  height: auto;
+  -webkit-clip-path: circle(33% at center);
+  clip-path: circle(33% at center);
+}
+.profile-header{
+  font-family: $title-font;
+  font-size: 18px;
+}
+.profile-name{
+  font-size: 22px;
+  font-weight: 700;
+  border-bottom: 4px solid $secondary;
+  display: inline-block;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+.profile-title{
+  font-style: italic;
+}
+.profile-skills{
+  overflow: scroll;
+}
+.profile-skills ul{
+  list-style-type: circle;
+}
+.profile-skills ul li{
+  width: 50%;
+  // display: inline;
+  float: left;
+}
+/* END Profile */
 /* END Resource panel */
 
 
