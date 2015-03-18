@@ -1,0 +1,17 @@
+// Color Palette:
+$primary: #3d6d8f;
+$secondary: #8ca6b8;
+$bg-primary: #ededed;
+$bg-secondary: #dcdcdc;
+$positive: #89bb87;
+$negative: #ba6f6f;
+$text-color: #303030;
+
+// Color codes:
+// #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
+// Random color can be calculated with Javascript --> '#'+Math.floor(Math.random()*16777215).toString(16);
+
+// Fonts:
+$basic-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$title-font: 'Trebuchet MS';
+$extra-bold: Impact;
