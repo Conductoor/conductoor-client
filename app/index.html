@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild-->
 
+    <!-- build:css styles/timesheet.css -->
+    <link rel="stylesheet" href="styles/timesheet.css">
+    <!-- endbuild-->
+
     <!-- build:js bower_components/webcomponentsjs/webcomponents.min.js -->
     <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
     <!-- endbuild -->
@@ -60,24 +64,26 @@
               Planning phase
               <div class="phase-color-code"></div>
             </paper-item>
-            <core-collapse id="phase1" class="phase-content">
-              <div class="phase-content">
-                <details>
-                  <summary>Skill category</summary>
-                  <div class="phase-skill-workers">
-                    <div flex>worker</div>
-                    <div flex>worker</div>
-                  </div>
-                </details>
-                <details>
-                  <summary>Skill category</summary>
-                  <div class="phase-skill-workers">
-                    <div flex>worker</div>
-                    <div flex>worker</div>
-                  </div>
-                </details>
-              </div>
-            </core-collapse>
+            <div>
+              <core-collapse id="phase1">
+                <div class="phase-content">
+                  <details>
+                    <summary>Skill category</summary>
+                    <div class="phase-skill-workers">
+                      <div flex>worker</div>
+                      <div flex>worker</div>
+                    </div>
+                  </details>
+                  <details>
+                    <summary>Skill category</summary>
+                    <div class="phase-skill-workers">
+                      <div flex>worker</div>
+                      <div flex>worker</div>
+                    </div>
+                  </details>
+                </div>
+              </core-collapse>
+            </div>
           </div>
 
           <div class="phase">
@@ -85,29 +91,37 @@
               Design phase
               <div class="phase-color-code"></div>
             </paper-item>
-            <core-collapse id="phase2" class="phase-content">
-              <div class="phase-content">Categories and workers here</div>
-            </core-collapse>
+            <div>
+              <core-collapse id="phase2">
+                <div class="phase-content">Categories and workers here</div>
+              </core-collapse>
+            </div>
           </div>
 
           <div class="phase">
             <paper-item class="phase-header" onclick="document.querySelector('#phase3').toggle();">
-            Implementation phase
-            <div class="phase-color-code"></div>
-          </paper-item>
-            <core-collapse id="phase3" class="phase-content">
-              <div class="phase-content">Categories and workers here</div>
-            </core-collapse>
+              Implementation phase
+              <div class="phase-color-code"></div>
+            </paper-item>
+            <div>
+              <core-collapse id="phase3">
+                <div class="phase-content">Categories and workers here</div>
+              </core-collapse>
+            </div>
           </div>
+
           <div class="phase">
             <paper-item class="phase-header" onclick="document.querySelector('#phase4').toggle();">
-            Closure phase
-            <div class="phase-color-code"></div>
-          </paper-item>
-            <core-collapse id="phase4" class="phase-content">
-              <div class="phase-content">Categories and workers here</div>
-            </core-collapse>
+              Closure phase
+              <div class="phase-color-code"></div>
+            </paper-item>
+            <div>
+              <core-collapse id="phase4">
+                <div class="phase-content">Categories and workers here</div>
+              </core-collapse>
+            </div>
           </div>
+          
         </core-menu>
         <!-- END Phases -->
 
@@ -120,10 +134,12 @@
       <div vertical layout fit class="right-panel">
 
         <!-- Selected skill -->
-        <div horizontal layout center-justified class="selected-skill-preview">
+        <div horizontal layout center-justified class="selected-preview">
+          <div><span class="selected-phase arrow-right">Design phase</span></div>
           <div><span class="selected-skill arrow-right">Javascript</span></div>
           <div><div class="arrow-right"><div class="circle free">3</div></div></div>
           <div><div class="arrow-right"><div class="circle reserved">4</div></div></div>
+          <div><span class="selected-worker arrow-right">John Doe</span></div>
         </div>
 
         <!-- Skills, Resources, Worker profile -->
@@ -277,7 +293,8 @@
             <h3>Project timeline</h3>
           </div>
 
-          <div class="timeline">
+          <div horizontal layout>
+            <div flex id="timeline"></div>
           </div>
           
         </div>
@@ -293,5 +310,25 @@
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
     <!-- endbuild-->
+
+    <!-- build:js scripts/timesheet.js -->
+    <script src="scripts/timesheet.js"></script>
+    <!-- endbuild-->
+
+    <script type="text/javascript">
+    new Timesheet('timeline', 2002, 2013, [
+      ['2002', '09/2002', 'A freaking awesome time', 'lorem'],
+      ['06/2002', '09/2003', 'Some great memories', 'ipsum'],
+      ['2003', 'Had very bad luck'],
+      ['10/2003', '2006', 'At least had fun', 'lorem'],
+      ['02/2005', '05/2006', 'Enjoyed those times as well', 'ipsum'],
+      ['07/2005', '09/2005', 'Bad luck again', 'default'],
+      ['10/2005', '2008', 'For a long time nothing happened', 'dolor'],
+      ['01/2008', '05/2009', 'LOST Season #4', 'lorem'],
+      ['01/2009', '05/2009', 'LOST Season #4', 'lorem'],
+      ['02/2010', '05/2010', 'LOST Season #5', 'lorem'],
+      ['09/2008', '06/2010', 'FRINGE #1 & #2', 'ipsum']
+    ]);
+    </script>
   </body>
 </html>
