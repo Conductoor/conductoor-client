@@ -55,10 +55,11 @@
         </core-toolbar>
 
         <!-- Phases -->
+        <h2 class="phases-title">Phases:</h2>
+        <phases-menu></phases-menu>
+        <!-- Layoutin rakennusta... Poistetaan nämä kun phases element toimii 
         <core-menu class="phases-wrapper" selected="0">
-          <h2>Phases:</h2>
-
-          <!-- Layoutin rakennusta... -->
+          
           <div class="phase">
             <paper-item class="phase-header" onclick="document.querySelector('#phase1').toggle();">
               Planning phase
@@ -88,7 +89,10 @@
 
           <div class="phase">
             <paper-item class="phase-header" onclick="document.querySelector('#phase2').toggle();">
-              Design phase
+              <div vertical layout>
+                <span class="phase-name">Design phase</span>
+                <span class="phase-duration">1/2015 - 8/2015</span>
+              </div>
               <div class="phase-color-code"></div>
             </paper-item>
             <div>
@@ -121,8 +125,8 @@
               </core-collapse>
             </div>
           </div>
-          
-        </core-menu>
+
+        </core-menu>-->
         <!-- END Phases -->
 
       </core-header-panel>
@@ -149,88 +153,13 @@
             <!-- Skills -->
             <div flex self-stretch class="section skills">
               <h3>Skills:</h3>
-              
-              <!-- Dummies -->
-              <div class="skill" center layout horizontal>
-                <div flex>Graphical Design</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill selected" center layout horizontal>
-                <div flex>Javascript</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill" center layout horizontal>
-                <div flex>Python</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill" center layout horizontal>
-                <div flex>Python</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill" center layout horizontal>
-                <div flex>Python</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill" center layout horizontal>
-                <div flex>Python</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              <div class="skill" center layout horizontal>
-                <div flex>Python</div>
-                <div class="circle free small">3</div>
-                <div class="circle reserved small">4</div>
-              </div>
-              
-              <!-- Toteutetaan core-listin avulla...
-              <core-list data="{{skills}}" flex>
-                <template>
-                  <div class="row" layout horizontal center>
-                    <div flex>{{skill.name}}</div>
-                    <div class="circle free small">{{skill.free}}</div>
-                    <div class="circle reserved small">{{skill.reserved}}</div>
-                  </div>
-                </template>
-              </core-list>-->
+              <skill-list></skill-list>
             </div>
 
             <!-- Resources -->
             <div flex self-stretch class="section resources">
               <h3>Resources:</h3>
-              <!-- Dummies -->
-              <div class="resource free selected">
-                <div class="resource-name">John Doe</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Sarah Davidson</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Dummy Dude</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Sarah Davidson</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Dummy Dude</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Sarah Davidson</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Dummy Dude</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Sarah Davidson</div>
-              </div>
-              <div class="resource reserved">
-                <div class="resource-name">Dummy Dude</div>
-              </div>
-              <!-- core-list... -->
+              <resource-list></resource-list>
             </div>
 
             <!-- Profile -->

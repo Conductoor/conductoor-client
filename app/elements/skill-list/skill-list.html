@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!--
+En saanut core-listia toimimaan... -Teemu
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+-->
+
+<polymer-element name="skill-list" attributes="">
+  <template>
+    <!-- build:css skill-list.css -->
+    <link rel="stylesheet" type="text/css" href="skill-list.css">
+    <!-- endbuild-->
+    
+    <template repeat="{{skill in skills}}">
+      <div class="skill" center layout horizontal>
+        <div flex>{{skill.name}}</div>
+        <div class="circle free small">{{skill.free}}</div>
+        <div class="circle reserved small">{{skill.reserved}}</div>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    (function () {
+      Polymer( "skill-list", {
+        created: function() {
+          this.skills = [
+            {name: "Javascript", free: "3", reserved: "5"},
+            {name: "UI Design", free: "3", reserved: "5"},
+            {name: "PHP", free: "3", reserved: "5"},
+            {name: "Python", free: "3", reserved: "5"},
+            {name: "Python", free: "3", reserved: "5"},
+            {name: "Python", free: "3", reserved: "5"},
+            {name: "Python", free: "3", reserved: "5"}
+          ];
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+

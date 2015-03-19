@@ -1,0 +1,35 @@
+@import "../../styles/palette";
+
+:host {
+  display: block;
+}
+.phase > div{
+  border-left: 1px solid $bg-secondary;
+  border-right: 1px solid $bg-secondary;
+  border-bottom: 1px solid $bg-secondary;
+}
+.phase.core-selected .phase-header{
+  background: $primary;
+}
+.phase-header{
+  background: $secondary;
+  color: #fff;
+  border-bottom: 1px solid $bg-secondary;
+}
+.phase-name{
+
+}
+.phase-duration{
+  margin-top: 3px;
+  font-size: 10px;
+}
+#phase_content > div{
+  margin: 5px;
+}
+.phase-color-code{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+}

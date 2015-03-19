@@ -1,0 +1,68 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<polymer-element name="phases-menu" attributes="">
+  <template>
+    <!-- build:css phases-menu.css -->
+    <link rel="stylesheet" type="text/css" href="phases-menu.css">
+    <!-- endbuild-->
+    <core-menu class="phases-wrapper" selected="0">
+      <template repeat="{{phase in phases}}">
+        <div class="phase">
+          <paper-item class="phase-header" onclick="{{openPhase()}}">
+            <div vertical layout>
+              <span class="phase-name">{{phase.name}}</span>
+              <span class="phase-duration">{{phase.duration.start}}-{{phase.duration.end}}</span>
+            </div>
+            <div class="phase-color-code" style="background: #{{phase.color}}"></div>
+          </paper-item>
+          <div>
+            <core-collapse id="phase_content">
+              <div>
+                <!-- tähän template kans -->
+                <details>
+                  <summary>Skill category</summary>
+                  <div class="phase-skill-workers">
+                    <div flex>worker</div>
+                    <div flex>worker</div>
+                  </div>
+                </details>
+              </div>
+            </core-collapse>
+          </div>
+        </div>
+      </template>
+    </core-menu>
+  </template>
+
+  <script>
+    (function () {
+      Polymer( "phases-menu", {
+        created: function() {
+          this.phases = [
+            // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
+            {name: "Planning", id: 1, color: "33ADD6", duration: {start: "1/2015", end: "3/2015"}},
+            {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/2015", end: "3/2015"}},
+            {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/2015", end: "3/2015"}},
+            {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/2015", end: "3/2015"}},
+            {name: "Closure", id: 5, color: "FFE680", duration: {start: "1/2015", end: "3/2015"}}
+
+            // "skills":{
+            //   {name: "Javascript"},
+            //   {name: "UI Design"},
+            //   {name: "PHP"}
+            // }
+            
+          ];
+        },
+        openPhase: function(){
+          
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+

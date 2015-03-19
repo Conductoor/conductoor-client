@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!--
+En saanut core-listia toimimaan... -Teemu
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+-->
+
+<polymer-element name="resource-list" attributes="">
+  <template>
+    <!-- build:css resource-list.css -->
+    <link rel="stylesheet" type="text/css" href="resource-list.css">
+    <!-- endbuild-->
+    
+    <template repeat="{{resource in resources}}">
+      <div class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
+        <div class="resource-name">{{resource.name}}</div>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    (function () {
+      Polymer( "resource-list", {
+        created: function() {
+          this.resources = [
+            {name: "John Doe", free: 1},
+            {name: "John Doe", free: 1},
+            {name: "John Doe", free: 0},
+            {name: "John Doe", free: 0},
+            {name: "John Doe", free: 0},
+            {name: "John Doe", free: 1},
+            {name: "John Doe", free: 0},
+            {name: "John Doe", free: 1},
+            {name: "John Doe", free: 0} 
+          ];
+        }
+      });
+    })();
+  </script>
+
+</polymer-element>
+
