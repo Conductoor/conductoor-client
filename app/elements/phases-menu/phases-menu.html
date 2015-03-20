@@ -11,7 +11,7 @@
     <core-menu class="phases-wrapper" selected="0">
       <template repeat="{{phase in phases}}">
         <div class="phase">
-          <paper-item class="phase-header" onclick="{{openPhase()}}">
+          <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.id}}">
             <div vertical layout>
               <span class="phase-name">{{phase.name}}</span>
               <span class="phase-duration">{{phase.duration.start}}-{{phase.duration.end}}</span>
@@ -19,7 +19,7 @@
             <div class="phase-color-code" style="background: #{{phase.color}}"></div>
           </paper-item>
           <div>
-            <core-collapse id="phase_content">
+            <core-collapse id="phase_content{{phase.id}}">
               <div>
                 <!-- tähän template kans -->
                 <details>
@@ -57,8 +57,10 @@
             
           ];
         },
-        openPhase: function(){
-          
+        openPhase: function(event, detail, sender){
+          var querystring = "#phase_content"+sender.getAttribute("target-id");
+          this.shadowRoot.querySelector(querystring).toggle();
+          //this.setAttribute("active");
         }
       });
     })();
