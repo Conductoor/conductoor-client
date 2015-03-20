@@ -24,7 +24,7 @@
     <!-- endbuild-->
   </head>
   <body unresolved fullbleed>
-    
+
     <core-scaffold id="core_scaffold">
 
 
@@ -49,85 +49,14 @@
 
       <!-- Left panel -->
       <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
-        
+
         <core-toolbar tool>
-          <span flex id="app-name">Conductoor</span>  
+          <span flex id="app-name">Conductoor</span>
         </core-toolbar>
 
         <!-- Phases -->
         <h2 class="phases-title">Phases:</h2>
         <phases-menu></phases-menu>
-        <!-- Layoutin rakennusta... Poistetaan nämä kun phases element toimii 
-        <core-menu class="phases-wrapper" selected="0">
-          
-          <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase1').toggle();">
-              Planning phase
-              <div class="phase-color-code"></div>
-            </paper-item>
-            <div>
-              <core-collapse id="phase1">
-                <div class="phase-content">
-                  <details>
-                    <summary>Skill category</summary>
-                    <div class="phase-skill-workers">
-                      <div flex>worker</div>
-                      <div flex>worker</div>
-                    </div>
-                  </details>
-                  <details>
-                    <summary>Skill category</summary>
-                    <div class="phase-skill-workers">
-                      <div flex>worker</div>
-                      <div flex>worker</div>
-                    </div>
-                  </details>
-                </div>
-              </core-collapse>
-            </div>
-          </div>
-
-          <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase2').toggle();">
-              <div vertical layout>
-                <span class="phase-name">Design phase</span>
-                <span class="phase-duration">1/2015 - 8/2015</span>
-              </div>
-              <div class="phase-color-code"></div>
-            </paper-item>
-            <div>
-              <core-collapse id="phase2">
-                <div class="phase-content">Categories and workers here</div>
-              </core-collapse>
-            </div>
-          </div>
-
-          <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase3').toggle();">
-              Implementation phase
-              <div class="phase-color-code"></div>
-            </paper-item>
-            <div>
-              <core-collapse id="phase3">
-                <div class="phase-content">Categories and workers here</div>
-              </core-collapse>
-            </div>
-          </div>
-
-          <div class="phase">
-            <paper-item class="phase-header" onclick="document.querySelector('#phase4').toggle();">
-              Closure phase
-              <div class="phase-color-code"></div>
-            </paper-item>
-            <div>
-              <core-collapse id="phase4">
-                <div class="phase-content">Categories and workers here</div>
-              </core-collapse>
-            </div>
-          </div>
-
-        </core-menu>-->
-        <!-- END Phases -->
 
       </core-header-panel>
       <!-- END Left panel -->
@@ -197,7 +126,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div flex one relative class="profile-add">
                   <div horizontal layout center center-justified fit>
                     <div>
@@ -205,18 +133,14 @@
                     </div>
                   </div>
                 </div>
-                
-
-
               </div>
             </div>
-
           </div>
         </div>
         <!-- END Skills, Resources, Worker profile -->
 
         <!-- Timeline -->
-        
+
         <div flex three class="timeline-panel">
           <div class="timeline-header">
             <h3>Project timeline</h3>
@@ -225,10 +149,10 @@
           <div horizontal layout>
             <div flex id="timeline"></div>
           </div>
-          
+
         </div>
 
-        <!-- END Timeline --> 
+        <!-- END Timeline -->
 
       </div>
       <!-- END Right panel -->
@@ -245,19 +169,19 @@
     <!-- endbuild-->
 
     <script type="text/javascript">
-    new Timesheet('timeline', 2002, 2013, [
-      ['2002', '09/2002', 'A freaking awesome time', 'lorem'],
-      ['06/2002', '09/2003', 'Some great memories', 'ipsum'],
-      ['2003', 'Had very bad luck'],
-      ['10/2003', '2006', 'At least had fun', 'lorem'],
-      ['02/2005', '05/2006', 'Enjoyed those times as well', 'ipsum'],
-      ['07/2005', '09/2005', 'Bad luck again', 'default'],
-      ['10/2005', '2008', 'For a long time nothing happened', 'dolor'],
-      ['01/2008', '05/2009', 'LOST Season #4', 'lorem'],
-      ['01/2009', '05/2009', 'LOST Season #4', 'lorem'],
-      ['02/2010', '05/2010', 'LOST Season #5', 'lorem'],
-      ['09/2008', '06/2010', 'FRINGE #1 & #2', 'ipsum']
-    ]);
+      new Timesheet('timeline', 2002, 2013, [
+        ['2002', '09/2002', 'A freaking awesome time', 'lorem'],
+        ['06/2002', '09/2003', 'Some great memories', 'ipsum'],
+        ['2003', 'Had very bad luck'],
+        ['10/2003', '2006', 'At least had fun', 'lorem'],
+        ['02/2005', '05/2006', 'Enjoyed those times as well', 'ipsum'],
+        ['07/2005', '09/2005', 'Bad luck again', 'default'],
+        ['10/2005', '2008', 'For a long time nothing happened', 'dolor'],
+        ['01/2008', '05/2009', 'LOST Season #4', 'lorem'],
+        ['01/2009', '05/2009', 'LOST Season #4', 'lorem'],
+        ['02/2010', '05/2010', 'LOST Season #5', 'lorem'],
+        ['09/2008', '06/2010', 'FRINGE #1 & #2', 'ipsum']
+      ]);
     </script>
   </body>
 </html>

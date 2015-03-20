@@ -2,16 +2,36 @@
 <link rel="import" href="../../bower_components/core-menu/core-menu.html">
 <link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 
 <polymer-element name="phases-menu" attributes="">
   <template>
     <!-- build:css phases-menu.css -->
     <link rel="stylesheet" type="text/css" href="phases-menu.css">
     <!-- endbuild-->
+    <!-- ajax functionality -->
+    <core-ajax
+      id = "projectAjax"
+      auto
+      url="http://conductoor-api.herokuapp.com/users/1/"
+      params='{"alt":"json", "q":"chrome"}'
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
+    <core-ajax
+      id ="projectAjaxPost"
+      url="http://conductoor-api.herokuapp.com/users/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponsePost}}"
+      core-error="{{handleErrorPost}}">
+    </core-ajax>
     <core-menu class="phases-wrapper" selected="0">
       <template repeat="{{phase in phases}}">
         <div class="phase">
-          <paper-item class="phase-header" onclick="{{openPhase()}}">
+          <paper-item class="phase-header" on-click="{{openPhase}}" elemid="{{phase.id}}">
             <div vertical layout>
               <span class="phase-name">{{phase.name}}</span>
               <span class="phase-duration">{{phase.duration.start}}-{{phase.duration.end}}</span>
@@ -19,7 +39,7 @@
             <div class="phase-color-code" style="background: #{{phase.color}}"></div>
           </paper-item>
           <div>
-            <core-collapse id="phase_content">
+            <core-collapse id="phase_content{{phase.id}}">
               <div>
                 <!-- tähän template kans -->
                 <details>
@@ -38,30 +58,57 @@
   </template>
 
   <script>
-    (function () {
-      Polymer( "phases-menu", {
-        created: function() {
-          this.phases = [
-            // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
-            {name: "Planning", id: 1, color: "33ADD6", duration: {start: "1/2015", end: "3/2015"}},
-            {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/2015", end: "3/2015"}},
-            {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/2015", end: "3/2015"}},
-            {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/2015", end: "3/2015"}},
-            {name: "Closure", id: 5, color: "FFE680", duration: {start: "1/2015", end: "3/2015"}}
-
-            // "skills":{
-            //   {name: "Javascript"},
-            //   {name: "UI Design"},
-            //   {name: "PHP"}
-            // }
-            
-          ];
-        },
-        openPhase: function(){
-          
-        }
-      });
-    })();
+    Polymer( "phases-menu", {
+      ready: function() {
+        console.log(this.$.phase_content);
+        var ajax = this.$.projectAjaxPost;
+        ajax.body = JSON.stringify(
+          {
+            "email": "kekkonen@aalto.fi",
+            "first_name": "Urho",
+            "last_name": "Kekkonen"
+          }
+        );
+        ajax.go();
+        console.log(this.$.phase_content1);
+      },
+      created: function() {
+        console.log("created");
+        this.phases = [
+          // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
+          {name: "Planning", id: 1, color: "33ADD6", duration: {start: "1/2015", end: "3/2015"}},
+          {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/2015", end: "3/2015"}},
+          {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/2015", end: "3/2015"}},
+          {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/2015", end: "3/2015"}},
+          {name: "Closure", id: 5, color: "FFE680", duration: {start: "1/2015", end: "3/2015"}}
+        ];
+      },
+      handleResponse: function(event, response) {
+        // this.phases =
+        console.log(response);
+      },
+      handleResponsePost: function(event, response) {
+        // this.phases =
+        console.log(response);
+        console.log("post");
+      },
+      handleError: function(event, response) {
+        console.log(response);
+      },
+      handleErrorPost: function(event, response) {
+        console.log(response);
+        console.log("postError");
+      },
+      openPhase: function(event, detail, sender){
+        sender.nextElementSibling.childNodes[1].toggle();
+        // sender.setAttribute('active', '');
+        console.dir(sender);
+        // console.dir(sender.childNodes[5].childNodes[1]);
+        // var id = sender.attributes.elemid.nodeValue;
+        // console.log(id);
+        // document.querySelector("#phase_content"+id).toggle();
+      }
+    });
   </script>
 
 </polymer-element>
