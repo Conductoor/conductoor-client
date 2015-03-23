@@ -15,14 +15,13 @@
 
     this.parse(data || []);
 
-    if (typeof document !== 'undefined') {
-      this.container = (typeof container === 'string') ? document.querySelector('#'+container) : container;
-      var that = this;
-      this.drawSections( function(){
-        that.insertData(); 
-      });
 
-      
+    if (typeof document !== 'undefined') {
+      this.container = (typeof container === 'string') ? document.querySelector("") : container;
+      // this.container = container;
+      var that = this;
+      this.drawSections();
+      setTimeout(function(){ that.insertData(); }, 0);
     }
   };
 
@@ -33,12 +32,12 @@
     var html = [];
     console.dir(this.container.querySelector('.scale section'));
     var widthMonth = this.container.querySelector('.scale section').offsetWidth;
-
+    // var widthMonth = 93;
     for (var n = 0, m = this.data.length; n < m; n++) {
       var cur = this.data[n];
       var bubble = new Bubble(widthMonth, this.year.min, cur.start, cur.end);
       var line = [
-        '<span style="background-color:#'+(cur.type || '000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
+        '<span style="background-color:'+(cur.type || '#000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
         '<span class="date">' + bubble.getDateLabel() + '</span> ',
         '<span class="label">' + cur.label + '</span>'
       ].join('');
@@ -52,7 +51,7 @@
   /**
    * Draw section labels
    */
-  Timesheet.prototype.drawSections = function(callback) {
+  Timesheet.prototype.drawSections = function() {
     var html = [];
 
     for (var c = this.year.min; c <= this.year.max; c++) {
@@ -61,7 +60,6 @@
 
     this.container.className = 'timesheet color-scheme-default';
     this.container.innerHTML = '<div class="scale" layout horizontal fit>' + html.join('') + '</div>';
-    callback();
   };
 
   /**
@@ -88,7 +86,7 @@
       var beg = this.parseDate(data[n][0]);
       var end = data[n].length === 4 ? this.parseDate(data[n][1]) : null;
       var lbl = data[n].length === 4 ? data[n][2] : data[n][1];
-      var cat = data[n].length === 4 ? data[n][3] : data[n].length === 3 ? data[n][2] : '000';
+      var cat = data[n].length === 4 ? data[n][3] : data[n].length === 3 ? data[n][2] : '#000';
 
       if (beg.getFullYear() < this.year.min) {
         this.year.min = beg.getFullYear();
@@ -103,7 +101,7 @@
       this.data.push({start: beg, end: end, label: lbl, type: cat});
     }
   };
-  
+
   /**
    * Timesheet Bubble
    */
@@ -113,37 +111,37 @@
     this.end = end;
     this.widthMonth = wMonth;
   };
-  
+
   /**
    * Format month number
    */
   Bubble.prototype.formatMonth = function(num) {
     num = parseInt(num, 10);
-  
+
     return num >= 10 ? num : '0' + num;
   };
-  
+
   /**
    * Calculate starting offset for bubble
    */
   Bubble.prototype.getStartOffset = function() {
     return (this.widthMonth/12) * (12 * (this.start.getFullYear() - this.min) + this.start.getMonth());
   };
-  
+
   /**
    * Get count of full years from start to end
    */
   Bubble.prototype.getFullYears = function() {
     return ((this.end && this.end.getFullYear()) || this.start.getFullYear()) - this.start.getFullYear();
   };
-  
+
   /**
    * Get count of all months in Timesheet Bubble
    */
   Bubble.prototype.getMonths = function() {
     var fullYears = this.getFullYears();
     var months = 0;
-  
+
     if (!this.end) {
       months += !this.start.hasMonth ? 12 : 1;
     } else {
@@ -156,17 +154,17 @@
         months += 12 * (fullYears-1);
       }
     }
-  
+
     return months;
   };
-  
+
   /**
    * Get bubble's width in pixel
    */
   Bubble.prototype.getWidth = function() {
     return (this.widthMonth/12) * this.getMonths();
   };
-  
+
   /**
    * Get the bubble's label
    */

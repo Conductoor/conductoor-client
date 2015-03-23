@@ -1,0 +1,81 @@
+<!-- build:vulcanized elements/elements.vulcanized.html -->
+<link rel="import" href="../elements/elements.html">
+<!-- endbuild-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="project-page" noscript>
+  <template>
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="../styles/main.css">
+  <!-- endbuild-->
+
+    <core-scaffold id="core_scaffold">
+
+      <!-- Toolbar: brand, links to pages, logout -->
+      <core-toolbar fullbleed tool flex>
+        <h1 horizontal flex>Project name</h1>
+
+        <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+                <core-menu>
+                    <core-item>My Projects</core-item>
+                    <core-item>Help</core-item>
+                    <core-item>Logout</core-item>
+                </core-menu>
+            </core-dropdown>
+        </core-menu-button>
+
+      </core-toolbar>
+
+      <!-- Left panel -->
+      <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
+
+        <core-toolbar tool>
+          <span flex id="app-name">Conductoor</span>
+        </core-toolbar>
+
+        <!-- Phases -->
+        <h2 class="phases-title">Phases:</h2>
+        <phases-menu></phases-menu>
+
+      </core-header-panel>
+      <!-- END Left panel -->
+
+      <!-- Right panel -->
+      <div vertical layout fit class="right-panel">
+        <!-- Phase arrow -->
+        <conductoor-phase-arrow horizontal center-justified layout></conductoor-phase-arrow>
+
+        <!-- Skills, Resources, Worker profile -->
+        <div flex two relative class="resource-panel">
+          <div horizontal layout fit class="resource-panel-sections">
+
+            <!-- Skills -->
+            <div flex self-stretch class="section skills">
+              <h3>Skills:</h3>
+              <skill-list></skill-list>
+            </div>
+
+            <!-- Resources -->
+            <div flex self-stretch class="section resources">
+              <h3>Resources:</h3>
+              <resource-list></resource-list>
+            </div>
+
+            <!-- Profile -->
+          </div>
+        </div>
+
+
+        <!-- END Skills, Resources, Worker profile -->
+        <!-- Timeline -->
+
+          <conductoor-timeline></conductoor-timeline>
+
+        <!-- END Timeline -->
+      </div>
+      <!-- END Right panel -->
+    </core-scaffold>
+  </template>
+</polymer-element>

@@ -50,70 +50,15 @@ core-toolbar{
   background: $primary;
 }
 
-// Nämä voisi varmaan siirtää omiin filuihin...
-
-/* Timeline */
-.timeline-panel{
-  margin-top: 5px;
-  background: $bg-secondary;
-}
-#timeline{
+/* Resource panel */
+.resource-panel{
+  background: $bg-primary;
+  min-height: 200px;
+  border-bottom: 2px solid $secondary;
   border-top: 2px solid $secondary;
   -webkit-box-shadow: 0px 1px 8px 0px rgba(50, 50, 50, 0.2);
      -moz-box-shadow:    0px 1px 8px 0px rgba(50, 50, 50, 0.2);
           box-shadow:         0px 1px 8px 0px rgba(50, 50, 50, 0.2);
-}
-// .timeline-header h3{
-//   margin: 0;
-//   padding-bottom: 5px;
-// }
-.timeline-header{
-  padding-left: 5px;
-}
-
-/* END Timeline */
-
-
-
-/* Resource panel */
-.resource-panel{
-  background: $bg-primary;
-  border-bottom: 2px solid $secondary;
-  -webkit-box-shadow: 0px 1px 8px 0px rgba(50, 50, 50, 0.2);
-     -moz-box-shadow:    0px 1px 8px 0px rgba(50, 50, 50, 0.2);
-          box-shadow:         0px 1px 8px 0px rgba(50, 50, 50, 0.2);
-}
-.selected-preview{
-  padding-left: 10px;
-  line-height: 40px;
-  font-weight: 700;
-  border-bottom: 2px solid $secondary;
-  font-size: 14px;
-  background: $bg-secondary;
-  float: right;
-}
-.selected-preview > div{
-  display: inline-block;
-  position: relative;
-  margin-right: 25px;
-}
-.selected-preview .selected-skill{
-  font-family: $title-font;
-  margin-right: 5px;
-}
-.arrow-right::after{
-  content: "";
-  display: block;
-  width: 28px;
-  height: 28px;
-  -webkit-transform: translateX(-50%) rotate(45deg);
-  transform: translateX(-50%) rotate(45deg);
-  background: transparent;
-  border-right: 2px solid $bg-primary;
-  border-top: 2px solid $bg-primary;
-  position: absolute;
-  top: 15%;
-  right: -28px;
 }
 .resource-panel-sections .section{
   padding-left: 5px;
