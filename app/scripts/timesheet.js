@@ -19,7 +19,6 @@
     if (typeof document !== 'undefined') {
       this.container = (typeof container === 'string') ?
         document.querySelector("") : container;
-      // this.container = container;
       var that = this;
       this.drawSections();
       setTimeout(function(){ that.insertData(); }, 0);

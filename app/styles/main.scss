@@ -53,7 +53,7 @@ core-toolbar{
 /* Resource panel */
 .resource-panel{
   background: $bg-primary;
-  min-height: 200px;
+  min-height: 220px;
   border-bottom: 2px solid $secondary;
   -webkit-box-shadow: 0px 1px 8px 0px rgba(50, 50, 50, 0.2);
      -moz-box-shadow:    0px 1px 8px 0px rgba(50, 50, 50, 0.2);
@@ -92,43 +92,7 @@ core-toolbar{
 }
 /* END Resources and Skills */
 
-/* Profile */
-.profile .profile-main-skill{
-  font-size: 14px;
-  border-bottom: 2px solid $bg-secondary;
-}
-.profile .profile-img img{
-  width: 100%;
-  height: auto;
-  -webkit-clip-path: circle(33% at center);
-  clip-path: circle(33% at center);
-}
-.profile-header{
-  font-family: $title-font;
-  font-size: 18px;
-}
-.profile-name{
-  font-size: 22px;
-  font-weight: 700;
-  border-bottom: 4px solid $secondary;
-  display: inline-block;
-  margin-bottom: 5px;
-  padding-bottom: 5px;
-}
-.profile-title{
-  font-style: italic;
-}
-.profile-skills{
-  overflow: auto;
-}
-.profile-skills ul{
-  list-style-type: circle;
-}
-.profile-skills ul li{
-  width: 50%;
-  // display: inline;
-  float: left;
-}
+/* Profile
 /* END Profile */
 /* END Resource panel */
 
