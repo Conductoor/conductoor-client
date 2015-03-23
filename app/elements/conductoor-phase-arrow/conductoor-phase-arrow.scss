@@ -4,14 +4,13 @@
 
 :host {
   display: block;
-  min-height: 45px;
+  min-height: 43px;
 }
 
 .selected-preview{
   padding-left: 10px;
   line-height: 40px;
   font-weight: 700;
-  border-bottom: 2px solid $secondary;
   font-size: 14px;
   background: $bg-secondary;
   float: right;

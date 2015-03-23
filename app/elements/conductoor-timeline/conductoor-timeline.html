@@ -28,18 +28,26 @@
       // define element prototype here
       ready: function() {
         timesheet = new Timesheet(this.$.timeline, 2002, 2013, [
-          ['2002', '09/2002', 'A freaking awesome time', 'lorem'],
-          ['06/2002', '09/2003', 'Some great memories', 'ipsum'],
+          ['2002', '09/2002', 'A freaking awesome time', this.getRandomColor()],
+          ['06/2002', '09/2003', 'Some great memories', this.getRandomColor()],
           ['2003', 'Had very bad luck'],
-          ['10/2003', '2006', 'At least had fun', 'lorem'],
-          ['02/2005', '05/2006', 'Enjoyed those times as well', 'ipsum'],
-          ['07/2005', '09/2005', 'Bad luck again', 'default'],
-          ['10/2005', '2008', 'For a long time nothing happened', 'dolor'],
-          ['01/2008', '05/2009', 'LOST Season #4', 'lorem'],
-          ['01/2009', '05/2009', 'LOST Season #4', 'lorem'],
-          ['02/2010', '05/2010', 'LOST Season #5', 'lorem'],
-          ['09/2008', '06/2010', 'FRINGE #1 & #2', 'ipsum']
+          ['10/2003', '2006', 'At least had fun', this.getRandomColor()],
+          ['02/2005', '05/2006', 'Enjoyed those times as well', this.getRandomColor()],
+          ['07/2005', '09/2005', 'Bad luck again', this.getRandomColor()],
+          ['10/2005', '2008', 'For a long time nothing happened', this.getRandomColor()],
+          ['01/2008', '05/2009', 'LOST Season #4', this.getRandomColor()],
+          ['01/2009', '05/2009', 'LOST Season #4', this.getRandomColor()],
+          ['02/2010', '05/2010', 'LOST Season #5', this.getRandomColor()],
+          ['09/2008', '06/2010', 'FRINGE #1 & #2', this.getRandomColor()]
         ]);
+      },
+      getRandomColor: function() {
+          var letters = '0123456789ABCDEF'.split('');
+          var color = '#';
+          for (var i = 0; i < 6; i++ ) {
+              color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
       },
       drawBubble: function() {
         console.log(timesheet);
