@@ -17,8 +17,12 @@
 
     if (typeof document !== 'undefined') {
       this.container = (typeof container === 'string') ? document.querySelector('#'+container) : container;
-      this.drawSections();
-      this.insertData();
+      var that = this;
+      this.drawSections( function(){
+        that.insertData(); 
+      });
+
+      
     }
   };
 
@@ -27,14 +31,14 @@
    */
   Timesheet.prototype.insertData = function() {
     var html = [];
+    console.dir(this.container.querySelector('.scale section'));
     var widthMonth = this.container.querySelector('.scale section').offsetWidth;
 
     for (var n = 0, m = this.data.length; n < m; n++) {
       var cur = this.data[n];
       var bubble = new Bubble(widthMonth, this.year.min, cur.start, cur.end);
-
       var line = [
-        '<span style="margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble bubble-' + (cur.type || 'default') + '" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
+        '<span style="background-color:#'+(cur.type || '000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
         '<span class="date">' + bubble.getDateLabel() + '</span> ',
         '<span class="label">' + cur.label + '</span>'
       ].join('');
@@ -48,15 +52,16 @@
   /**
    * Draw section labels
    */
-  Timesheet.prototype.drawSections = function() {
+  Timesheet.prototype.drawSections = function(callback) {
     var html = [];
 
     for (var c = this.year.min; c <= this.year.max; c++) {
-      html.push('<section>' + c + '</section>');
+      html.push('<section flex>' + c + '</section>');
     }
 
     this.container.className = 'timesheet color-scheme-default';
-    this.container.innerHTML = '<div class="scale">' + html.join('') + '</div>';
+    this.container.innerHTML = '<div class="scale" layout horizontal fit>' + html.join('') + '</div>';
+    callback();
   };
 
   /**
@@ -83,7 +88,7 @@
       var beg = this.parseDate(data[n][0]);
       var end = data[n].length === 4 ? this.parseDate(data[n][1]) : null;
       var lbl = data[n].length === 4 ? data[n][2] : data[n][1];
-      var cat = data[n].length === 4 ? data[n][3] : data[n].length === 3 ? data[n][2] : 'default';
+      var cat = data[n].length === 4 ? data[n][3] : data[n].length === 3 ? data[n][2] : '000';
 
       if (beg.getFullYear() < this.year.min) {
         this.year.min = beg.getFullYear();
