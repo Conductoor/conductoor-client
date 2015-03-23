@@ -31,7 +31,7 @@
     <core-menu class="phases-wrapper" selected="0">
       <template repeat="{{phase in phases}}">
         <div class="phase">
-          <paper-item class="phase-header" on-click="{{openPhase}}" elemid="{{phase.id}}">
+          <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.id}}">
             <div vertical layout>
               <span class="phase-name">{{phase.name}}</span>
               <span class="phase-duration">{{phase.duration.start}}-{{phase.duration.end}}</span>
@@ -60,7 +60,6 @@
   <script>
     Polymer( "phases-menu", {
       ready: function() {
-        console.log(this.$.phase_content);
         var ajax = this.$.projectAjaxPost;
         ajax.body = JSON.stringify(
           {
@@ -100,13 +99,8 @@
         console.log("postError");
       },
       openPhase: function(event, detail, sender){
-        sender.nextElementSibling.childNodes[1].toggle();
-        // sender.setAttribute('active', '');
-        console.dir(sender);
-        // console.dir(sender.childNodes[5].childNodes[1]);
-        // var id = sender.attributes.elemid.nodeValue;
-        // console.log(id);
-        // document.querySelector("#phase_content"+id).toggle();
+        var querystring = "#phase_content"+sender.getAttribute("target-id");
+        this.shadowRoot.querySelector(querystring).toggle();
       }
     });
   </script>
