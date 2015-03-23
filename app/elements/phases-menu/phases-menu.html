@@ -56,13 +56,12 @@
         </div>
       </template>
     </core-menu>
-    
+
   </template>
 
   <script>
     Polymer( "phases-menu", {
       ready: function() {
-        console.log(this.$.phase_content);
         var ajax = this.$.projectAjaxPost;
         ajax.body = JSON.stringify(
           {
@@ -102,10 +101,10 @@
         console.log("postError");
       },
       openPhase: function(event, detail, sender){
-          var querystring = "#phase_content"+sender.getAttribute("target-id");
-          this.shadowRoot.querySelector(querystring).toggle();
+        var querystring = "#phase_content"+sender.getAttribute("target-id");
+        this.shadowRoot.querySelector(querystring).toggle();
       }
-      
+
     });
   </script>
 

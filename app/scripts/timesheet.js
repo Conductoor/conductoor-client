@@ -15,10 +15,14 @@
 
     this.parse(data || []);
 
+
     if (typeof document !== 'undefined') {
-      this.container = (typeof container === 'string') ? document.querySelector('#'+container) : container;
+      this.container = (typeof container === 'string') ?
+        document.querySelector("") : container;
+      // this.container = container;
+      var that = this;
       this.drawSections();
-      this.insertData();
+      setTimeout(function(){ that.insertData(); }, 0);
     }
   };
 
@@ -27,8 +31,9 @@
    */
   Timesheet.prototype.insertData = function() {
     var html = [];
+    console.dir(this.container.querySelector('.scale section'));
     var widthMonth = this.container.querySelector('.scale section').offsetWidth;
-
+    // var widthMonth = 93;
     for (var n = 0, m = this.data.length; n < m; n++) {
       var cur = this.data[n];
       var bubble = new Bubble(widthMonth, this.year.min, cur.start, cur.end);
@@ -52,11 +57,12 @@
     var html = [];
 
     for (var c = this.year.min; c <= this.year.max; c++) {
-      html.push('<section>' + c + '</section>');
+      html.push('<section flex>' + c + '</section>');
     }
 
     this.container.className = 'timesheet color-scheme-default';
-    this.container.innerHTML = '<div class="scale">' + html.join('') + '</div>';
+    this.container.innerHTML = '<div class="scale" layout horizontal fit>' + html.join('') + '</div>';
+
   };
 
   /**
@@ -98,7 +104,7 @@
       this.data.push({start: beg, end: end, label: lbl, type: cat});
     }
   };
-  
+
   /**
    * Timesheet Bubble
    */
@@ -108,37 +114,37 @@
     this.end = end;
     this.widthMonth = wMonth;
   };
-  
+
   /**
    * Format month number
    */
   Bubble.prototype.formatMonth = function(num) {
     num = parseInt(num, 10);
-  
+
     return num >= 10 ? num : '0' + num;
   };
-  
+
   /**
    * Calculate starting offset for bubble
    */
   Bubble.prototype.getStartOffset = function() {
     return (this.widthMonth/12) * (12 * (this.start.getFullYear() - this.min) + this.start.getMonth());
   };
-  
+
   /**
    * Get count of full years from start to end
    */
   Bubble.prototype.getFullYears = function() {
     return ((this.end && this.end.getFullYear()) || this.start.getFullYear()) - this.start.getFullYear();
   };
-  
+
   /**
    * Get count of all months in Timesheet Bubble
    */
   Bubble.prototype.getMonths = function() {
     var fullYears = this.getFullYears();
     var months = 0;
-  
+
     if (!this.end) {
       months += !this.start.hasMonth ? 12 : 1;
     } else {
@@ -151,17 +157,17 @@
         months += 12 * (fullYears-1);
       }
     }
-  
+
     return months;
   };
-  
+
   /**
    * Get bubble's width in pixel
    */
   Bubble.prototype.getWidth = function() {
     return (this.widthMonth/12) * this.getMonths();
   };
-  
+
   /**
    * Get the bubble's label
    */

@@ -1,0 +1,41 @@
+@import "../../styles/palette";
+@import "../../styles/circle";
+
+
+:host {
+  display: block;
+  min-height: 45px;
+}
+
+.selected-preview{
+  padding-left: 10px;
+  line-height: 40px;
+  font-weight: 700;
+  border-bottom: 2px solid $secondary;
+  font-size: 14px;
+  background: $bg-secondary;
+  float: right;
+}
+.selected-preview > div{
+  display: inline-block;
+  position: relative;
+  margin-right: 25px;
+}
+.selected-preview .selected-skill{
+  font-family: $title-font;
+  margin-right: 5px;
+}
+.arrow-right::after{
+  content: "";
+  display: block;
+  width: 28px;
+  height: 28px;
+  -webkit-transform: translateX(-50%) rotate(45deg);
+  transform: translateX(-50%) rotate(45deg);
+  background: transparent;
+  border-right: 2px solid $bg-primary;
+  border-top: 2px solid $bg-primary;
+  position: absolute;
+  top: 15%;
+  right: -28px;
+}
