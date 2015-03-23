@@ -1,0 +1,43 @@
+@import "../../styles/palette";
+@import "../../styles/circle";
+
+:host {
+  display: block;
+}
+
+.profile .profile-main-skill{
+  font-size: 14px;
+  border-bottom: 2px solid $bg-secondary;
+}
+.profile .profile-img img{
+  width: 100%;
+  height: auto;
+  -webkit-clip-path: circle(33% at center);
+  clip-path: circle(33% at center);
+}
+.profile-header{
+  font-family: $title-font;
+  font-size: 18px;
+}
+.profile-name{
+  font-size: 22px;
+  font-weight: 700;
+  border-bottom: 4px solid $secondary;
+  display: inline-block;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+.profile-title{
+  font-style: italic;
+}
+.profile-skills{
+  overflow: auto;
+}
+.profile-skills ul{
+  list-style-type: circle;
+}
+.profile-skills ul li{
+  width: 50%;
+  // display: inline;
+  float: left;
+}

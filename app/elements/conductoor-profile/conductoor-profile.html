@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-profile" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-profile.css">
+
+    <div layout vertical fit class="section profile">
+      <div flex three relative class="profile-header">
+        <div horizontal layout center fit>
+          <div flex two>
+            <div class="profile-img"><img src="../../images/no_image.png"></div>
+          </div>
+          <div flex three>
+            <div class="profile-name">John Doe</div>
+            <div class="profile-title">UI Designer</div>
+          </div>
+        </div>
+      </div>
+
+      <div flex one relative class="profile-main-skill">
+        <div horizontal layout center fit center-justified>
+          <div>Main skill: UI Design</div>
+        </div>
+      </div>
+
+      <div flex two relative class="profile-skills">
+        <div horizontal layout fit>
+          <div flex>
+            <ul>
+              <li>Skill 1</li>
+              <li>Skill 2</li>
+              <li>Skill 3</li>
+              <li>Skill 4</li>
+              <li>Skill 4</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div flex one relative class="profile-add">
+        <div horizontal layout center center-justified fit>
+          <div>
+            <button>Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+      });
+    })();
+  </script>
+</polymer-element>
