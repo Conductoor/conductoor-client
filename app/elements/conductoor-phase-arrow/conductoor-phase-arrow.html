@@ -1,21 +1,28 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-phase-arrow" attributes="">
+<polymer-element name="conductoor-phase-arrow" attributes="userSelection">
   <template>
     <link rel="stylesheet" href="conductoor-phase-arrow.css">
 
-
-    <div class="selected-preview">
-      <div><span class="selected-phase arrow-right">Design phase</span></div>
-      <div><span class="selected-skill arrow-right">Javascript</span></div>
-      <div><div class="arrow-right"><div class="circle free">3</div></div></div>
-      <div><div class="arrow-right"><div class="circle reserved">4</div></div></div>
-      <div><span class="selected-worker arrow-right">John Doe</span></div>
+    <!-- <core-localstorage name="conductoor-project-data" value="{{project}}"></core-localstorage> -->
+    <div class="selected-preview" on-click={{click}}>
+      <div><span class="selected-phase arrow-right">{{userSelection.phase}}</span></div>
+      <div><span class="selected-skill arrow-right">{{userSelection.selectedSkill}}</span></div>
+      <div><div class="arrow-right"><div class="circle free">{{userSelection.free}}</div></div></div>
+      <div><div class="arrow-right"><div class="circle reserved">{{userSelection.reserved}}</div></div></div>
+      <div><span class="selected-worker arrow-right">{{userSelection.selectedPerson}}</span></div>
     </div>
   </template>
   <script>
     (function () {
       Polymer({
+        ready: function() {
+          console.log(this.project);
+          // this.project = "kakka";
+        } ,
+        click: function() {
+          this.project = "kakka";
+        }
         // define element prototype here
       });
     })();

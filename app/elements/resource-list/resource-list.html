@@ -4,16 +4,29 @@ En saanut core-listia toimimaan... -Teemu
 <link rel="import" href="../../bower_components/core-list/core-list.html">
 -->
 
-<polymer-element name="resource-list" attributes="">
+<polymer-element name="resource-list" attributes="userSelection">
   <template>
     <!-- build:css resource-list.css -->
     <link rel="stylesheet" type="text/css" href="resource-list.css">
     <!-- endbuild-->
-    
+    <core-localstorage name="conductoor-project-data" value="{{project}}"></core-localstorage>
+    <core-ajax
+      id = "getResources"
+      auto
+      url="/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
+
     <template repeat="{{resource in resources}}">
-      <div class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
-        <div class="resource-name">{{resource.name}}</div>
-      </div>
+      <paper-item
+        no-padding
+        on-click={{selectPerson}}
+        class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
+        {{resource.name}}
+      </paper-item>
     </template>
 
   </template>
@@ -22,6 +35,10 @@ En saanut core-listia toimimaan... -Teemu
     (function () {
       Polymer( "resource-list", {
         created: function() {
+          // TODO
+        },
+        handleResponse: function(event, response) {
+          console.log(response);
           this.resources = [
             {name: "John Doe", free: 1},
             {name: "John Doe", free: 1},
@@ -31,8 +48,17 @@ En saanut core-listia toimimaan... -Teemu
             {name: "John Doe", free: 1},
             {name: "John Doe", free: 0},
             {name: "John Doe", free: 1},
-            {name: "John Doe", free: 0} 
+            {name: "John Doe", free: 0}
           ];
+          this.userSelection.selectedPerson = this.resources[0].name;
+        },
+        handleError: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        selectPerson: function(event, detail, sender) {
+          console.log(sender.templateInstance.model.resource.name);
+          this.userSelection.selectedPerson = sender.templateInstance.model.resource.name;
         }
       });
     })();
