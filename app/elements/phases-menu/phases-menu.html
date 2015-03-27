@@ -106,6 +106,7 @@
         this.userSelection.phase = sender.templateInstance.model.phase.name;
         var querystring = "#phase_content"+sender.getAttribute("target-id");
         this.shadowRoot.querySelector(querystring).toggle();
+        this.fire('load-skill', {msg: 'That hurt!'});
       }
 
     });

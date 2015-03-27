@@ -33,6 +33,12 @@ En saanut core-listia toimimaan... -Teemu
   <script>
     (function () {
       Polymer( "skill-list", {
+        ready: function() {
+          document.addEventListener('load-skill', (function(e) {
+            var ajax = this.$.getSkillList;
+            ajax.go();
+          }).bind(this));
+        },
         created: function() {
           // TODO
         },
