@@ -1,0 +1,70 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-project-listing-page" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-project-listing-page.css">
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="../../styles/main.css">
+    <!-- endbuild-->
+
+    <div layout horizontal fit>
+      <core-header-panel mode="seamed" id="core_header_panel" flex relative>
+
+        <core-toolbar tool>
+        <span flex id="app-name">Conductoor</span>
+
+          <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+              <core-menu>
+                  <paper-item noink><a href="#/project">Current project</a></paper-item>
+                  <paper-item noink><a href="#/help">Help</a></paper-item>
+                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+              </core-menu>
+            </core-dropdown>
+          </core-menu-button>
+
+        </core-toolbar>
+
+        <div vertical layout fit center class="projects-wrapper">
+          <h1>My Projects</h1>
+          <div class="projects-list">
+            <template repeat="{{project in projects}}">
+              <div layout horizontal center class="project">
+                <div class="label" flex four>{{project.name}}</div>
+                <div class="edit" flex one>
+                  <core-icon icon="create" on-click="{{editProject}}"></core-icon>
+                  <paper-ripple fit></paper-ripple>
+                </div>
+              </div>
+            </template>
+            <div class="new" layout horizontal center-justified><core-icon icon="add-circle" on-click="{{newProject}}"></core-icon></div>
+          </div>
+        </div>
+
+      </core-header-panel>
+    </div>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+        created: function(){
+          this.projects = [
+            {id: 1, name: "Project name 1"},
+            {id: 2, name: "Project name 2"},
+            {id: 3, name: "Project name 3"},
+            {id: 4, name: "Project name 4"}
+          ]
+        },
+        editProject: function(){
+          console.log("edit");
+        },
+        newProject: function(){
+          console.log("new");
+        }
+      });
+    })();
+  </script>
+</polymer-element>

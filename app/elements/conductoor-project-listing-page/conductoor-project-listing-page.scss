@@ -1,0 +1,43 @@
+@import "../../styles/palette";
+
+:host {
+  display: block;
+}
+core-toolbar{
+	color: #fff;
+}
+h1{
+
+}
+.projects-wrapper{
+	background: $bg-primary;
+}
+.projects-list{
+	min-width: 300px;
+	border-top: 4px solid $secondary;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.project{
+	height: 50px;
+	background: $bg-secondary;
+	border-radius: 10px;
+	font-size: 16px;
+	margin-bottom: 10px;
+	padding-left: 10px;
+}
+.edit{
+	text-align: center;
+	border-left: 1px solid $bg-primary;
+	height: 50px;
+	line-height: 50px;
+	position: relative;
+}
+.new{
+	margin-top: 15px;
+}
+/*.edit > core-icon{
+	background: $secondary;
+	padding: 2px;
+	border-radius: 5px;
+}*/

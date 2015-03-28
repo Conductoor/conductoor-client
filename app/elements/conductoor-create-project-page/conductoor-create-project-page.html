@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-create-project-page" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-create-project-page.css">
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="../../styles/main.css">
+    <!-- endbuild-->
+
+    <core-scaffold id="core_scaffold">
+
+      <!-- Toolbar: brand, links to pages, logout -->
+      <core-toolbar fullbleed tool flex>
+        <h1 horizontal flex>Create new project</h1>
+
+        <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+              <core-menu>
+                  <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
+                  <paper-item noink><a href="#/project">Current Projects</a></paper-item>
+                  <paper-item noink><a href="#/help">Help</a></paper-item>
+                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+              </core-menu>
+            </core-dropdown>
+        </core-menu-button>
+
+      </core-toolbar>
+
+      <!-- Left panel -->
+      <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
+
+        <core-toolbar tool>
+          <span flex id="app-name">Conductoor</span>
+        </core-toolbar>
+
+
+      </core-header-panel>
+      <!-- END Left panel -->
+
+      <!-- Right panel -->
+      <div vertical layout fit class="right-panel" >
+        
+
+      </div>
+      <!-- END Right panel -->
+    </core-scaffold>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+      });
+    })();
+  </script>
+</polymer-element>
