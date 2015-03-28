@@ -17,11 +17,20 @@
   </head>
   <body unresolved fullbleed>
     <app-router>
-      <!-- matches an exact path -->
+      <!-- Project page -->
       <app-route path="/project" import="/pages/project-page.html"></app-route>
 
+      <!-- Project listing page -->
+      <app-route path="/list-projects" import="/pages/project-listing-page.html"></app-route>
+
+      <!-- Create project page -->
+      <app-route path="/project/create" import="/pages/create-project-page.html"></app-route>
+
+      <!-- Help page -->
+      <app-route path="/help" import="/pages/help-page.html"></app-route>
+
       <!-- matches using a wildcard -->
-      <app-route path="*" import="/pages/create-project-page.html"></app-route>
+      <app-route path="*" import="/pages/landing-page.html"></app-route>
 
     </app-router>
     <!-- build:js scripts/app.js -->
