@@ -7,10 +7,10 @@
     <!-- <core-localstorage name="conductoor-project-data" value="{{project}}"></core-localstorage> -->
     <div class="selected-preview" on-click={{click}}>
       <div><span class="selected-phase arrow-right">{{userSelection.phase}}</span></div>
-      <div><span class="selected-skill arrow-right">{{userSelection.selectedSkill}}</span></div>
-      <div><div class="arrow-right"><div class="circle free">{{userSelection.free}}</div></div></div>
-      <div><div class="arrow-right"><div class="circle reserved">{{userSelection.reserved}}</div></div></div>
-      <div><span class="selected-worker arrow-right">{{userSelection.selectedPerson}}</span></div>
+      <div><span class="selected-skill arrow-right">{{userSelection.selectedSkill.name}}</span></div>
+      <div><div class="arrow-right"><div class="circle free">{{userSelection.selectedSkill.free}}</div></div></div>
+      <div><div class="arrow-right"><div class="circle reserved">{{userSelection.selectedSkill.reserved}}</div></div></div>
+      <div><span class="selected-worker arrow-right">{{userSelection.selectedPerson.name}}</span></div>
     </div>
   </template>
   <script>

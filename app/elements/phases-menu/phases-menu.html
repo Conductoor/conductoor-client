@@ -13,7 +13,7 @@
     <core-ajax
       id = "projectAjax"
       auto
-      url="http://conductoor-api.herokuapp.com/users/1/"
+      url="/"
       params='{"alt":"json", "q":"chrome"}'
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -21,7 +21,7 @@
     </core-ajax>
     <core-ajax
       id ="projectAjaxPost"
-      url="http://conductoor-api.herokuapp.com/users/"
+      url="/"
       handleAs="json"
       method="POST"
       contentType="application/json"
@@ -62,16 +62,16 @@
   <script>
     Polymer( "phases-menu", {
       ready: function() {
-        var ajax = this.$.projectAjaxPost;
-        ajax.body = JSON.stringify(
-          {
-            "email": "kekkonen@aalto.fi",
-            "first_name": "Urho",
-            "last_name": "Kekkonen"
-          }
-        );
-        ajax.go();
-        console.log(this.$.phase_content1);
+        // var ajax = this.$.projectAjaxPost;
+        // ajax.body = JSON.stringify(
+        //   {
+        //     "email": "kekkonen@aalto.fi",
+        //     "first_name": "Urho",
+        //     "last_name": "Kekkonen"
+        //   }
+        // );
+        // ajax.go();
+        // console.log(this.$.phase_content1);
       },
       created: function() {
         console.log("created");
@@ -106,7 +106,7 @@
         this.userSelection.phase = sender.templateInstance.model.phase.name;
         var querystring = "#phase_content"+sender.getAttribute("target-id");
         this.shadowRoot.querySelector(querystring).toggle();
-        this.fire('load-skill', {msg: 'That hurt!'});
+        this.fire('load-skill', {msg: 'Load-skill event fired'});
       }
 
     });

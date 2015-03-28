@@ -53,8 +53,7 @@ En saanut core-listia toimimaan... -Teemu
             {name: "Python", free: "6", reserved: "2"},
             {name: "Python", free: "7", reserved: "1"}
           ];
-          this.selectedSkill = this.skills[0].name;
-          this.userSelection.selectedSkill = this.skills[0].name;
+          this.userSelection.selectedSkill = this.skills[0];
           this.userSelection.free = this.skills[0].free;
           this.userSelection.reserved = this.skills[0].reserved;
         },
@@ -63,9 +62,7 @@ En saanut core-listia toimimaan... -Teemu
           console.log(response);
         },
         selectSkill: function(event, detail, sender) {
-          this.userSelection.selectedSkill = sender.templateInstance.model.skill.name;
-          this.userSelection.free = sender.templateInstance.model.skill.free;
-          this.userSelection.reserved = sender.templateInstance.model.skill.reserved;
+          this.userSelection.selectedSkill = sender.templateInstance.model.skill;
         }
       });
     })();

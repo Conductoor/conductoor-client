@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-profile" attributes="">
+<polymer-element name="conductoor-profile" attributes="userSelection">
   <template>
     <link rel="stylesheet" href="conductoor-profile.css">
 
@@ -8,18 +8,18 @@
       <div flex three relative class="profile-header">
         <div horizontal layout center fit>
           <div flex two>
-            <div class="profile-img"><img src="../../images/no_image.png"></div>
+            <div on-click={{click}} class="profile-img"><img src="../../images/no_image.png"></div>
           </div>
           <div flex three>
-            <div class="profile-name">John Doe</div>
-            <div class="profile-title">UI Designer</div>
+            <div class="profile-name">{{userSelection.selectedPerson.name}}</div>
+            <div class="profile-title">{{userSelection.selectedPerson.title}}</div>
           </div>
         </div>
       </div>
 
       <div flex one relative class="profile-main-skill">
         <div horizontal layout center fit center-justified>
-          <div>Main skill: UI Design</div>
+          <div>Main skill: {{userSelection.selectedPerson.mainSkill}}</div>
         </div>
       </div>
 
@@ -27,11 +27,9 @@
         <div horizontal layout fit>
           <div flex>
             <ul>
-              <li>Skill 1</li>
-              <li>Skill 2</li>
-              <li>Skill 3</li>
-              <li>Skill 4</li>
-              <li>Skill 4</li>
+              <template repeat="{{ skill in userSelection.selectedPerson.skills }}">
+                <li>{{skill}}</li>
+              </template>
             </ul>
           </div>
         </div>
@@ -48,6 +46,13 @@
   <script>
     (function () {
       Polymer({
+        created: function() {
+          console.log(this.userSelection);
+        },
+        click: function() {
+          console.log("hei");
+          this.userSelection.selectedSkill.name = "kakka";
+        }
         // define element prototype here
       });
     })();

@@ -67,7 +67,7 @@
 
             <!-- Profile -->
             <div flex self-stretch relative class="section profile">
-              <conductoor-profile></conductoor-profile>
+              <conductoor-profile userSelection={{userSelection}}></conductoor-profile>
             </div>
           </div>
         </div>
@@ -88,13 +88,13 @@
       Polymer({
         // define element prototype here
         created: function() {
-          this.userSelection ={
+          this.userSelection = {
             phase: "N/A",
             selectedPerson: "N/A",
             selectedSkill: "N/A",
             free: 0,
             reserved: 0,
-          };
+          }
         }
       });
     })();
