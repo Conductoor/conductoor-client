@@ -18,6 +18,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('web-component-tester');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-easymock');
 
   // configurable paths
   var yeomanConfig = {
@@ -292,6 +293,28 @@ module.exports = function (grunt) {
           threshold: 80
         }
       }
+    },
+
+    //gruntserver
+    easymock: {
+      api1: {
+        options: {
+          port: 30000,
+          path: 'easymock/api1',
+          config: {
+            routes: [
+              "/users/:id",
+            ],
+          },
+        },
+      },
+      api2: {
+        options: {
+          keepalive: true,
+          port: 30010,
+          path: 'easymock/api2',
+        },
+      },
     }
   });
 

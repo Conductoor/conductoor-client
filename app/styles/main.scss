@@ -88,6 +88,16 @@ core-toolbar{
 }
 /* END Phases area */
 
+/*Resource paper-item*/
+resource-list::shadow paper-item .button-content {
+  padding: 0px !important;
+}
+
+resource-list /deep/ .button-content, skill-list /deep/ .button-content  {
+ padding: 0px !important;
+ font-size: 12px;
+}
+
 
 
 

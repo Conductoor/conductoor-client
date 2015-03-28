@@ -4,18 +4,28 @@ En saanut core-listia toimimaan... -Teemu
 <link rel="import" href="../../bower_components/core-list/core-list.html">
 -->
 
-<polymer-element name="skill-list" attributes="">
+<polymer-element name="skill-list" attributes="userSelection">
   <template>
     <!-- build:css skill-list.css -->
     <link rel="stylesheet" type="text/css" href="skill-list.css">
     <!-- endbuild-->
-    
+
+    <core-ajax
+      id = "getSkillList"
+      auto
+      url="/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
+
     <template repeat="{{skill in skills}}">
-      <div class="skill" center layout horizontal>
-        <div flex>{{skill.name}}</div>
+      <paper-item on-click={{selectSkill}} class="skill" no-padding>
+        <div flex >{{skill.name}}</div>
         <div class="circle free small">{{skill.free}}</div>
         <div class="circle reserved small">{{skill.reserved}}</div>
-      </div>
+      </paper-item>
     </template>
 
   </template>
@@ -23,16 +33,36 @@ En saanut core-listia toimimaan... -Teemu
   <script>
     (function () {
       Polymer( "skill-list", {
+        ready: function() {
+          document.addEventListener('load-skill', (function(e) {
+            var ajax = this.$.getSkillList;
+            ajax.go();
+          }).bind(this));
+        },
         created: function() {
+          // TODO
+        },
+        handleResponse: function(event, response) {
+          console.log(response);
           this.skills = [
-            {name: "Javascript", free: "3", reserved: "5"},
-            {name: "UI Design", free: "3", reserved: "5"},
+            {name: "Javascript", free: "1", reserved: "7"},
+            {name: "UI Design", free: "2", reserved: "6"},
             {name: "PHP", free: "3", reserved: "5"},
-            {name: "Python", free: "3", reserved: "5"},
-            {name: "Python", free: "3", reserved: "5"},
-            {name: "Python", free: "3", reserved: "5"},
-            {name: "Python", free: "3", reserved: "5"}
+            {name: "Python", free: "4", reserved: "4"},
+            {name: "Python", free: "5", reserved: "3"},
+            {name: "Python", free: "6", reserved: "2"},
+            {name: "Python", free: "7", reserved: "1"}
           ];
+          this.userSelection.selectedSkill = this.skills[0];
+          this.userSelection.free = this.skills[0].free;
+          this.userSelection.reserved = this.skills[0].reserved;
+        },
+        handleError: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        selectSkill: function(event, detail, sender) {
+          this.userSelection.selectedSkill = sender.templateInstance.model.skill;
         }
       });
     })();

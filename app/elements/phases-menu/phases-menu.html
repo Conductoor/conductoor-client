@@ -4,7 +4,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="phases-menu" attributes="">
+<polymer-element name="phases-menu" attributes="userSelection">
   <template>
     <!-- build:css phases-menu.css -->
     <link rel="stylesheet" type="text/css" href="phases-menu.css">
@@ -13,7 +13,7 @@
     <core-ajax
       id = "projectAjax"
       auto
-      url="http://conductoor-api.herokuapp.com/users/1/"
+      url="/"
       params='{"alt":"json", "q":"chrome"}'
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -21,7 +21,7 @@
     </core-ajax>
     <core-ajax
       id ="projectAjaxPost"
-      url="http://conductoor-api.herokuapp.com/users/"
+      url="/"
       handleAs="json"
       method="POST"
       contentType="application/json"
@@ -62,19 +62,23 @@
   <script>
     Polymer( "phases-menu", {
       ready: function() {
-        var ajax = this.$.projectAjaxPost;
-        ajax.body = JSON.stringify(
-          {
-            "email": "kekkonen@aalto.fi",
-            "first_name": "Urho",
-            "last_name": "Kekkonen"
-          }
-        );
-        ajax.go();
-        console.log(this.$.phase_content1);
+        // var ajax = this.$.projectAjaxPost;
+        // ajax.body = JSON.stringify(
+        //   {
+        //     "email": "kekkonen@aalto.fi",
+        //     "first_name": "Urho",
+        //     "last_name": "Kekkonen"
+        //   }
+        // );
+        // ajax.go();
+        // console.log(this.$.phase_content1);
       },
       created: function() {
         console.log("created");
+      },
+      handleResponse: function(event, response) {
+        // this.phases =
+        console.log(response);
         this.phases = [
           // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
           {name: "Planning", id: 1, color: "33ADD6", duration: {start: "1/2015", end: "3/2015"}},
@@ -83,10 +87,7 @@
           {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/2015", end: "3/2015"}},
           {name: "Closure", id: 5, color: "FFE680", duration: {start: "1/2015", end: "3/2015"}}
         ];
-      },
-      handleResponse: function(event, response) {
-        // this.phases =
-        console.log(response);
+        this.userSelection.phase = this.phases[0].name;
       },
       handleResponsePost: function(event, response) {
         // this.phases =
@@ -101,8 +102,11 @@
         console.log("postError");
       },
       openPhase: function(event, detail, sender){
+        console.log(sender.templateInstance.model.phase.name);
+        this.userSelection.phase = sender.templateInstance.model.phase.name;
         var querystring = "#phase_content"+sender.getAttribute("target-id");
         this.shadowRoot.querySelector(querystring).toggle();
+        this.fire('load-skill', {msg: 'Load-skill event fired'});
       }
 
     });

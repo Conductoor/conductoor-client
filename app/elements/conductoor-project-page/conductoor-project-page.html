@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-project-page" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-project-page.css">
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="../../styles/main.css">
+    <!-- endbuild-->
+    <!-- <core-localstorage name="conductoor-project-data" id="storage" value="{{project}}"></core-localstorage> -->
+
+    <core-scaffold id="core_scaffold">
+
+      <!-- Toolbar: brand, links to pages, logout -->
+      <core-toolbar fullbleed tool flex>
+        <h1 horizontal flex>Project name</h1>
+
+        <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+                <core-menu>
+                    <core-item>My Projects</core-item>
+                    <core-item>Help</core-item>
+                    <core-item>Logout</core-item>
+                </core-menu>
+            </core-dropdown>
+        </core-menu-button>
+
+      </core-toolbar>
+
+      <!-- Left panel -->
+      <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
+
+        <core-toolbar tool>
+          <span flex id="app-name">Conductoor</span>
+        </core-toolbar>
+
+        <!-- Phases -->
+        <h2 class="phases-title">Phases:</h2>
+        <phases-menu userSelection="{{userSelection}}"></phases-menu>
+
+      </core-header-panel>
+      <!-- END Left panel -->
+
+      <!-- Right panel -->
+      <div vertical layout fit class="right-panel" >
+        <!-- Phase arrow -->
+        <conductoor-phase-arrow
+          horizontal center-justified layout
+          userSelection={{userSelection}}>
+        </conductoor-phase-arrow>
+
+        <!-- Skills, Resources, Worker profile -->
+        <div flex two relative class="resource-panel">
+          <div horizontal layout fit class="resource-panel-sections">
+
+            <!-- Skills -->
+            <div flex self-stretch class="section skills">
+              <h3>Skills:</h3>
+              <skill-list userSelection={{userSelection}}></skill-list>
+            </div>
+
+            <!-- Resources -->
+            <div flex self-stretch class="section resources">
+              <h3>Resources:</h3>
+              <resource-list userSelection={{userSelection}}></resource-list>
+            </div>
+
+            <!-- Profile -->
+            <div flex self-stretch relative class="section profile">
+              <conductoor-profile userSelection={{userSelection}}></conductoor-profile>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- END Skills, Resources, Worker profile -->
+        <!-- Timeline -->
+
+          <conductoor-timeline ></conductoor-timeline>
+
+        <!-- END Timeline -->
+      </div>
+      <!-- END Right panel -->
+    </core-scaffold>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+        created: function() {
+          this.userSelection = {
+            phase: "N/A",
+            selectedPerson: "N/A",
+            selectedSkill: "N/A",
+            free: 0,
+            reserved: 0,
+          }
+        }
+      });
+    })();
+  </script>
+</polymer-element>
