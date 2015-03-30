@@ -93,9 +93,14 @@ resource-list::shadow paper-item .button-content {
   padding: 0px !important;
 }
 
-resource-list /deep/ .button-content, skill-list /deep/ .button-content  {
- padding: 0px !important;
+resource-list /deep/ .button-content,
+  skill-list /deep/ .button-content  {
+ padding: 0px;
  font-size: 12px;
+}
+phases-menu /deep/ details /deep/ .button-content {
+  padding: 0px;
+  font-size: 10px;
 }
 
 

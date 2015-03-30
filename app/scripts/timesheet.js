@@ -35,6 +35,7 @@
     for (var n = 0, m = this.data.length; n < m; n++) {
       var cur = this.data[n];
       var bubble = new Bubble(widthMonth, this.year.min, cur.start, cur.end);
+      console.log(Math.round((cur.end-cur.start)/1000/60/60/24/39));
       var line = [
         '<span style="background-color:'+(cur.type || '#000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
         '<span class="date">' + bubble.getDateLabel() + '</span> ',
@@ -124,7 +125,8 @@
    * Calculate starting offset for bubble
    */
   Bubble.prototype.getStartOffset = function() {
-    return (this.widthMonth/12) * (12 * (this.start.getFullYear() - this.min) + this.start.getMonth());
+    return (this.widthMonth/12) * (12 * (this.start.getFullYear() - this.min) +
+      this.start.getMonth());
   };
 
   /**
