@@ -4,7 +4,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="phases-menu" attributes="userSelection">
+<polymer-element name="phases-menu" attributes="userSelection project">
   <template>
     <!-- build:css phases-menu.css -->
     <link rel="stylesheet" type="text/css" href="phases-menu.css">
@@ -30,12 +30,12 @@
     </core-ajax>
 
     <core-menu class="phases-wrapper" selected="0">
-      <template repeat="{{phase in phases}}">
+      <template repeat="{{phase in project.phases}}">
         <div class="phase">
           <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.id}}">
             <div vertical layout>
               <span class="phase-name">{{phase.name}}</span>
-              <span class="phase-duration">{{phase.duration.start}}-{{phase.duration.end}}</span>
+              <span class="phase-duration">Weeks: {{phase.duration.start}}-{{phase.duration.end}}</span>
             </div>
             <div class="phase-color-code" style="background: #{{phase.color}}"></div>
           </paper-item>
@@ -77,17 +77,23 @@
       },
       created: function() {
         console.log("created");
+        // this.project  =[];
       },
       handleResponse: function(event, response) {
         // this.phases =
         console.log(response);
-        this.phases = [
+        this.project = {
+          name: "project 1",
+          duration: {start: "1/1/2012", end: "3/7/2012"}
+        };
+        this.project.phases =
+        [
           // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
           {
             name: "Planning",
             id: 1,
             color: "33ADD6",
-            duration: {start: "1/2015", end: "3/2015"},
+            duration: {start: "1/1/2012", end: "2/7/2012"},
             skills: [
               {
                 name: "Javascript",
@@ -102,7 +108,7 @@
               {name: "Python", resource_need: "7", current_resource_amount: "2"}
             ]
           },
-          {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/2015", end: "3/2015"},
+          {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/1/2012", end: "1/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -112,7 +118,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/2015", end: "3/2015"},
+          {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/15/2012", end: "2/2/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -122,7 +128,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/2015", end: "3/2015"},
+          {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/14/2012", end: "2/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -132,7 +138,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Closure", id: 5, color: "FFE680", duration: {start: "1/2015", end: "3/2015"},
+          {name: "Closure", id: 5, color: "FFE680", duration: {start: "2/1/2012", end: "2/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -143,7 +149,8 @@
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           }
         ];
-        this.userSelection.phase = this.phases[0].name;
+        this.userSelection.phase = this.project.phases[0].name;
+        this.fire('show-timeline', {msg: 'Load-skill event fired'});
       },
       handleResponsePost: function(event, response) {
         // this.phases =
