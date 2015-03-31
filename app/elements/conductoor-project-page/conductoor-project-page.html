@@ -36,7 +36,7 @@
 
         <!-- Phases -->
         <h2 class="phases-title">Phases:</h2>
-        <phases-menu userSelection="{{userSelection}}"></phases-menu>
+        <phases-menu userSelection="{{userSelection}}" project="{{project}}"></phases-menu>
 
       </core-header-panel>
       <!-- END Left panel -->
@@ -50,7 +50,7 @@
         </conductoor-phase-arrow>
 
         <!-- Skills, Resources, Worker profile -->
-        <div flex two relative class="resource-panel">
+        <div flex relative class="resource-panel">
           <div horizontal layout fit class="resource-panel-sections">
 
             <!-- Skills -->
@@ -76,7 +76,7 @@
         <!-- END Skills, Resources, Worker profile -->
         <!-- Timeline -->
 
-          <conductoor-timeline ></conductoor-timeline>
+          <conductoor-timeline project={{project}}></conductoor-timeline>
 
         <!-- END Timeline -->
       </div>
@@ -95,6 +95,7 @@
             free: 0,
             reserved: 0,
           }
+          this.project = [];
         }
       });
     })();

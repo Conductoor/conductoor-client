@@ -4,14 +4,14 @@
 <!-- build:js scripts/timesheet.js -->
 <script src="../../scripts/timesheet.js"></script>
 <!-- endbuild-->
-<polymer-element name="conductoor-timeline" attributes="">
+<polymer-element name="conductoor-timeline" attributes="project">
   <template>
     <link rel="stylesheet" href="conductoor-timeline.css">
     <!-- build:css styles/timesheet.css -->
     <link rel="stylesheet" href="../../styles/timesheet.css">
     <!-- endbuild-->
 
-    <div flex three class="timeline-panel">
+    <div flex class="timeline-panel">
       <div class="timeline-header">
         <h3 on-click=”{{drawBubble}}”>Project timeline</h3>
       </div>
@@ -27,27 +27,52 @@
     Polymer({
       // define element prototype here
       ready: function() {
-        timesheet = new Timesheet(this.$.timeline, 2002, 2013, [
-          ['2002', '09/2002', 'A freaking awesome time', this.getRandomColor()],
-          ['06/2002', '09/2003', 'Some great memories', this.getRandomColor()],
-          ['2003', 'Had very bad luck'],
-          ['10/2003', '2006', 'At least had fun', this.getRandomColor()],
-          ['02/2005', '05/2006', 'Enjoyed those times as well', this.getRandomColor()],
-          ['07/2005', '09/2005', 'Bad luck again', this.getRandomColor()],
-          ['10/2005', '2008', 'For a long time nothing happened', this.getRandomColor()],
-          ['01/2008', '05/2009', 'LOST Season #4', this.getRandomColor()],
-          ['01/2009', '05/2009', 'LOST Season #4', this.getRandomColor()],
-          ['02/2010', '05/2010', 'LOST Season #5', this.getRandomColor()],
-          ['09/2008', '06/2010', 'FRINGE #1 & #2', this.getRandomColor()]
-        ]);
+        document.addEventListener('show-timeline', (function(e) {
+            if (this.project.phases) {
+              console.log(this.getData(this.project));
+              timesheet = new Timesheet(this.$.timeline, new Date(this.project.duration.start),
+                new Date(this.project.duration.end), this.getData(this.project));
+            }
+          }).bind(this));
       },
-      getRandomColor: function() {
-          var letters = '0123456789ABCDEF'.split('');
-          var color = '#';
-          for (var i = 0; i < 6; i++ ) {
-              color += letters[Math.floor(Math.random() * 16)];
-          }
-          return color;
+      // TURHIA TÄÄLLÄ?
+      // getRandomColor: function() {
+      //     var letters = '0123456789ABCDEF'.split('');
+      //     var color = '#';
+      //     for (var i = 0; i < 6; i++ ) {
+      //         color += letters[Math.floor(Math.random() * 16)];
+      //     }
+      //     return this.changeLuminance(color, -0.4);
+      // },
+      // changeLuminance: function(hex, lum) {
+      //   // validate hex string
+      //   hex = String(hex).replace(/[^0-9a-f]/gi, '');
+      //   if (hex.length < 6) {
+      //     hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      //   }
+      //   lum = lum || 0;
+
+      //   // convert to decimal and change luminosity
+      //   var rgb = "#", c, i;
+      //   for (i = 0; i < 3; i++) {
+      //     c = parseInt(hex.substr(i*2,2), 16);
+      //     c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+      //     rgb += ("00"+c).substr(c.length);
+      //   }
+      //   return rgb;
+      // },
+      getData: function(project) {
+        var data = [];
+        for (var i=0; i<project.phases.length; i++) {
+          data.push(
+            [
+              new Date(project.phases[i].duration.start),
+              new Date(project.phases[i].duration.end),
+              project.phases[i].name,
+              project.phases[i].color
+            ]);
+        }
+        return data;
       },
       drawBubble: function() {
         console.log(timesheet);

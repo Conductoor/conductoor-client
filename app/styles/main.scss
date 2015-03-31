@@ -93,10 +93,29 @@ resource-list::shadow paper-item .button-content {
   padding: 0px !important;
 }
 
-resource-list /deep/ .button-content, skill-list /deep/ .button-content  {
- padding: 0px !important;
+resource-list /deep/ .button-content,
+  skill-list /deep/ .button-content  {
+ padding: 0px;
  font-size: 12px;
 }
+phases-menu /deep/ details /deep/ .button-content {
+  padding: 0px;
+  font-size: 10px;
+}
+/*
+.blink {
+  -webkit-animation: blink 1s step-end 5;
+  -moz-animation: blink 1s step-end 5;
+  -o-animation: blink 1s step-end 5;
+  animation: blink 1s step-end 5;
+}
+
+@keyframes blink {
+  0% {opacity: 0.2}
+  50% {opacity: 1 }
+}
+*/
+
 
 
 

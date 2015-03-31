@@ -15,9 +15,18 @@
   line-height: 20px;
   border-radius: 30px;
 }
+.circle.xs-small{
+  height: 16px;
+  width: 16px;
+  margin: 0px 2px 0px 0px;
+  line-height: 15px;
+  border-radius: 8px;
+  border-width: 0px;
+}
 .circle.free{
   background: $positive;
 }
 .circle.reserved{
   background: $negative;
 }
+
