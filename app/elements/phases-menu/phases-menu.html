@@ -37,7 +37,7 @@
               <span class="phase-name">{{phase.name}}</span>
               <span class="phase-duration">{{phase.duration.start}} - {{phase.duration.end}}</span>
             </div>
-            <div class="phase-color-code" style="background: #{{phase.color}}"></div>
+            <div class="phase-color-code" style="background:{{phase.color}}"></div>
           </paper-item>
           <div>
             <core-collapse id="phase_content{{phase.id}}">
@@ -48,7 +48,7 @@
                   <template repeat="{{skill in phase.skills}}">
                     <paper-item class="skill" no-padding>
                       <div flex >{{skill.name}}</div>
-                      <div title="We still need [[skill.resource_need - skill.current_resource_amount]] person(s)!" class="circle free xs-small" style="background: #{{phase.color}}">[[skill.resource_need - skill.current_resource_amount]]</div>
+                      <div title="We still need [[skill.resource_need - skill.current_resource_amount]] person(s)!" class="circle free xs-small" style="background:{{phase.color}}">[[skill.resource_need - skill.current_resource_amount]]</div>
                     </paper-item>
                   </template>
                 </details>
@@ -79,6 +79,32 @@
         console.log("created");
         // this.project  =[];
       },
+      getRandomColor: function() {
+          var letters = '0123456789ABCDEF'.split('');
+          var color = '#';
+          for (var i = 0; i < 6; i++ ) {
+              color += letters[Math.floor(Math.random() * 16)];
+          }
+          console.log(this.changeLuminance(color, -0.4));
+          return this.changeLuminance(color, -0.4);
+      },
+      changeLuminance: function(hex, lum) {
+        // validate hex string
+        hex = String(hex).replace(/[^0-9a-f]/gi, '');
+        if (hex.length < 6) {
+          hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        }
+        lum = lum || 0;
+
+        // convert to decimal and change luminosity
+        var rgb = "#", c, i;
+        for (i = 0; i < 3; i++) {
+          c = parseInt(hex.substr(i*2,2), 16);
+          c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+          rgb += ("00"+c).substr(c.length);
+        }
+        return rgb;
+      },
       handleResponse: function(event, response) {
         // this.phases =
         console.log(response);
@@ -92,7 +118,7 @@
           {
             name: "Planning",
             id: 1,
-            color: "33ADD6",
+            color: this.getRandomColor(),
             duration: {start: "1/1/2012", end: "2/7/2012"},
             skills: [
               {
@@ -108,7 +134,7 @@
               {name: "Python", resource_need: "7", current_resource_amount: "2"}
             ]
           },
-          {name: "Design", id: 2, color: "CC66FF", duration: {start: "1/1/2012", end: "1/7/2012"},
+          {name: "Design", id: 2, color: this.getRandomColor(), duration: {start: "1/1/2012", end: "1/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -118,7 +144,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Implementation", id: 3, color: "E65C8A", duration: {start: "1/15/2012", end: "2/2/2012"},
+          {name: "Implementation", id: 3, color: this.getRandomColor(), duration: {start: "1/15/2012", end: "2/2/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -128,7 +154,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Testing", id: 4, color: "FF8533", duration: {start: "1/14/2012", end: "2/7/2012"},
+          {name: "Testing", id: 4, color: this.getRandomColor(), duration: {start: "1/14/2012", end: "2/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
@@ -138,7 +164,7 @@
               {name: "Python", resource_need: "6", current_resource_amount: "0"},
               {name: "Python", resource_need: "7", current_resource_amount: "2"}]
           },
-          {name: "Closure", id: 5, color: "FFE680", duration: {start: "2/1/2012", end: "2/7/2012"},
+          {name: "Closure", id: 5, color: this.getRandomColor(), duration: {start: "2/1/2012", end: "2/7/2012"},
             skills: [
               {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
               {name: "UI Design", resource_need: "2", current_resource_amount: "1"},

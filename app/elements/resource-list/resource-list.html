@@ -1,8 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<!--
-En saanut core-listia toimimaan... -Teemu
-<link rel="import" href="../../bower_components/core-list/core-list.html">
--->
+
 
 <polymer-element name="resource-list" attributes="userSelection">
   <template>
@@ -20,6 +17,7 @@ En saanut core-listia toimimaan... -Teemu
       core-error="{{handleError}}">
     </core-ajax>
 
+    <core-selector selected="0">
     <template repeat="{{resource in resources}}">
       <paper-item
         no-padding
@@ -28,6 +26,7 @@ En saanut core-listia toimimaan... -Teemu
         {{resource.name}}
       </paper-item>
     </template>
+    </core-selector>
 
   </template>
 

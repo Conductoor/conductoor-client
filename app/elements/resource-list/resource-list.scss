@@ -5,7 +5,7 @@
   font-size: 1px !important;
 }
 .resource{
-  height: 30px;
+  //height: 30px;
   line-height: 30px;
   background: $secondary;
   padding-right: 5px;
@@ -19,9 +19,10 @@
 .resource.reserved{
   background: $negative !important;
 }
-.resource.selected{
+.resource.core-selected{
+  font-weight: 700;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border: 2px solid $primary;
+  border: 3px solid $primary;
 }
