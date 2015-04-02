@@ -23,7 +23,11 @@
         no-padding
         on-click={{selectPerson}}
         class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
-        {{resource.name}}
+        <span flex>{{resource.name}}</span>
+        <template if="{{ !resource.free }}" >
+          <core-icon icon="block"></core-icon>
+        </template>
+
       </paper-item>
     </template>
     </core-selector>

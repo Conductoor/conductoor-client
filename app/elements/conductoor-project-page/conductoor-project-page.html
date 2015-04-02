@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../../styles/main.css">
     <!-- endbuild-->
     <!-- <core-localstorage name="conductoor-project-data" id="storage" value="{{project}}"></core-localstorage> -->
+    <!-- <core-localstorage name="project-backup" value="{{project}}"></core-localstorage> -->
+    <!-- <core-localstorage name="user-selection-backup" value="{{userSelection}}"></core-localstorage> -->
 
     <core-scaffold id="core_scaffold">
 
@@ -67,7 +69,7 @@
 
             <!-- Profile -->
             <div flex self-stretch relative class="section profile">
-              <conductoor-profile userSelection={{userSelection}}></conductoor-profile>
+              <conductoor-profile userSelection={{userSelection}} project={{project}}></conductoor-profile>
             </div>
           </div>
         </div>

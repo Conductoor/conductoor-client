@@ -16,6 +16,8 @@
     <link rel="import" href="../bower_components/app-router/app-router.html">
   </head>
   <body unresolved fullbleed>
+    <core-localstorage id="projectBackup" name="project-backup"></core-localstorage>
+    <core-localstorage id=" userSelectionBackup" name="userSelectionBackup"></core-localstorage>
     <app-router>
       <!-- Project page -->
       <app-route path="/project" import="/pages/project-page.html"></app-route>

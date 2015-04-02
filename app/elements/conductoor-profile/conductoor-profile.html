@@ -1,8 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-profile" attributes="userSelection">
+<polymer-element name="conductoor-profile" attributes="userSelection project">
   <template>
+    <link rel="import" href="../bower_components/paper-item/paper-button.html">
     <link rel="stylesheet" href="conductoor-profile.css">
+
+    <core-ajax
+      id ="addEmployeeAjax"
+      url="/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
 
     <div layout vertical fit class="section profile">
       <div flex three relative class="profile-header">
@@ -36,20 +47,56 @@
       </div>
       <div flex one relative class="profile-add">
         <div horizontal layout center center-justified fit>
-          <div>
-            <button>Add</button>
-          </div>
+          <paper-button on-click="{{addEmployee}}">
+            <core-icon icon="add"></core-icon>
+            Add
+          </paper-button>
         </div>
       </div>
     </div>
+    <!-- <core-localstorage name="project-backup" value="{{project}}"></core-localstorage>
+    <core-localstorage name="userSelectionBackup" value="{{userSelection}}"></core-localstorage> -->
   </template>
   <script>
     (function () {
       Polymer({
         created: function() {
           console.log(this.userSelection);
+        },
+        addEmployee: function() {
+          var ajax = this.$.addEmployeeAjax;
+          ajax.body = JSON.stringify(
+            {
+              "phase_id": "",
+              "project_id": "",
+              "employee_id": ""
+            }
+          );
+          ajax.go();
+          // ADD USER TO LOCAL DATA
+          this.storage = document.querySelector("#projectBackup");
+          if (this.storage) {
+            this.storage.value = this.project;
+          }
+          this.storageUser = document.querySelector("#userSelectionBackup");
+          if (this.storageUser) {
+            this.storageUser.value = this.userSelection;
+          }
+        },
+        handleResponse: function() {
+          console.log("jooasda");
+          //TODO
+        },
+        handleError: function() {
+          console.log("joo2");
+          if (this.storage) {
+            console.log("joo");
+            this.project = this.storage.value;
+          }
+          if (this.storageUser) {
+            this.project = this.storageUser.value;
+          }
         }
-        // define element prototype here
       });
     })();
   </script>

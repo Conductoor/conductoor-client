@@ -80,6 +80,13 @@ module.exports = function (grunt) {
           src: ['styles/{,*/}*.{scss,sass}', 'elements/{,*/}*.{scss,sass}'],
           dest: '<%= yeoman.dist %>',
           ext: '.css'
+        },
+        {
+          expand: true,
+          dot: true,
+          cwd: 'bower_components/font-awesome',
+          src: ['fonts/*.*'],
+          dest: '<%= config.dist %>'
         }]
       },
       server: {
