@@ -8,7 +8,7 @@
       <div flex three relative class="profile-header">
         <div horizontal layout center fit>
           <div flex two>
-            <div on-click={{click}} class="profile-img"><img src="../../images/no_image.png"></div>
+            <div class="profile-img"><img src="../../images/no_image.png"></div>
           </div>
           <div flex three>
             <div class="profile-name">{{userSelection.selectedPerson.name}}</div>
@@ -48,10 +48,6 @@
       Polymer({
         created: function() {
           console.log(this.userSelection);
-        },
-        click: function() {
-          console.log("hei");
-          this.userSelection.selectedSkill.name = "kakka";
         }
         // define element prototype here
       });

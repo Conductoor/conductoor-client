@@ -35,7 +35,7 @@
           <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.id}}">
             <div vertical layout>
               <span class="phase-name">{{phase.name}}</span>
-              <span class="phase-duration">Weeks: {{phase.duration.start}}-{{phase.duration.end}}</span>
+              <span class="phase-duration">{{phase.duration.start}} - {{phase.duration.end}}</span>
             </div>
             <div class="phase-color-code" style="background: #{{phase.color}}"></div>
           </paper-item>
@@ -83,7 +83,7 @@
         // this.phases =
         console.log(response);
         this.project = {
-          name: "project 1",
+          name: "Project 1",
           duration: {start: "1/1/2012", end: "3/7/2012"}
         };
         this.project.phases =

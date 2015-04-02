@@ -4,28 +4,20 @@
 :host {
   display: block;
 }
-.phase > div{
-  border-left: 1px solid $bg-secondary;
-  border-right: 1px solid $bg-secondary;
-  border-bottom: 1px solid $bg-secondary;
+details paper-item {
+  margin-left: 5px;
 }
-.phase.core-selected .phase-header{
-  background: $primary;
-}
-.phase-header{
-  background: $secondary;
-  color: #fff;
-  border-bottom: 1px solid $bg-secondary;
-}
-.phase-name{
-
+#phase_content > div{
+  margin: 5px;
 }
 .phase-duration{
   margin-top: 3px;
   font-size: 10px;
 }
-#phase_content > div{
-  margin: 5px;
+.phase-header{
+  background: $secondary;
+  color: #fff;
+  border-bottom: 1px solid $bg-secondary;
 }
 .phase-color-code{
   position: absolute;
@@ -34,6 +26,14 @@
   width: 20px;
   height: 100%;
 }
+.phase > div{
+  border-left: 1px solid $bg-secondary;
+  border-right: 1px solid $bg-secondary;
+  border-bottom: 1px solid $bg-secondary;
+}
+.phase.core-selected .phase-header{
+  background: $primary;
+}
 .skill{
   height: 22px;
   line-height: 22px;
@@ -41,7 +41,4 @@
   padding-left: 2px;
   margin-bottom: 2px;
   border-bottom: 1px solid black;
-}
-details paper-item {
-  margin-left: 5px;
 }
