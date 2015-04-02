@@ -27,14 +27,16 @@
 .arrow-right::after{
   content: "";
   display: block;
-  width: 28px;
-  height: 28px;
+  width: 33px; /* 28*/
+  height: 33px; /*30*/
   -webkit-transform: translateX(-50%) rotate(45deg);
   transform: translateX(-50%) rotate(45deg);
   background: transparent;
-  border-right: 2px solid $bg-primary;
-  border-top: 2px solid $bg-primary;
+  border-right: 2px solid $secondary;
+  border-top: 2px solid $secondary;
   position: absolute;
   top: 15%;
-  right: -28px;
+  right: -33px;
+  margin-top: -3px;
+
 }

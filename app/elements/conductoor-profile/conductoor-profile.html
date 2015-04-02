@@ -16,8 +16,8 @@
     </core-ajax>
 
     <div layout vertical fit class="section profile">
-      <div flex three relative class="profile-header">
-        <div horizontal layout center fit>
+      <div relative class="profile-header">
+        <div horizontal layout center>
           <div flex two>
             <div class="profile-img"><img src="../../images/no_image.png"></div>
           </div>
@@ -28,18 +28,18 @@
         </div>
       </div>
 
-      <div flex one relative class="profile-main-skill">
-        <div horizontal layout center fit center-justified>
+      <div relative class="profile-main-skill">
+        <div horizontal layout center  center-justified>
           <div>Main skill: {{userSelection.selectedPerson.mainSkill}}</div>
         </div>
       </div>
 
-      <div flex two relative class="profile-skills">
-        <div horizontal layout fit>
+      <div flex one relative class="profile-skills">
+        <div horizontal layout >
           <div flex>
-            <ul>
+            <ul class="skill-list">
               <template repeat="{{ skill in userSelection.selectedPerson.skills }}">
-                <li>{{skill}}</li>
+                <li >{{skill}}</li>
               </template>
             </ul>
           </div>
@@ -47,7 +47,7 @@
       </div>
       <div flex one relative class="profile-add">
         <div horizontal layout center center-justified fit>
-          <paper-button on-click="{{addEmployee}}">
+          <paper-button raised on-click="{{addEmployee}}">
             <core-icon icon="add"></core-icon>
             Add
           </paper-button>

@@ -40,8 +40,9 @@ var ONE_DAY = 1000 * 60 * 60 * 24;
       var bubble = new Bubble(widthMonth, this.year.start_date, cur.start, cur.end, this.divider );
       var line = [
         '<span style="background-color:'+(cur.type || '#000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
-        '<span class="date">' + bubble.getDateLabel() + '</span> ',
-        '<span class="label">' + cur.label + '</span>'
+        '<span class="label">' + cur.label + '</span> ',
+        '<span class="date">' + bubble.getDateLabel() + '</span>'
+
       ].join('');
 
       html.push('<li>' + line + '</li>');
