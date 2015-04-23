@@ -5,25 +5,37 @@
     <link rel="stylesheet" href="conductoor-phase-arrow.css">
 
     <!-- <core-localstorage name="conductoor-project-data" value="{{project}}"></core-localstorage> -->
-    <div class="selected-preview" on-click={{click}}>
-      <div><span class="selected-phase arrow-right">{{userSelection.phase}}</span></div>
-      <div><span class="selected-skill arrow-right">{{userSelection.selectedSkill.name}}</span></div>
-      <div><div class="arrow-right"><div class="circle free wide-border">{{userSelection.selectedSkill.free}}</div></div></div>
-      <div><div class="arrow-right"><div class="circle reserved wide-border">{{userSelection.selectedSkill.reserved}}</div></div></div>
-      <div><span class="selected-worker arrow-right">{{userSelection.selectedPerson.name}}</span></div>
+    <div horizontal layout class="selected-preview" on-click={{click}}>
+      <div>
+        <span class="selected-phase arrow-right">{{userSelection.phase.title}}</span>
+      </div>
+      <div>
+        <span class="selected-skill arrow-right">{{userSelection.selectedSkill.rs.name}}</span>
+      </div>
+      <div>
+        <div class="arrow-right">
+          <div class="circle free wide-border">{{userSelection.selectedSkill.rs.required_hours}}</div>
+        </div>
+      </div>
+      <div>
+        <div class="arrow-right">
+          <div class="circle reserved wide-border">{{userSelection.selectedSkill.as.allocated_hours}}</div>
+        </div>
+      </div>
+      <div>
+        <span class="selected-worker arrow-right">{{userSelection.selectedPerson.first_name}} {{userSelection.selectedPerson.last_name}}</span>
+      </div>
     </div>
   </template>
   <script>
     (function () {
       Polymer({
+        created: function() {
+          console.log("created jei");
+        },
         ready: function() {
-          console.log(this.project);
-          // this.project = "kakka";
-        } ,
-        click: function() {
-          this.project = "kakka";
+          //
         }
-        // define element prototype here
       });
     })();
   </script>

@@ -13,7 +13,7 @@
     <core-ajax
       id = "projectAjax"
       auto
-      url="/"
+      url="http://conductoor-api.herokuapp.com/projects/1/"
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -34,25 +34,20 @@
         <div class="phase">
           <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.id}}">
             <div vertical layout>
-              <span class="phase-name">{{phase.name}}</span>
-              <span class="phase-duration">{{phase.duration.start}} - {{phase.duration.end}}</span>
+              <span class="phase-name">{{phase.title}}</span>
+              <!-- TODO -->
+              <span class="phase-duration">{{phase.time_start}} - {{phase.time_end}}</span>
             </div>
             <div class="phase-color-code" style="background:{{phase.color}}"></div>
           </paper-item>
           <div>
-            <core-collapse id="phase_content{{phase.id}}">
-              <div>
-                <!-- tähän template kans -->
-                <details class="phase-skills">
-                  <summary >Skill category</summary>
-                  <template repeat="{{skill in phase.skills}}">
-                    <paper-item class="skill" no-padding>
-                      <div flex >{{skill.name}}</div>
-                      <div title="We still need [[skill.resource_need - skill.current_resource_amount]] person(s)!" class="circle free xs-small" style="background:{{phase.color}}">[[skill.resource_need - skill.current_resource_amount]]</div>
-                    </paper-item>
-                  </template>
-                </details>
-              </div>
+            <core-collapse id="phase_content{{phase.id}}" class="phase-content">
+              <template repeat="{{skill in phase.required_skills}}">
+                <paper-item class="skill" no-padding>
+                  <div flex class="summary-div">{{skill.name}}</div>
+                  <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div>
+                </paper-item>
+              </template>
             </core-collapse>
           </div>
         </div>
@@ -76,8 +71,7 @@
         // console.log(this.$.phase_content1);
       },
       created: function() {
-        console.log("created");
-        // this.project  =[];
+        //
       },
       getRandomColor: function() {
           var letters = '0123456789ABCDEF'.split('');
@@ -105,81 +99,16 @@
         }
         return rgb;
       },
-      handleResponse: function(event, response) {
-        // this.phases =
-        console.log(response);
-        this.project = {
-          name: "Project 1",
-          duration: {start: "1/1/2012", end: "3/7/2012"}
-        };
-        this.project.phases =
-        [
-          // Color codes: #33ADD6, #CC66FF, #E65C8A, #FF8533, #FFE680, #4DDB94, #52CCCC, #5E7E9E, #8F0000
-          {
-            name: "Planning",
-            id: 1,
-            color: this.getRandomColor(),
-            duration: {start: "1/1/2012", end: "2/7/2012"},
-            skills: [
-              {
-                name: "Javascript",
-                resource_need: "4",
-                current_resource_amount: "2"
-              },
-              {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
-              {name: "PHP", resource_need: "3", current_resource_amount: "0"},
-              {name: "Python", resource_need: "4", current_resource_amount: "0"},
-              {name: "Python", resource_need: "5", current_resource_amount: "1"},
-              {name: "Python", resource_need: "6", current_resource_amount: "0"},
-              {name: "Python", resource_need: "7", current_resource_amount: "2"}
-            ]
-          },
-          {name: "Design", id: 2, color: this.getRandomColor(), duration: {start: "1/1/2012", end: "1/7/2012"},
-            skills: [
-              {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
-              {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
-              {name: "PHP", resource_need: "3", current_resource_amount: "0"},
-              {name: "Python", resource_need: "4", current_resource_amount: "0"},
-              {name: "Python", resource_need: "5", current_resource_amount: "1"},
-              {name: "Python", resource_need: "6", current_resource_amount: "0"},
-              {name: "Python", resource_need: "7", current_resource_amount: "2"}]
-          },
-          {name: "Implementation", id: 3, color: this.getRandomColor(), duration: {start: "1/15/2012", end: "2/2/2012"},
-            skills: [
-              {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
-              {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
-              {name: "PHP", resource_need: "3", current_resource_amount: "0"},
-              {name: "Python", resource_need: "4", current_resource_amount: "0"},
-              {name: "Python", resource_need: "5", current_resource_amount: "1"},
-              {name: "Python", resource_need: "6", current_resource_amount: "0"},
-              {name: "Python", resource_need: "7", current_resource_amount: "2"}]
-          },
-          {name: "Testing", id: 4, color: this.getRandomColor(), duration: {start: "1/14/2012", end: "2/7/2012"},
-            skills: [
-              {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
-              {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
-              {name: "PHP", resource_need: "3", current_resource_amount: "0"},
-              {name: "Python", resource_need: "4", current_resource_amount: "0"},
-              {name: "Python", resource_need: "5", current_resource_amount: "1"},
-              {name: "Python", resource_need: "6", current_resource_amount: "0"},
-              {name: "Python", resource_need: "7", current_resource_amount: "2"}]
-          },
-          {name: "Closure", id: 5, color: "#e6d873", duration: {start: "2/1/2012", end: "2/7/2012"},
-            skills: [
-              {name: "Javascript", resource_need: "4", current_resource_amount: "2"},
-              {name: "UI Design", resource_need: "2", current_resource_amount: "1"},
-              {name: "PHP", resource_need: "3", current_resource_amount: "0"},
-              {name: "Python", resource_need: "4", current_resource_amount: "0"},
-              {name: "Python", resource_need: "5", current_resource_amount: "1"},
-              {name: "Python", resource_need: "6", current_resource_amount: "0"},
-              {name: "Python", resource_need: "7", current_resource_amount: "2"}]
-          }
-        ];
-        this.userSelection.phase = this.project.phases[0].name;
+      handleResponse: function(event, res) {
+        console.log("ORDER");
+        console.dir(res.response);
+        this.project = res.response;
+        this.userSelection.phase = this.project.phases[0];
+        this.fire('load-skill', {msg: 'Load-skill event fired'});
         this.fire('show-timeline', {msg: 'Load-skill event fired'});
+
       },
       handleResponsePost: function(event, response) {
-        // this.phases =
         console.log(response);
         console.log("post");
       },
@@ -191,9 +120,8 @@
         console.log("postError");
       },
       openPhase: function(event, detail, sender){
-        console.log(sender.templateInstance.model.phase.name);
-        this.userSelection.phase = sender.templateInstance.model.phase.name;
         var querystring = "#phase_content"+sender.getAttribute("target-id");
+        this.userSelection.phase = sender.templateInstance.model.phase;
         this.shadowRoot.querySelector(querystring).toggle();
         this.fire('load-skill', {msg: 'Load-skill event fired'});
       }

@@ -10,7 +10,7 @@
     <core-ajax
       id = "getResources"
       auto
-      url="/"
+      url="http://conductoor-api.herokuapp.com/users/"
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -20,10 +20,11 @@
     <core-selector selected="0">
     <template repeat="{{resource in resources}}">
       <paper-item
+        title="Select a resource"
         no-padding
         on-click={{selectPerson}}
         class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
-        <span flex>{{resource.name}}</span>
+        <span flex>{{resource.first_name}} {{resource.last_name}}</span>
         <template if="{{ !resource.free }}" >
           <core-icon icon="block"></core-icon>
         </template>
@@ -40,19 +41,9 @@
         created: function() {
           // TODO
         },
-        handleResponse: function(event, response) {
-          console.log(response);
-          this.resources = [
-            {name: "John Doe", free: 1, skills:["Javascript", "PHP", "Front-end", "Back-end", "Kaljan juominen"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "Jaska Jokunen", free: 1, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 0, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 0, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 0, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 1, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 0, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 1, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"},
-            {name: "John Doe", free: 0, skills:["Javascript", "PHP", "Front-end"], mainSkill: "Front-end", title: "UI Design"}
-          ];
+        handleResponse: function(event, res) {
+          console.log(res.response);
+          this.resources = res.response
           this.userSelection.selectedPerson = this.resources[0];
         },
         handleError: function(event, response) {
@@ -60,7 +51,6 @@
           console.log(response);
         },
         selectPerson: function(event, detail, sender) {
-          console.log(sender.templateInstance.model.resource.name);
           this.userSelection.selectedPerson = sender.templateInstance.model.resource;
         }
       });

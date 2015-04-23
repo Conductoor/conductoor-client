@@ -22,7 +22,7 @@
             <div class="profile-img"><img src="../../images/no_image.png"></div>
           </div>
           <div flex three>
-            <div class="profile-name">{{userSelection.selectedPerson.name}}</div>
+            <div class="profile-name">{{userSelection.selectedPerson.first_name}} {{userSelection.selectedPerson.last_name}}</div>
             <div class="profile-title">{{userSelection.selectedPerson.title}}</div>
           </div>
         </div>
@@ -38,8 +38,8 @@
         <div horizontal layout >
           <div flex>
             <ul class="skill-list">
-              <template repeat="{{ skill in userSelection.selectedPerson.skills }}">
-                <li >{{skill}}</li>
+              <template repeat="{{ skill in userSelection.selectedPerson.knows }}">
+                <li >{{skill.name}}</li>
               </template>
             </ul>
           </div>
@@ -47,7 +47,7 @@
       </div>
       <div flex one relative class="profile-add">
         <div horizontal layout center center-justified fit>
-          <paper-button raised on-click="{{addEmployee}}">
+          <paper-button title="Add selected employee to {{userSelection.phase.title phase}}" raised on-click="{{addEmployee}}">
             <core-icon icon="add"></core-icon>
             Add
           </paper-button>

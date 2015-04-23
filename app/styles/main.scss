@@ -83,7 +83,7 @@ core-toolbar{
 /* END Phases area */
 
 /* Paper item button padding and smaller font size*/
-phases-menu /deep/ details /deep/ .button-content {
+phases-menu /deep/ .phase-content /deep/ .button-content {
   padding: 0px;
   font-size: 10px;
 }

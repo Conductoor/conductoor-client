@@ -28,47 +28,26 @@
       // define element prototype here
       ready: function() {
         document.addEventListener('show-timeline', (function(e) {
-            if (this.project.phases) {
-              console.log(this.getData(this.project));
-              timesheet = new Timesheet(this.$.timeline, new Date(this.project.duration.start),
-                new Date(this.project.duration.end), this.getData(this.project));
-            }
-          }).bind(this));
+          if (this.project.phases) {
+            // console.log(this.getData(this.project));
+            console.log(this.$.timeline);
+            console.log(this.project);
+            timesheet = new Timesheet(
+              this.$.timeline,
+              new Date(this.project.phases[0].time_start),
+              new Date(this.project.phases[this.project.phases.length-1].time_end),
+              this.getData(this.project));
+          }
+        }).bind(this));
       },
-      // TURHIA TÄÄLLÄ?
-      // getRandomColor: function() {
-      //     var letters = '0123456789ABCDEF'.split('');
-      //     var color = '#';
-      //     for (var i = 0; i < 6; i++ ) {
-      //         color += letters[Math.floor(Math.random() * 16)];
-      //     }
-      //     return this.changeLuminance(color, -0.4);
-      // },
-      // changeLuminance: function(hex, lum) {
-      //   // validate hex string
-      //   hex = String(hex).replace(/[^0-9a-f]/gi, '');
-      //   if (hex.length < 6) {
-      //     hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-      //   }
-      //   lum = lum || 0;
-
-      //   // convert to decimal and change luminosity
-      //   var rgb = "#", c, i;
-      //   for (i = 0; i < 3; i++) {
-      //     c = parseInt(hex.substr(i*2,2), 16);
-      //     c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-      //     rgb += ("00"+c).substr(c.length);
-      //   }
-      //   return rgb;
-      // },
       getData: function(project) {
         var data = [];
         for (var i=0; i<project.phases.length; i++) {
           data.push(
             [
-              new Date(project.phases[i].duration.start),
-              new Date(project.phases[i].duration.end),
-              project.phases[i].name,
+              new Date(project.phases[i].time_start),
+              new Date(project.phases[i].time_end),
+              project.phases[i].title,
               project.phases[i].color
             ]);
         }

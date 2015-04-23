@@ -14,6 +14,8 @@
   font-size: 14px;
   background: $bg-secondary;
   float: right;
+  text-align: center;
+  max-height: 44px;
 }
 .selected-preview > div{
   display: inline-block;
@@ -23,6 +25,10 @@
 .selected-preview .selected-skill{
   font-family: $title-font;
   margin-right: 5px;
+}
+.selected-preview span {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .arrow-right::after{
   content: "";

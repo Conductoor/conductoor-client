@@ -10,7 +10,7 @@
     <core-ajax
       id = "getSkillList"
       auto
-      url="/"
+      url="http://google.fi"
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -19,10 +19,9 @@
 
     <core-selector selected="0">
     <template repeat="{{skill in skills}}">
-      <paper-item on-click={{selectSkill}} class="skill" no-padding>
-        <div flex >{{skill.name}}</div>
-        <div class="circle free small">{{skill.free}}</div>
-        <div class="circle reserved small">{{skill.reserved}}</div>
+      <paper-item title="Select a skill" on-click={{selectSkill}} class="skill" no-padding>
+        <div flex >{{ skill.rs.name }}</div>
+        <div class="">{{ skill.rs.required_hours - skill.as.allocated_hours }}</div>
       </paper-item>
     </template>
     </core-selector>
@@ -30,31 +29,39 @@
   </template>
 
   <script>
+    var skillCombine = function(rs, as) {
+      for (var k=0; k<as.length; i++) {
+        if (rs.id === as[k].id) {
+          return {"rs": rs, "as": as[k]};
+        }
+      }
+      return {"rs": rs, "as": {"name": "", "allocated_hours": 0}};
+    };
     (function () {
       Polymer( "skill-list", {
         ready: function() {
+          this.skills = [];
           document.addEventListener('load-skill', (function(e) {
-            var ajax = this.$.getSkillList;
-            ajax.go();
+            this.skills = [];
+            this.skill();
           }).bind(this));
         },
         created: function() {
           // TODO
+
+        },
+        skill: function() {
+          console.log("jou");
+          this.userSelection.phase.required_skills.map(function(rs) {
+            console.dir(rs);
+            console.log(this);
+            this.skills.push(skillCombine(rs, this.userSelection.phase.allocations));
+          }.bind(this));
+          this.userSelection.selectedSkill = this.skills[0];
         },
         handleResponse: function(event, response) {
           //console.log(response);
-          this.skills = [
-            {name: "Javascript", free: "1", reserved: "7"},
-            {name: "UI Design", free: "2", reserved: "6"},
-            {name: "PHP", free: "3", reserved: "5"},
-            {name: "Python", free: "4", reserved: "4"},
-            {name: "Python", free: "5", reserved: "3"},
-            {name: "Python", free: "6", reserved: "2"},
-            {name: "Python", free: "7", reserved: "1"}
-          ];
-          this.userSelection.selectedSkill = this.skills[0];
-          this.userSelection.free = this.skills[0].free;
-          this.userSelection.reserved = this.skills[0].reserved;
+
         },
         handleError: function(event, response) {
           console.log("Error");
