@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-added-phases" attributes="phases">
+  <template>
+    <link rel="stylesheet" href="conductoor-added-phases.css">
+    <core-menu class="phases-wrapper" selected="0">
+      <template repeat="{{phase in phases}}">
+        <div id="{{phase.color}}" class="phase" relative>
+            <paper-item class="phase-header">
+              <div vertical layout>
+                <span class="phase-name">{{phase.name}}</span>
+                <!-- TODO -->
+                <span class="phase-duration">{{phase.start}} - {{phase.end}}</span>
+              </div>
+            </paper-item>
+            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:{{phase.color}}"><core-icon icon="clear"></core-icon></button>
+            <div>
+              <!-- <core-collapse id="phase_content{{phase.id}}" class="phase-content">
+                <template repeat="{{skill in phase.required_skills}}">
+                  <paper-item class="skill" no-padding>
+                    <div flex class="summary-div">{{skill.name}}</div>
+                    <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div>
+                  </paper-item>
+                </template>
+              </core-collapse> -->
+            </div>
+          </div>
+      </template>
+    </core-menu>
+
+    <!-- PopUp for delete action-->
+    <core-overlay id="modal" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px;">
+        <h2>Remove phase</h2>
+        <div>Are you sure you want to remove this phase?</div>
+        <br>
+        <paper-button raised core-overlay-toggle on-click="{{removePhase}}">Remove</paper-button><paper-button raised core-overlay-toggle>Cancel</paper-button>
+      </div>
+    </core-overlay>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        created: function(){
+          this.phaseToRemoveId;
+        },
+        removePhase: function(){
+          this.phases = _.without( this.phases, _.findWhere(this.phases, {color: this.phaseToRemoveId}) );
+        },
+        confirmDelete: function(event, detail, sender){
+          this.phaseToRemoveId = sender.getAttribute("phase-id");
+          this.$.modal.toggle();
+        }
+      });
+    })();
+  </script>
+</polymer-element>

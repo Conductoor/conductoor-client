@@ -5,48 +5,6 @@
 
 <polymer-element name="create-project-page" noscript>
   <template>
-  <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="../styles/main.css">
-  <!-- endbuild-->
-
-    <core-scaffold id="core_scaffold">
-
-      <!-- Toolbar: brand, links to pages, logout -->
-      <core-toolbar fullbleed tool flex>
-        <h1 horizontal flex>New project</h1>
-
-        <core-menu-button>
-            <core-icon-button icon="more-vert"></core-icon-button>
-            <core-dropdown halign="right" class="dropdown" layered>
-                <core-menu>
-                    <core-item>My Projects</core-item>
-                    <core-item>Help</core-item>
-                    <core-item>Logout</core-item>
-                </core-menu>
-            </core-dropdown>
-        </core-menu-button>
-
-      </core-toolbar>
-
-      <!-- Left panel -->
-      <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
-
-        <core-toolbar tool>
-          <span flex id="app-name">Conductoor</span>
-        </core-toolbar>
-
-        <!-- Phases -->
-        <h2 class="phases-title">Phases:</h2>
-
-      </core-header-panel>
-      <!-- END Left panel -->
-
-      <!-- Right panel -->
-      <div vertical layout fit class="right-panel">
-   
-
-      </div>
-      <!-- END Right panel -->
-    </core-scaffold>
+    <conductoor-create-project-page></conductoor-create-project-page>
   </template>
 </polymer-element>

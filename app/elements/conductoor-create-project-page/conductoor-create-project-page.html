@@ -11,7 +11,7 @@
 
       <!-- Toolbar: brand, links to pages, logout -->
       <core-toolbar fullbleed tool flex>
-        <h1 horizontal flex>Create new project</h1>
+        <h1 horizontal flex><paper-input label="Project's name"></paper-input></h1>
 
         <core-menu-button>
             <core-icon-button icon="more-vert"></core-icon-button>
@@ -34,14 +34,17 @@
           <span flex id="app-name">Conductoor</span>
         </core-toolbar>
 
+        <h2 class="phases-title">Phases:</h2>
+        <conductoor-added-phases phases={{phases}}></conductoor-added-phases>
 
       </core-header-panel>
       <!-- END Left panel -->
 
       <!-- Right panel -->
-      <div vertical layout fit class="right-panel" >
-        
-
+      <div fit vertical layout class="right-panel">
+        <div style="margin-bottom:30px;">
+          <conductoor-create-phase-form phases={{phases}}></conductoor-create-phase-form>
+        </div>
       </div>
       <!-- END Right panel -->
     </core-scaffold>
@@ -49,7 +52,9 @@
   <script>
     (function () {
       Polymer({
-        // define element prototype here
+        ready: function(){
+          this.phases = this.phases || [];
+        }
       });
     })();
   </script>

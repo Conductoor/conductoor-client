@@ -1,0 +1,182 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+
+<polymer-element name="conductoor-create-phase-form" attributes="phases">
+  <template>
+    <link rel="stylesheet" href="conductoor-create-phase-form.css">
+
+      <h2>New phase:</h2>
+      <form id="createProjectForm" on-submit="{{validateForm}}">
+        <div layout horizontal>
+          <div flex class="card">
+            <paper-input-decorator floatingLabel label="Phase name" id="phaseNameDecorator">
+              <input is="core-input" required maxlength="30" on-input="{{validateInput}}" error="This field is required" type="text" value="{{phaseName}}">
+            </paper-input-decorator>
+            <br>
+            <div layout horizontal>
+              <paper-input-decorator flex label="Start" style="margin-right:10px;">
+                <label>Start date:</label><input is="core-input" type="date" required on-input="{{validateInput}}" value="{{phaseStart}}"></input>
+              </paper-input-decorator>
+              <paper-input-decorator flex label="End">
+                <label>End date:</label><input is="core-input" type="date" required on-input="{{validateInput}}" value="{{phaseEnd}}"></input>
+              </paper-input-decorator>
+            </div>
+            <br>
+            <paper-input-decorator label="Desription" floatingLabel>
+              <paper-autogrow-textarea>
+                <textarea value="{{phaseDescription}}"></textarea>
+              <paper-autogrow-textarea>
+            </paper-input-decorator>
+          </div>
+
+          <div flex class="card">
+            <h3>Select skills for phase:</h3>
+            <core-selector id="selectSkills" selected="" multi>
+              <template repeat="{{skill in skills}}">
+                <div class="skill" on-click={{addSkill}}>{{skill}}</div>
+              </template>
+            </core-selector>
+          </div>
+        </div>
+        <br>
+        <!-- paper-buttonilla submit ei toimi... -->
+        <button id="submit" disabled?="{{formInvalid}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
+      </form>
+      <paper-toast id="addSuccess" text="Phase added"></paper-toast>
+      <paper-toast id="addError" text="Could not add phase. Check your inputs!"></paper-toast>
+
+  </template>
+
+
+  <script>
+    (function () {
+      Polymer({
+        created: function(){
+          this.skills = ["skill1", "skill2", "skill3", "skill4", "skill5"];
+          this.selectedSkills = [];
+          this.phaseName;
+          this.phaseStart;
+          this.phaseEnd;
+          this.phaseDescription;
+          this.phaseColor = "#000";
+          this.formInvalid = true;
+        },
+
+        addSkill: function(event, detail, sender) {
+          var skill_to_add = sender.templateInstance.model.skill;
+          // check if skill is already selected
+          if (this.selectedSkills.indexOf(skill_to_add) >= 0 ){
+            this.selectedSkills.splice(this.selectedSkills.indexOf(skill_to_add),1);
+            this.updateFormValidity();
+          }
+          else{
+            this.selectedSkills.push(skill_to_add)
+            this.updateFormValidity();
+          }
+        },
+
+        addPhase: function(){
+          var exists = 0;
+          var current = this.phaseName;
+          // can't have two phases with same name
+          console.log(this.phases);
+          this.phases.forEach(function(phase){
+            if (phase.name === current) {
+              alert("Already phase with that name!");
+              exists = 1;
+            }
+          });
+          if (!exists) {
+            // generate random color --> works as ID?
+            this.phaseColor = this.getRandomColor();
+            this.phases.push({"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":this.selectedSkills, });
+            this.$.addSuccess.show();
+            console.log(this.phases);
+          }
+          this.clearForm();
+        },
+
+        getRandomColor: function() {
+          var letters = '0123456789ABCDEF'.split('');
+          var color = '#';
+          for (var i = 0; i < 6; i++ ) {
+              color += letters[Math.floor(Math.random() * 16)];
+          }
+          return this.changeLuminance(color, -0.4);
+        },
+
+        changeLuminance: function(hex, lum) {
+          // validate hex string
+          hex = String(hex).replace(/[^0-9a-f]/gi, '');
+          if (hex.length < 6) {
+            hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+          }
+          lum = lum || 0;
+          // convert to decimal and change luminosity
+          var rgb = "#", c, i;
+          for (i = 0; i < 3; i++) {
+            c = parseInt(hex.substr(i*2,2), 16);
+            c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+            rgb += ("00"+c).substr(c.length);
+          }
+          return rgb;
+        },
+
+        validateInput: function(e){
+          var d = e.target.parentNode;
+          d.isInvalid = !e.target.validity.valid;
+          this.updateFormValidity();
+        },
+
+        updateFormValidity: function(){
+          var myform = this.$.createProjectForm;
+          var invalid = false;
+          // check validity of form fields
+          Array.prototype.forEach.call(myform, function(child) {
+            if (child.validity.valid === false) {
+              invalid = true;
+            }
+          });
+          if(!this.selectedSkills.length){invalid = true};
+          this.formInvalid = invalid;
+        },
+
+        validateForm: function(e) {
+          e.preventDefault();
+          // validate data
+          var valid = true;
+          if(this.phaseName.length > 30 || this.phaseName.length === 0){
+            valid = false;
+          }
+          // strip tags
+          this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
+          // check date format
+          var re = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+          console.log(this.phaseStart);
+          if(this.phaseStart.length === 0 || this.phaseEnd.length === 0 || !this.phaseStart.match(re) || !this.phaseEnd.match(re) ){
+            valid = false;
+          }
+          // at least one skill required
+          if(this.selectedSkills.length === 0){
+            valid = false;
+          }
+          // if data valid --> add phase
+          valid === true ? this.addPhase() : this.$.addError.show();
+        },
+
+        clearForm: function(){
+          // reset variables
+          this.selectedSkills = [];
+          this.phaseName = "";
+          this.phaseStart = "";
+          this.phaseEnd = "";
+          this.phaseDescription = "";
+          this.phaseColor = "#000";
+          this.formInvalid = true;
+          // deselect skills
+          this.$.selectSkills.selected = null;
+        }
+      });
+    })();
+  </script>
+</polymer-element>

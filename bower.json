@@ -6,7 +6,9 @@
     "paper-elements": "Polymer/paper-elements#^0.5.1",
     "polymer": "Polymer/polymer#^0.5.1",
     "timesheet.js": "https://github.com/sbstjn/timesheet.js.git",
-    "app-router": "~2.6.0"
+    "app-router": "~2.6.0",
+    "ajax-form": "~1.6.0",
+    "underscore": "~1.8.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"
