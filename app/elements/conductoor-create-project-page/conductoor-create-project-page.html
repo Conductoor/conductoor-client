@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-create-project-page" attributes="">
+<polymer-element name="conductoor-create-project-page" attributes="editMode">
   <template>
     <link rel="stylesheet" href="conductoor-create-project-page.css">
     <!-- build:css styles/main.css -->
@@ -11,7 +11,7 @@
 
       <!-- Toolbar: brand, links to pages, logout -->
       <core-toolbar fullbleed tool flex>
-        <h1 horizontal flex><paper-input label="Project's name"></paper-input></h1>
+        <h1 horizontal flex><paper-input label="Project's name" value="{{projectName}}"></paper-input></h1>
 
         <core-menu-button>
             <core-icon-button icon="more-vert"></core-icon-button>
@@ -35,7 +35,7 @@
         </core-toolbar>
 
         <h2 class="phases-title">Phases:</h2>
-        <conductoor-added-phases phases={{phases}}></conductoor-added-phases>
+        <conductoor-added-phases editMode={{editMode}} projectName={{projectName}} phases={{phases}}></conductoor-added-phases>
 
       </core-header-panel>
       <!-- END Left panel -->
@@ -43,7 +43,7 @@
       <!-- Right panel -->
       <div fit vertical layout class="right-panel">
         <div style="margin-bottom:30px;">
-          <conductoor-create-phase-form phases={{phases}}></conductoor-create-phase-form>
+          <conductoor-create-phase-form editMode={{editMode}} phases={{phases}}></conductoor-create-phase-form>
         </div>
       </div>
       <!-- END Right panel -->
@@ -53,7 +53,15 @@
     (function () {
       Polymer({
         ready: function(){
-          this.phases = this.phases || [];
+          if(this.editMode){
+            //populate phases and project name
+            this.phases = this.phases || [];            //remove this
+            this.projectName = this.projectName || "";  //remove this
+          }
+          else{
+            this.phases = this.phases || [];
+            this.projectName = this.projectName || "";
+          }
         }
       });
     })();

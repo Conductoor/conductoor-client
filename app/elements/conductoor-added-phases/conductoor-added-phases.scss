@@ -3,8 +3,12 @@
 :host {
   display: block;
 }
+paper-button#createProject, paper-button#updateProject{
+  margin-top: 15px;
+}
 .phase{
-	border-bottom: 1px solid $bg-secondary;
+	// border-bottom: 1px solid $bg-secondary;
+  margin-bottom: 2px;
 }
 #phase_content > div{
   margin: 5px;
@@ -24,6 +28,7 @@
   right: 0;
   width: 20px;
   height: 100%;
+  max-height: 62px; //keksi parempi tapa...
   border:none;
   margin: 0;
   padding: 0;

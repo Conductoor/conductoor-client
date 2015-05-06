@@ -1,31 +1,44 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-added-phases" attributes="phases">
+<polymer-element name="conductoor-added-phases" attributes="editMode projectName phases">
   <template>
     <link rel="stylesheet" href="conductoor-added-phases.css">
     <core-menu class="phases-wrapper" selected="0">
       <template repeat="{{phase in phases}}">
         <div id="{{phase.color}}" class="phase" relative>
-            <paper-item class="phase-header">
+            <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.color}}">
               <div vertical layout>
                 <span class="phase-name">{{phase.name}}</span>
                 <!-- TODO -->
                 <span class="phase-duration">{{phase.start}} - {{phase.end}}</span>
               </div>
             </paper-item>
-            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:{{phase.color}}"><core-icon icon="clear"></core-icon></button>
+            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button>
             <div>
-              <!-- <core-collapse id="phase_content{{phase.id}}" class="phase-content">
-                <template repeat="{{skill in phase.required_skills}}">
+              <core-collapse id="phase_content{{phase.color}}" class="phase-content">
+                <template repeat="{{skill in phase.skills}}">
                   <paper-item class="skill" no-padding>
                     <div flex class="summary-div">{{skill.name}}</div>
-                    <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div>
+                    <!-- <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div> -->
                   </paper-item>
                 </template>
-              </core-collapse> -->
+              </core-collapse>
             </div>
           </div>
       </template>
+      <template if="{{!editMode}}">
+        <template if="{{phases.length || projectName}}">
+          <paper-button id="createProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{createProject}}">Create Project</paper-button>
+        </template>
+      </template>
+
+      <template if="{{editMode}}">
+        <template if="{{phases.length || projectName}}">
+          <paper-button id="updateProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{updateProject}}">Update Project</paper-button>
+        </template>
+      </template>
+
+      
     </core-menu>
 
     <!-- PopUp for delete action-->
@@ -44,6 +57,29 @@
       Polymer({
         created: function(){
           this.phaseToRemoveId;
+        },
+        createProject: function(){
+          // create only when phases exist
+          if (this.phases.length && this.projectName){
+            console.log("Created project:");
+            console.log("phases: " + JSON.stringify(this.phases) );
+            console.log("name: " + this.projectName);
+          }
+        },
+        updateProject: function(){
+          // TODO
+        },
+        openPhase: function(event, detail, sender){
+          var phaseId = sender.getAttribute("target-id");  //or called color?
+          // populate form fields for phase data edit
+          this.populateForm(phaseId); // OMA NAPPI EDITILLE? --> REMOVEN TILALLE EHKÄ? JA REMOVE MUUALLE
+          // show skills
+          var querystring = "#phase_content"+phaseId;
+          this.shadowRoot.querySelector(querystring).toggle();
+        },
+        populateForm: function(phaseId){
+          var phaseData = _.findWhere(this.phases, {color:phaseId});
+          console.log(phaseData);
         },
         removePhase: function(){
           this.phases = _.without( this.phases, _.findWhere(this.phases, {color: this.phaseToRemoveId}) );
