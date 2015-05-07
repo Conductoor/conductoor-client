@@ -12,7 +12,6 @@
       <!-- Toolbar: brand, links to pages, logout -->
       <core-toolbar fullbleed tool flex>
         <h1 horizontal flex><paper-input label="Project's name" value="{{projectName}}"></paper-input></h1>
-
         <core-menu-button>
             <core-icon-button icon="more-vert"></core-icon-button>
             <core-dropdown halign="right" class="dropdown" layered>
@@ -47,7 +46,9 @@
         </div>
       </div>
       <!-- END Right panel -->
+      <conductoor-project-panel></conductoor-project-panel>
     </core-scaffold>
+
   </template>
   <script>
     (function () {

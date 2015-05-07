@@ -1,0 +1,110 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-project-panel" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-project-panel.css">
+    <div id="showProjectPanel"><core-icon-button icon="view-list" on-click="{{showPanel}}"></core-icon-button></div>
+    <core-drawer-panel forceNarrow id="projectPanel" rightDrawer style="left:100%;opacity:0">
+      <core-header-panel drawer>
+        <core-icon-button icon="arrow-forward" on-click="{{hidePanel}}"></core-icon-button>
+        <core-menu selected="0">
+          <!-- get the current project -->
+          <h2>Current project:</h2>
+          <div layout vertical id="currentProject">
+            <span flex class="projectName current">{{currentProject.name}}</span>
+            <span flex class="projectDuration current">{{currentProject.start}} - {{currentProject.end}}</span>
+          </div>
+          <h3 style="margin-top:32px;">Other projects:</h3>
+          <template repeat="{{project in projects | filterCurrent}}">
+            <paper-item class="project" on-click="{{confirmProjectOpen}}" project="{{project}}">
+              <div vertical layout>
+                <span class="projectName">{{project.name}}</span>
+                <span class="projectDuration">{{project.start}} - {{project.end}}</span>
+              </div>
+            </paper-item>
+          </template>
+        </core-menu>
+        <div style="text-align:center;"><core-icon-button icon="add-circle-outline" on-click="{{confirmNewProject}}"></core-icon-button></div>
+      </core-header-panel>
+    </core-drawer-panel>
+
+    <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px;">
+        <h2>Open project</h2>
+        <p>Are you sure you want to open this project?</p>
+        <p>Any unsaved changes will be lost.</p>
+        <br>
+        <paper-button raised core-overlay-toggle on-click="{{openProject}}">Open</paper-button><paper-button raised core-overlay-toggle>Cancel</paper-button>
+      </div>
+    </core-overlay>
+
+    <core-overlay id="modalNew" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px;">
+        <h2>New project</h2>
+        <p>Remember to save changes before creating a new project.</p>
+        <p>Create new project?</p>
+        <br>
+        <paper-button raised core-overlay-toggle on-click="{{createProject}}">Create</paper-button><paper-button raised core-overlay-toggle>Cancel</paper-button>
+      </div>
+    </core-overlay>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        created: function(){
+          this.projects = this.projects || [{"name":"project1", "desctiption":"desc1", "start":"2015-04-12", "end":"2016-02-10"}, {"name":"project2", "desctiption":"desc2", "start":"2015-04-12", "end":"2016-02-10"}, {"name":"project3", "desctiption":"desc3", "start":"2015-04-12", "end":"2016-02-10"}];
+          this.currentProject = this.currentProject || {"name":"project1", "desctiption":"desc1", "start":"2015-04-12", "end":"2016-02-10"};
+          this.projectToOpen;
+        },
+
+        eventDelegates:{
+          tap: "tapHandler"
+        },
+        tapHandler: function(e){
+          // jos käyttäjä sulkee panelin sen ulkopuolelta
+          if(e.path[0].id === "scrim"){
+            //this.$.projectPanel.style.height = 0;
+            this.panelTransition("100%", "0");
+          }
+        },
+
+        showPanel: function(){
+          this.panelTransition("0", "1");
+          this.$.projectPanel.openDrawer();
+        },
+        hidePanel: function(){
+          this.panelTransition("100%", "0");
+          this.$.projectPanel.closeDrawer();
+        },
+        panelTransition: function(h, o){
+          // tää on vähä hack...
+          this.$.projectPanel.style.left = h;
+          this.$.projectPanel.style.opacity = o;
+        },
+        filterCurrent: function(projects){
+          if(projects){
+            return _.without(projects, _.findWhere(projects, {name: this.currentProject.name}));
+          }
+        },
+
+        openProject: function(){
+          //TODO
+          console.log("Open project"+this.projectToOpen);
+        },
+        createProject: function(){
+          //TODO
+          console.log("Create project");
+        },
+        confirmProjectOpen: function(event, detail, sender){
+          this.projectToOpen = sender.getAttribute("project");
+          this.$.modalOpen.toggle();
+        },
+        confirmNewProject: function(){
+          this.$.modalNew.toggle();
+        }
+
+      });
+    })();
+  </script>
+</polymer-element>

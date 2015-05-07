@@ -1,0 +1,60 @@
+@import "../../styles/palette";
+
+:host {
+  display: block;
+}
+#showProjectPanel{
+	opacity: 0.5;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	background-color: #fff;
+	margin-right: -15px;
+	-webkit-transition: margin-right 0.2s;
+    transition: margin-right 0.2s;
+}
+#showProjectPanel:hover{
+	opacity: 1;
+	margin-right: 0px;
+}
+core-drawer-panel{
+	background: transparent;
+	-webkit-transition: left ease-in-out 0.2s, opacity 0.4s;
+    transition: left ease-in-out 0.2s, opacity 0.4s;
+}
+core-drawer-panel core-header-panel{
+	background-color: #fff;
+}
+
+#currentProject{
+	height: 50px;
+	border: 3px solid $bg-primary;
+	/*border-top: 3px solid $bg-primary;*/
+	/*background-color: $primary;*/
+	padding: 10px 10px 0px 10px;
+	/*color: #fff;*/
+/*	-webkit-box-shadow: inset 0px 0px 15px 0px rgba(50, 50, 50, 0.5);
+-moz-box-shadow:    inset 0px 0px 15px 0px rgba(50, 50, 50, 0.5);
+box-shadow:         inset 0px 0px 15px 0px rgba(50, 50, 50, 0.5);*/
+
+	.projectName{
+		font-size: 18px;
+		font-weight: 700;
+	}
+	.projectDuration{
+		font-size: 14px;
+	}
+}
+.project{
+	background-color: $bg-primary;
+	margin-bottom: 2px;
+
+	.projectName{
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	.projectDuration{
+		font-size: 12px;
+	}
+}
