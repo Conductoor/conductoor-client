@@ -5,7 +5,10 @@
   <template>
     <link rel="stylesheet" href="conductoor-create-phase-form.css">
 
-      <h2>New phase:</h2>
+      <template if="{{!editPhase}}"><h2>New phase: {{phaseName}}</h2></template>
+      <template if="{{editPhase}}"><h2>Editing: {{phaseName}}</h2></template>
+
+      
       <form id="createProjectForm" on-submit="{{validateForm}}">
         <div layout horizontal>
           <div flex class="card">
@@ -32,7 +35,15 @@
             <h3>Select skills for phase:</h3>
             <core-selector id="selectSkills" selected="{{selectedSkills}}" multi valueattr="skill">
               <template repeat="{{skill in skills}}">
-                <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
+                  <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
+                  <div class="skill-hours">
+                    <core-field>
+                      <core-icon icon="alarm"></core-icon>
+                      <paper-input-decorator label="hours">
+                        <input type="number" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
+                      </paper-input-decorator>
+                    </core-field>
+                  </div>
               </template>
             </core-selector>
           </div>
@@ -44,7 +55,7 @@
         </template>
         <template if="{{editPhase}}">
           <button id="submit" visible?="{{formInvalid || !editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Save</paper-button></button>
-         <paper-button raised on-click="{{resetPhaseEdit}}">Reset</paper-button>
+         <paper-button raised on-click="{{clearForm}}">Reset</paper-button>
         </template>
       </form>
       <paper-toast id="addSuccess" text="Phase added"></paper-toast>
@@ -61,6 +72,7 @@
           // TODO fetch skills
           this.skills = [{"name":"skill1"}, {"name":"skill2"}, {"name":"skill3"}, {"name":"skill4"}, {"name":"skill5"}];
           this.selectedSkills = [];   // Tyyppiä? [{"name":"skill1", "hours":"40"}, {"name":"skill2", "hours":"40"}];
+          this.hours = [];            // Tyyppiä [{"skill":"skill1", "hours": "40"}]
           this.phaseName;
           this.phaseStart;
           this.phaseEnd;
@@ -71,8 +83,12 @@
           this.editPhase = false;
         },
 
+        selectedSkillsChanged: function(){
+          this.updateFormValidity();
+        },
         currentPhaseChanged: function(attrName, oldVal, newVal){
-          var phase = newVal[0][0];
+          var phase = newVal[0][1];
+          console.log(phase.name);
           //this.phaseBackup = phase;   //backup in case of reset
           this.phaseName = phase.name;
           this.phaseStart = phase.start;
@@ -87,15 +103,28 @@
           this.editPhase = true;
         },
 
+        mapHoursToSkill: function(event, detail, sender){
+          var hours = sender.value;
+          var skill = sender.getAttribute("skillName");
+          if(this.isNumeric(hours) && _.contains(this.selectedSkills, skill)){
+            this.hours.push({"skill":skill, "hours":hours});
+          }
+        },
+        isNumeric: function(n) {
+          return !isNaN(parseFloat(n)) && isFinite(n);
+        },
         createPhase: function(){
           // generate random color --> works as ID?
           this.phaseColor = this.editPhase ? this.phaseColor : this.getRandomColor();
           // create skill objects
           var skills = [];
           for (var i = this.selectedSkills.length - 1; i >= 0; i--) {
-            // TODO --> hours!!
-            skills.push({"name":this.selectedSkills[i]});
-          };
+            var hours = _.findWhere(this.hours, {skill:this.selectedSkills[i]});
+            // add to skills only when skill has hours set!
+            if(hours){
+              skills.push({"name":this.selectedSkills[i], "hours":hours.hours});
+            }
+          }
           var phase = {"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":skills};
           return phase;
         },
@@ -122,11 +151,6 @@
             this.phases[idx] = phase;
           }
           this.clearForm();
-        },
-        resetPhaseEdit: function(){
-          this.clearForm();
-          this.editPhase = false;
-          this.formInvalid = true;
         },
 
         getRandomColor: function() {
@@ -210,14 +234,17 @@
         },
 
         clearForm: function(){
+          this.$.createProjectForm.reset();
           // reset variables
           this.selectedSkills = [];
+          // pelkkä reset ei riitä --> phase edit ei toimi normisti
           this.phaseName = "";
           this.phaseStart = "";
           this.phaseEnd = "";
           this.phaseDescription = "";
           this.phaseColor = "#000";
           this.formInvalid = true;
+          this.editPhase = false;
         }
       });
     })();

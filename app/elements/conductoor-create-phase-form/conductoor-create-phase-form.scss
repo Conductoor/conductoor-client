@@ -7,7 +7,19 @@
 	width:100%;
 }
 .skill{
-	padding: 15px;
+	padding-left: 5%;
+	width: 60%;
+	border-bottom: 1px solid $bg-secondary;
+	float: left;
+	height: 40px;
+	line-height: 40px;
+}
+.skill-hours{
+	height: 40px;
+	width: 35%;
+	display: block;
+	margin: 0 auto;
+	float: left;
 	border-bottom: 1px solid $bg-secondary;
 }
 .skill.core-selected{

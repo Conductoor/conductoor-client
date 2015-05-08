@@ -3,7 +3,7 @@
 <polymer-element name="conductoor-added-phases" attributes="editMode projectName phases currentPhase">
   <template>
     <link rel="stylesheet" href="conductoor-added-phases.css">
-    <core-menu class="phases-wrapper" selected="0">
+    <core-menu class="phases-wrapper" selected="">
       <template repeat="{{phase in phases}}">
         <div id="{{phase.color}}" class="phase" relative>
             <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.color}}">
@@ -13,13 +13,14 @@
                 <span class="phase-duration">{{phase.start}} - {{phase.end}}</span>
               </div>
             </paper-item>
-            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{populateForm}}" style="background:#{{phase.color}}"><core-icon icon="create"></core-icon></button>
+            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{editPhase}}" style="background:#{{phase.color}}"><core-icon icon="create"></core-icon></button>
             <!-- <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button> -->
             <div>
               <core-collapse id="phase_content{{phase.color}}" class="phase-content">
                 <template repeat="{{skill in phase.skills}}">
                   <paper-item class="skill" no-padding>
-                    <div flex class="summary-div">{{skill.name}}</div>
+                    <div flex three class="summary-div">{{skill.name}}</div>
+                    <div flex one class="summary-div">{{skill.hours}}</div>
                     <!-- <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div> -->
                   </paper-item>
                 </template>
@@ -76,7 +77,7 @@
           var querystring = "#phase_content"+phaseId;
           this.shadowRoot.querySelector(querystring).toggle();
         },
-        populateForm: function(event, detail, sender){
+        editPhase: function(event, detail, sender){
           var phaseId = sender.getAttribute("phase-id");  //or phaseColor?
           var phaseData = _.findWhere(this.phases, {color:phaseId});
           this.currentPhase = phaseData;
