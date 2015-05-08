@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-added-phases" attributes="editMode projectName phases">
+<polymer-element name="conductoor-added-phases" attributes="editMode projectName phases currentPhase">
   <template>
     <link rel="stylesheet" href="conductoor-added-phases.css">
     <core-menu class="phases-wrapper" selected="0">
@@ -13,7 +13,8 @@
                 <span class="phase-duration">{{phase.start}} - {{phase.end}}</span>
               </div>
             </paper-item>
-            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button>
+            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{populateForm}}" style="background:#{{phase.color}}"><core-icon icon="create"></core-icon></button>
+            <!-- <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button> -->
             <div>
               <core-collapse id="phase_content{{phase.color}}" class="phase-content">
                 <template repeat="{{skill in phase.skills}}">
@@ -70,16 +71,15 @@
           // TODO
         },
         openPhase: function(event, detail, sender){
-          var phaseId = sender.getAttribute("target-id");  //or called color?
-          // populate form fields for phase data edit
-          this.populateForm(phaseId); // OMA NAPPI EDITILLE? --> REMOVEN TILALLE EHKÄ? JA REMOVE MUUALLE
           // show skills
+          var phaseId = sender.getAttribute("target-id");  //or phaseColor?
           var querystring = "#phase_content"+phaseId;
           this.shadowRoot.querySelector(querystring).toggle();
         },
-        populateForm: function(phaseId){
+        populateForm: function(event, detail, sender){
+          var phaseId = sender.getAttribute("phase-id");  //or phaseColor?
           var phaseData = _.findWhere(this.phases, {color:phaseId});
-          console.log(phaseData);
+          this.currentPhase = phaseData;
         },
         removePhase: function(){
           this.phases = _.without( this.phases, _.findWhere(this.phases, {color: this.phaseToRemoveId}) );

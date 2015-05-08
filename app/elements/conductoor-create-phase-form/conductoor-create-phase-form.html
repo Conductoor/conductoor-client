@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 
-<polymer-element name="conductoor-create-phase-form" attributes="editMode phases">
+<polymer-element name="conductoor-create-phase-form" attributes="editMode phases currentPhase">
   <template>
     <link rel="stylesheet" href="conductoor-create-phase-form.css">
 
@@ -30,16 +30,22 @@
           </div>
           <div flex class="card">
             <h3>Select skills for phase:</h3>
-            <core-selector id="selectSkills" selected="" multi>
+            <core-selector id="selectSkills" selected="{{selectedSkills}}" multi valueattr="skill">
               <template repeat="{{skill in skills}}">
-                <div class="skill" on-click={{addSkill}}>{{skill.name}}</div>
+                <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
               </template>
             </core-selector>
           </div>
         </div>
         <br>
         <!-- paper-buttonilla submit ei toimi... -->
-        <button id="submit" visible?="{{formInvalid}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
+        <template if="{{!editPhase}}">
+          <button id="submit" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
+        </template>
+        <template if="{{editPhase}}">
+          <button id="submit" visible?="{{formInvalid || !editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Save</paper-button></button>
+         <paper-button raised on-click="{{resetPhaseEdit}}">Reset</paper-button>
+        </template>
       </form>
       <paper-toast id="addSuccess" text="Phase added"></paper-toast>
       <paper-toast id="addError" text="Could not add phase. Check your inputs!"></paper-toast>
@@ -61,40 +67,66 @@
           this.phaseDescription;
           this.phaseColor = "#000";
           this.formInvalid = true;
+          //this.phaseBackup;
+          this.editPhase = false;
         },
 
-        addSkill: function(event, detail, sender) {
-          var skill_to_add = sender.templateInstance.model.skill;
-          // check if skill is already selected
-          if (this.selectedSkills.indexOf(skill_to_add) >= 0 ){
-            this.selectedSkills.splice(this.selectedSkills.indexOf(skill_to_add),1);
-            this.updateFormValidity();
+        currentPhaseChanged: function(attrName, oldVal, newVal){
+          var phase = newVal[0][0];
+          //this.phaseBackup = phase;   //backup in case of reset
+          this.phaseName = phase.name;
+          this.phaseStart = phase.start;
+          this.phaseEnd = phase.end;
+          this.phaseDescription = phase.description;
+          this.phaseColor = phase.color;
+
+          for (var i =0 ; i <= phase.skills.length - 1; i++) {
+            this.selectedSkills.push(phase.skills[i].name);
           }
-          else{
-            this.selectedSkills.push(skill_to_add)
-            this.updateFormValidity();
-          }
+          this.formInvalid = false;
+          this.editPhase = true;
         },
 
+        createPhase: function(){
+          // generate random color --> works as ID?
+          this.phaseColor = this.editPhase ? this.phaseColor : this.getRandomColor();
+          // create skill objects
+          var skills = [];
+          for (var i = this.selectedSkills.length - 1; i >= 0; i--) {
+            // TODO --> hours!!
+            skills.push({"name":this.selectedSkills[i]});
+          };
+          var phase = {"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":skills};
+          return phase;
+        },
         addPhase: function(){
           var exists = 0;
           var current = this.phaseName;
           // can't have two phases with same name
-          console.log(this.phases);
-          this.phases.forEach(function(phase){
-            if (phase.name === current) {
-              alert("Already phase with that name!");
+          for (var i = this.phases.length - 1; i >= 0; i--) {
+            if (this.phases[i].name === current && !this.editPhase && this.phases[i].name != this.phaseBackup.name) {
+              alert("Already phase with that name!");   // REDO alert...
               exists = 1;
             }
-          });
-          if (!exists) {
-            // generate random color --> works as ID?
-            this.phaseColor = this.getRandomColor();
-            this.phases.push({"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":this.selectedSkills, });
+          }
+          var phase = this.createPhase();
+          // Add new phase
+          if (!exists && !this.editPhase) {
+            this.phases.push(phase);
             this.$.addSuccess.show();
-            console.log(this.phases);
+          }
+          // Update existing phase
+          else if(!exists && this.editPhase){
+            //console.log( _.indexOf(_.pluck(this.phases, 'color'), phase.color) );
+            var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
+            this.phases[idx] = phase;
           }
           this.clearForm();
+        },
+        resetPhaseEdit: function(){
+          this.clearForm();
+          this.editPhase = false;
+          this.formInvalid = true;
         },
 
         getRandomColor: function() {
@@ -165,7 +197,7 @@
           this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
           // check date format
           var re = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
-          console.log(this.phaseStart);
+          // console.log(this.phaseStart);
           if(this.phaseStart.length === 0 || this.phaseEnd.length === 0 || !this.phaseStart.match(re) || !this.phaseEnd.match(re) ){
             valid = false;
           }
@@ -186,8 +218,6 @@
           this.phaseDescription = "";
           this.phaseColor = "#000";
           this.formInvalid = true;
-          // deselect skills
-          this.$.selectSkills.selected = null;
         }
       });
     })();
