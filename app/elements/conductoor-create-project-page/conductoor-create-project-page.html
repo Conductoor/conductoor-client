@@ -6,12 +6,31 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="../../styles/main.css">
     <!-- endbuild-->
-
+    <core-ajax
+      id ="postProject"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponsePostProject}}"
+      core-error="{{handleErrorPostProject}">
+    </core-ajax>
+    <core-ajax
+      id ="putProject"
+      url=""
+      handleAs="json"
+      method="PUT"
+      contentType="application/json"
+      on-core-response="{{handleResponsePutProject}}"
+      core-error="{{handleErrorPutProject}}">
+    </core-ajax>
     <core-scaffold id="core_scaffold">
 
       <!-- Toolbar: brand, links to pages, logout -->
       <core-toolbar fullbleed tool flex>
-        <h1 horizontal flex><paper-input label="Project's name" value="{{projectName}}"></paper-input></h1>
+        <h1 horizontal flex>
+          <paper-input label="Project's name" id="headerProjectName" value="{{project.title}}"></paper-input>
+        </h1>
         <core-menu-button>
             <core-icon-button icon="more-vert"></core-icon-button>
             <core-dropdown halign="right" class="dropdown" layered>
@@ -34,7 +53,7 @@
         </core-toolbar>
 
         <h2 class="phases-title">Phases:</h2>
-        <conductoor-added-phases editMode={{editMode}} projectName={{projectName}} phases={{phases}} currentPhase={{currentPhase}}></conductoor-added-phases>
+        <conductoor-added-phases editMode={{editMode}} projectName={{project.title}} phases={{phases}} currentPhase={{currentPhase}}></conductoor-added-phases>
 
       </core-header-panel>
       <!-- END Left panel -->
@@ -47,6 +66,24 @@
       </div>
       <!-- END Right panel -->
       <conductoor-project-panel></conductoor-project-panel>
+      <!-- autoCloseDisabled -->
+      <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
+        <h2>Name your project:</h2>
+        <paper-input-decorator  label="required" floatinglabel="" error="input is required!" autovalidate="" layout="" vertical="" class="invalid">
+          <input is="core-input" id="projectName" required="" maxlength="100" placeholder="required" aria-label="required">
+        </paper-input-decorator>
+        <h3>Description for your project:</h3>
+        <paper-input-decorator label="Desription" floatingLabel  error="input is required! Max 200 characters" class="">
+          <paper-autogrow-textarea>
+            <textarea id="projectDescription" value="{{phaseDescription}}"></textarea>
+          <paper-autogrow-textarea>
+        </paper-input-decorator>
+        <br>
+        <paper-button raised on-click="{{createProject}}">Open</paper-button>
+        <paper-button raised on-click="{{cancel}}">Cancel</paper-button>
+      </div>
+    </core-overlay>
     </core-scaffold>
 
   </template>
@@ -54,16 +91,75 @@
     (function () {
       Polymer({
         ready: function(){
+          //local storage
+          this.storage = document.querySelector("#currentProject");
+          this.$.modalOpen.toggle();
+          console.log(this.$.headerProjectName);
+          this.$.headerProjectName.addEventListener("keyup", this.handleKeyUp.bind(this));
           if(this.editMode){
             //populate phases and project name
             this.phases = this.phases || [];              //remove this
-            this.projectName = this.projectName || "";    //remove this
+            this.project = this.project || {};    //remove this
             this.currentPhase = this.currentPhase || {};
           }
           else{
             this.phases = this.phases || [];
-            this.projectName = this.projectName || "";
+            this.project = this.project || {};
           }
+        },
+        handleResponsePostProject: function(event, response) {
+          console.log(response.response);
+          this.project= response.response;
+          this.storage.value = this.project;
+          this.$.modalOpen.toggle();
+
+        },
+        handleErrorPostProject: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        handleResponsePutProject: function(event, response) {
+          console.log(response.response);
+          this.project= response.response;
+          this.storage.value = this.project;
+        },
+        handleErrorPutProject: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        createProject: function() {
+          var ajax = this.$.postProject;
+          ajax.body = JSON.stringify(
+            {
+              "title": this.$.projectName.value,
+              "description": this.$.projectDescription.value
+            }
+          );
+          ajax.go();
+        },
+        cancel: function() {
+          window.location.href = "/#/list-projects";
+        },
+        updateProject: function() {
+          var ajax = this.$.putProject;
+          ajax.url = "https://conductoor-api.herokuapp.com:443/projects/" + this.project.id + "/";
+          ajax.body = JSON.stringify(
+            {
+              "title": this.$.headerProjectName.value,
+            }
+          );
+          ajax.go();
+          console.log("project name changed");
+        },
+        handleKeyUp: function() {
+          if (this.timeout) {
+            clearTimeout(this.timeout);
+          }
+          console.log(this);
+          this.timeout = setTimeout(this.updateProject.bind(this), 500);
+        },
+        validate: function() {
+          return false;
         }
       });
     })();

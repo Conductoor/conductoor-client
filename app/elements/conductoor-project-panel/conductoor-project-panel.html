@@ -3,6 +3,14 @@
 <polymer-element name="conductoor-project-panel" attributes="">
   <template>
     <link rel="stylesheet" href="conductoor-project-panel.css">
+    <core-ajax
+      id = "getProjectList"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
     <div id="showProjectPanel"><core-icon-button icon="view-list" on-click="{{showPanel}}"></core-icon-button></div>
     <core-drawer-panel forceNarrow id="projectPanel" rightDrawer style="left:100%;opacity:0">
       <core-header-panel drawer>
@@ -11,15 +19,16 @@
           <!-- get the current project -->
           <h2>Current project:</h2 >
           <div layout vertical id="currentProject">
-            <span flex class="projectName current">{{currentProject.name}}</span>
-            <span flex class="projectDuration current">{{currentProject.start}} - {{currentProject.end}}</span>
+            <span flex class="projectName current">{{currentProject.title}}</span>
+            <span flex class="projectDuration current">{{currentProject.time_start}} - {{currentProject.time_end}}</span>
           </div>
           <h3 style="margin-top:32px;">Other projects:</h3>
           <template repeat="{{project in projects | filterCurrent}}">
             <paper-item class="project" on-click="{{confirmProjectOpen}}" project="{{project}}">
               <div vertical layout>
-                <span class="projectName">{{project.name}}</span>
-                <span class="projectDuration">{{project.start}} - {{project.end}}</span>
+                <span class="projectName">{{project.title}}</span>
+                <span class="projectDescription">{{project.description}}</span>
+                <span class="projectDuration">{{project.time_start}} - {{project.time_end}}</span>
               </div>
             </paper-item>
           </template>
@@ -53,11 +62,22 @@
     (function () {
       Polymer({
         created: function(){
-          this.projects = this.projects || [{"name":"project1", "desctiption":"desc1", "start":"2015-04-12", "end":"2016-02-10"}, {"name":"project2", "desctiption":"desc2", "start":"2015-04-12", "end":"2016-02-10"}, {"name":"project3", "desctiption":"desc3", "start":"2015-04-12", "end":"2016-02-10"}];
-          this.currentProject = this.currentProject || {"name":"project1", "desctiption":"desc1", "start":"2015-04-12", "end":"2016-02-10"};
+          this.storage = document.querySelector("#currentProject");
+          this.projects = this.projects || [];
+          console.log(this.storage);
+          this.currentProject = this.storage.value|| {};
           this.projectToOpen;
-        },
 
+        },
+        handleResponse: function(event, response) {
+          console.log(response.response);
+          this.projects = response.response;
+          this.currentProject = this.storage.value;
+        },
+        handleError: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
         eventDelegates:{
           tap: "tapHandler"
         },
@@ -70,6 +90,8 @@
         },
 
         showPanel: function(){
+          var ajax = this.$.getProjectList;
+          ajax.go();
           this.panelTransition("0", "1");
           this.$.projectPanel.openDrawer();
         },
@@ -84,7 +106,7 @@
         },
         filterCurrent: function(projects){
           if(projects){
-            return _.without(projects, _.findWhere(projects, {name: this.currentProject.name}));
+            return _.without(projects, _.findWhere(projects, {id: this.currentProject.id}));
           }
         },
 
