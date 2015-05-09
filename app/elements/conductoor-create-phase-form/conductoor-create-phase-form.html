@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 
-<polymer-element name="conductoor-create-phase-form" attributes="editMode phases currentPhase">
+<polymer-element name="conductoor-create-phase-form" attributes="editMode phases currentPhase project">
   <template>
     <link rel="stylesheet" href="conductoor-create-phase-form.css">
     <core-ajax
@@ -81,7 +81,7 @@
                       <core-field>
                         <core-icon icon="alarm"></core-icon>
                         <paper-input-decorator label="hours">
-                          <input min="0" class="hours" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
+                          <input min="0" class="hours" skillName="{{skill.name}}" skillId="{{skill.id}}" on-input="{{mapHoursToSkill}}">
                         </paper-input-decorator>
                       </core-field>
                     </div>
@@ -147,28 +147,33 @@
         },
         handleResponsePostPhase: function(event, response) {
           console.log(response.response);
-          this.skills = response.response;
+          this.$.addSuccess.show();
         },
         handleErrorPostPhase: function(event, response) {
+          alert(response.response);
           console.log("Error");
           console.log(response);
         },
         handleResponsePutPhase: function(event, response) {
           console.log(response.response);
-          this.skills = response.response;
         },
         handleErrorPutPhase: function(event, response) {
+          alert(response.response);
           console.log("Error");
           console.log(response);
         },
         addPhaseApiCall: function(phase) {
+          console.log(this.project);
           var ajax = this.$.postPhase;
           ajax.body = JSON.stringify(
             {
-              "user": "",
-              "phase": "",
-              "skill": "",
-              "hours": ""
+              "title": phase.name,
+              "project": this.project.id,
+              "time_start": phase.start,
+              "time_end": phase.end,
+              "color": phase.color,
+              "required_skills": phase.skills,
+              "description": phase.description
             }
           );
           ajax.go();
@@ -177,10 +182,13 @@
           var ajax = this.$.putPhase;
           ajax.body = JSON.stringify(
             {
-              "user": "",
-              "phase": "",
-              "skill": "",
-              "hours": ""
+              "title": phase.name,
+              "project": this.project.id,
+              "time_start": phase.start,
+              "time_end": phase.end,
+              "color": phase.color,
+              "required_skills": phase.skills,
+              "description": phase.description
             }
           );
           ajax.go();
@@ -191,7 +199,7 @@
         ////////////////////
         // CHANGE LISTENERS
         ////////////////////
-        */        
+        */
         // phaseStartChanged ja phaseEndChanged pitää poistaa kun date input validation toimii...
         phaseStartChanged: function(){
           var dateFormatError = _.findWhere(this.errors, {error:"dateWrongFormat"});
@@ -262,7 +270,7 @@
               skills.push({"name":this.selectedSkills[i], "hours":hours.hours});
             }
             else{
-              skills.push({"name":this.selectedSkills[i], "hours":0});
+              skills.push({"skill":this.selectedSkills[i], "hours":0});
             }
           }
           var phase = {"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":skills};
@@ -274,7 +282,6 @@
           if (!this.editPhase) {
             this.addPhaseApiCall(phase);
             this.phases.push(phase);
-            this.$.addSuccess.show();
           }
           // Update existing phase
           else if(this.editPhase){
@@ -322,7 +329,7 @@
 
           if(is_input)
             this.validateInput(event);
-            
+
           for (var i = this.phases.length - 1; i >= 0; i--) {
             if (this.phases[i].name === phaseName && !this.editPhase){
               phaseNameError.show = true;
@@ -351,7 +358,7 @@
           }
           else{
             dateFormatError.show = false;
-          }  
+          }
           // check date order
           if( this.parseDate(this.phaseStart) > this.parseDate(this.phaseEnd) ){
             dateWrongOrderError.show = true;
@@ -478,7 +485,7 @@
           var b = s.split(/\D/);
           return new Date(b[0], --b[1], b[2]);
         }
-        
+
       });
     })();
   </script>

@@ -61,7 +61,7 @@
       <!-- Right panel -->
       <div fit vertical layout class="right-panel">
         <div style="margin-bottom:30px;">
-          <conductoor-create-phase-form editMode={{editMode}} phases={{phases}} currentPhase={{currentPhase}}></conductoor-create-phase-form>
+          <conductoor-create-phase-form editMode={{editMode}} phases={{phases}} currentPhase={{currentPhase}} project={{project}}></conductoor-create-phase-form>
         </div>
       </div>
       <!-- END Right panel -->
@@ -93,18 +93,19 @@
         ready: function(){
           //local storage
           this.storage = document.querySelector("#currentProject");
-          this.$.modalOpen.toggle();
+          // Uncomment to use the modal
+          // this.$.modalOpen.toggle();
           console.log(this.$.headerProjectName);
           this.$.headerProjectName.addEventListener("keyup", this.handleKeyUp.bind(this));
           if(this.editMode){
             //populate phases and project name
             this.phases = this.phases || [];              //remove this
-            this.project = this.project || {};    //remove this
+            this.project = this.project || {"id": 1};    //remove this for production
             this.currentPhase = this.currentPhase || {};
           }
           else{
             this.phases = this.phases || [];
-            this.project = this.project || {};
+            this.project = this.project || {"id": 1}; //remove this for production
           }
         },
         handleResponsePostProject: function(event, response) {
@@ -115,6 +116,7 @@
 
         },
         handleErrorPostProject: function(event, response) {
+          alert(response.response);
           console.log("Error");
           console.log(response);
         },
@@ -124,6 +126,7 @@
           this.storage.value = this.project;
         },
         handleErrorPutProject: function(event, response) {
+          alert(response.response);
           console.log("Error");
           console.log(response);
         },
