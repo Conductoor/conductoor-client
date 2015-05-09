@@ -8,50 +8,65 @@
       <template if="{{!editPhase}}"><h2>New phase: {{phaseName}}</h2></template>
       <template if="{{editPhase}}"><h2>Editing: {{phaseName}}</h2></template>
 
-      
+      <div id="error_messages">
+        <template repeat="{{error in errors}}">
+          <template if="{{error.show}}">
+            <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
+          </template>
+        </template>
+      </div>
+
       <form id="createProjectForm" on-submit="{{validateForm}}">
         <div layout horizontal>
           <div flex class="card">
             <paper-input-decorator floatingLabel label="Phase name" id="phaseNameDecorator">
-              <input is="core-input" required maxlength="30" on-input="{{validateInput}}" error="This field is required" type="text" value="{{phaseName}}">
+              <input is="core-input" required maxlength="30" on-input="{{validatePhaseName}}" error="This field is required" type="text" value="{{phaseName}}">
             </paper-input-decorator>
             <br>
             <div layout horizontal>
               <paper-input-decorator flex label="Start" style="margin-right:10px;">
-                <label>Start date:</label><input is="core-input" type="date" required on-input="{{validateInput}}" value="{{phaseStart}}"></input>
+                <label>Start date:</label><input is="core-input" type="date" required startDate on-input="{{validateInput}}" value="{{phaseStart}}"></input>
               </paper-input-decorator>
               <paper-input-decorator flex label="End">
-                <label>End date:</label><input is="core-input" type="date" required on-input="{{validateInput}}" value="{{phaseEnd}}"></input>
+                <label>End date:</label><input is="core-input" type="date" required endDate on-input="{{validateInput}}" value="{{phaseEnd}}"></input>
               </paper-input-decorator>
             </div>
             <br>
             <paper-input-decorator label="Desription" floatingLabel>
               <paper-autogrow-textarea>
-                <textarea value="{{phaseDescription}}"></textarea>
+                <textarea maxlength="200" value="{{phaseDescription}}"></textarea>
               <paper-autogrow-textarea>
             </paper-input-decorator>
           </div>
           <div flex class="card">
             <h3>Select skills for phase:</h3>
-            <core-selector id="selectSkills" selected="{{selectedSkills}}" multi valueattr="skill">
-              <template repeat="{{skill in skills}}">
-                  <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
+            <div layout horizontal>
+              <div flex four>
+                <core-selector id="selectSkills" selected="{{selectedSkills}}" multi valueattr="skill">
+                  <template repeat="{{skill in skills}}">
+                      <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
+                  </template>
+                </core-selector>
+              </div>
+              <div flex two>
+                <template repeat="{{skill in skills}}">
                   <div class="skill-hours">
-                    <core-field>
-                      <core-icon icon="alarm"></core-icon>
-                      <paper-input-decorator label="hours">
-                        <input type="number" class="hours" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
-                      </paper-input-decorator>
-                    </core-field>
-                  </div>
-              </template>
-            </core-selector>
+                      <core-field>
+                        <core-icon icon="alarm"></core-icon>
+                        <paper-input-decorator label="hours">
+                          <input min="0" class="hours" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
+                        </paper-input-decorator>
+                      </core-field>
+                    </div>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
         <br>
         <!-- paper-buttonilla submit ei toimi... -->
         <template if="{{!editPhase}}">
-          <button id="submit" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
+          <button id="submit" disabled?="{{formInvalid}}" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
         </template>
         <template if="{{editPhase}}">
           <button id="submit" visible?="{{formInvalid || !editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Save</paper-button></button>
@@ -73,44 +88,70 @@
           this.skills = [{"name":"skill1"}, {"name":"skill2"}, {"name":"skill3"}, {"name":"skill4"}, {"name":"skill5"}];
           this.selectedSkills = [];   // Tyyppiä? [{"name":"skill1", "hours":"40"}, {"name":"skill2", "hours":"40"}];
           this.hours = [];            // Tyyppiä [{"skill":"skill1", "hours": "40"}]
-          this.phaseName;
-          this.phaseStart;
-          this.phaseEnd;
-          this.phaseDescription;
+          this.phaseName = "";
+          this.phaseStart = "";
+          this.phaseEnd = "";
+          this.phaseDescription = "";
           this.phaseColor = "#000";
-          this.formInvalid = true;
-          //this.phaseBackup;
           this.editPhase = false;
+          this.formInvalid = true;
+          this.errors = [
+            {"error":"dateWrongOrder", "message":"Start date needs to be before end date.", "show":false},
+            {"error":"descriptionTooLong", "message":"Maximum length of description is 200 characters.", "show":false},
+            {"error":"phaseNameExists", "message":"Already exists phase with that name.", "show":false},
+            {"error":"hoursError", "message":"Hour needs to be a positive number.", "show":false},
+            {"error":"dateWrongFormat", "message":"Select date with the date picker.", "show":false}
+          ];
         },
 
+        /*
+        ////////////////////
+        // FUNCTIONALITIES
+        ////////////////////
+        */
+
+        // phaseStartChanged ja phaseEndChanged pitää poistaa kun date input validation toimii...
+        phaseStartChanged: function(){
+          var dateFormatError = _.findWhere(this.errors, {error:"dateWrongFormat"});
+          var dateWrongOrderError = _.findWhere(this.errors, {error:"dateWrongOrder"});
+          dateFormatError.show = false;
+          dateWrongOrderError.show = false;
+          this.updateFormValidity();
+        },
+        phaseEndChanged: function(){
+          var dateFormatError = _.findWhere(this.errors, {error:"dateWrongFormat"});
+          var dateWrongOrderError = _.findWhere(this.errors, {error:"dateWrongOrder"});
+          dateFormatError.show = false;
+          dateWrongOrderError.show = false;
+          this.updateFormValidity();
+        },
         selectedSkillsChanged: function(){
           this.updateFormValidity();
         },
-        currentPhaseChanged: function(attrName, oldVal, newVal){
+        currentPhaseChanged: function(){
           if(this.currentPhase){
-            var phase = newVal[0][1];
-            this.phaseName = phase.name;
-            this.phaseStart = phase.start;
-            this.phaseEnd = phase.end;
-            this.phaseDescription = phase.description;
-            this.phaseColor = phase.color;
+            this.phaseName = this.currentPhase.name;
+            this.phaseStart = this.currentPhase.start;
+            this.phaseEnd = this.currentPhase.end;
+            this.phaseDescription = this.currentPhase.description;
+            this.phaseColor = this.currentPhase.color;
             // select skills
             //var all_hours = this.shadowRoot.querySelectorAll(".hours");
             var hour_input;
-            for (var i =0 ; i <= phase.skills.length - 1; i++) {
-              hour_input = this.shadowRoot.querySelector(".hours[skillName='"+phase.skills[i].name+"']");
-              hour_input.value = phase.skills[i].hours;
-              this.selectedSkills.push(phase.skills[i].name);
+            for (var i =0 ; i <= this.currentPhase.skills.length - 1; i++) {
+              hour_input = this.shadowRoot.querySelector(".hours[skillName='"+this.currentPhase.skills[i].name+"']");
+              hour_input.value = this.currentPhase.skills[i].hours;
+              this.hours.push({"skill":this.currentPhase.skills[i].name, "hours":this.currentPhase.skills[i].hours});
+              this.selectedSkills.push(this.currentPhase.skills[i].name);
             }
             this.formInvalid = false;
             this.editPhase = true;
           }
         },
-
         mapHoursToSkill: function(event, detail, sender){
           var hours = sender.value;
           var skill = sender.getAttribute("skillName");
-          if(this.isNumeric(hours) && _.contains(this.selectedSkills, skill)){
+          if(this.validateHours(hours) && _.contains(this.selectedSkills, skill)){
             // check if hours has changed
             if( _.findWhere(this.hours, {skill:skill}) ){
               var idx = _.indexOf(_.pluck(this.hours, 'skill'), skill);
@@ -119,9 +160,7 @@
             else
               this.hours.push({"skill":skill, "hours":hours});
           }
-        },
-        isNumeric: function(n) {
-          return !isNaN(parseFloat(n)) && isFinite(n);
+          this.updateFormValidity();
         },
         createPhase: function(){
           // generate random color --> works as ID?
@@ -134,35 +173,195 @@
             if(hours){
               skills.push({"name":this.selectedSkills[i], "hours":hours.hours});
             }
+            else{
+              skills.push({"name":this.selectedSkills[i], "hours":0});
+            }
           }
           var phase = {"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":skills};
           return phase;
         },
         addPhase: function(){
-          var exists = 0;
-          var current = this.phaseName;
-          // can't have two phases with same name
-          for (var i = this.phases.length - 1; i >= 0; i--) {
-            if (this.phases[i].name === current && !this.editPhase) {
-              alert("Already phase with that name!");   // REDO alert...
-              exists = 1;
-            }
-          }
           var phase = this.createPhase();
           // Add new phase
-          if (!exists && !this.editPhase) {
+          if (!this.editPhase) {
             this.phases.push(phase);
             this.$.addSuccess.show();
           }
           // Update existing phase
-          else if(!exists && this.editPhase){
-            //console.log( _.indexOf(_.pluck(this.phases, 'color'), phase.color) );
+          else if(this.editPhase){
             var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
             this.phases[idx] = phase;
           }
           this.clearForm();
         },
 
+
+        /*
+        //////////////////////
+        // INPUT VALIDATIONS
+        //////////////////////
+        */
+        validateHours: function(n) {
+          var hoursError = _.findWhere(this.errors, {error:"hoursError"});
+          // show error messages if necessary
+          if( isNaN(parseFloat(n)) || parseFloat(n) < 0){
+            if(n){
+              hoursError.show = true;
+              this.hoursValid = false;
+            }
+            else{
+              hoursError.show = false;
+              this.hoursValid = true;
+            }
+          }
+          else{
+            hoursError.show = false;
+            this.hoursValid = true;
+          }
+          return !isNaN(parseFloat(n)) && isFinite(n) && parseFloat(n) > 0;
+        },
+        validateColor: function(color){
+          var colors = _.map(this.phases, "color");   // color is considered as the id of a phase --> unique!
+          console.log("color alreay exists: "+_.contains(colors, color));
+          return _.contains(colors, color);
+        },
+        validatePhaseName: function(event, detail, sender){
+          var phaseNameError = _.findWhere(this.errors, {error:"phaseNameExists"});
+          var is_input = (event || detail || sender) ? true : false;
+          var phaseName = is_input ? sender.value : this.phaseName;
+
+          if(is_input)
+            this.validateInput(event);
+            
+          for (var i = this.phases.length - 1; i >= 0; i--) {
+            if (this.phases[i].name === phaseName && !this.editPhase){
+              phaseNameError.show = true;
+              if(!is_input)
+                return false;
+            }
+            else{
+              phaseNameError.show = false;
+            }
+          }
+          this.updateFormValidity();
+
+          if(!is_input)
+            return true;
+        },
+        validateDate: function(){
+          // TODO --> input validation....
+          var re = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+          var dateFormatError = _.findWhere(this.errors, {error:"dateWrongFormat"});
+          var dateWrongOrderError = _.findWhere(this.errors, {error:"dateWrongOrder"});
+
+          // check date format
+          if ( !this.phaseStart.match(re) || !this.phaseEnd.match(re) ){
+            dateFormatError.show = true;
+            return false;
+          }
+          else{
+            dateFormatError.show = false;
+          }  
+          // check date order
+          if( this.parseDate(this.phaseStart) > this.parseDate(this.phaseEnd) ){
+            dateWrongOrderError.show = true;
+            return false;
+          }
+          else{
+            dateWrongOrderError.show = false;
+          }
+          return true;
+        },
+        validateDescription: function(){
+          if(this.phaseDescription){
+            if (this.phaseDescription.length > 200)
+              return false;
+            else
+              return true
+          }
+          return true;
+        },
+        validateInput: function(e){
+          // default validation --> uses inputs own validators (min, required etc.)
+          var d = e.target.parentNode;
+          d.isInvalid = !e.target.validity.valid;
+          this.updateFormValidity();
+        },
+        validateForm: function(e) {
+          e.preventDefault();
+          // Do final validation of data
+          var valid = true;
+          if(this.phaseName.length > 30 || this.phaseName.length === 0){
+            valid = false;
+          }
+          // strip tags
+          this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
+          this.phaseDescription = this.phaseDescription.replace(/(<([^>]+)>)/ig,"");
+
+          valid = this.validatePhaseName();
+          valid = this.validateDescription();
+          valid = this.validateDate();
+
+          if(this.selectedSkills.length === 0)
+            valid = false;
+          // if has errors
+          if( _.findWhere(this.errors, {show:true}) )
+            valid = false;
+          // if data valid --> add phase
+          valid === true ? this.addPhase() : this.$.addError.show();
+        },
+
+
+
+
+
+
+
+
+
+
+        /*
+        /////////////////
+        // FORM CONTROL
+        /////////////////
+        */
+        updateFormValidity: function(){
+          var myform = this.$.createProjectForm;
+          var invalid = false;
+          // check validity of form fields
+          Array.prototype.forEach.call(myform, function(child) {
+            if (child.validity.valid === false) {
+              invalid = true;
+            }
+          });
+          if(!this.selectedSkills.length)
+            invalid = true;
+          if( _.findWhere(this.errors, {show:true}) )
+            invalid = true;
+          this.formInvalid = invalid;
+        },
+        clearForm: function(){
+          this.$.createProjectForm.reset();
+          // reset variables
+          this.selectedSkills = [];
+          // pelkkä reset ei riitä --> phase edit ei toimi normisti
+          this.phaseName = "";
+          this.phaseStart = "";
+          this.phaseEnd = "";
+          this.phaseDescription = "";
+          this.phaseColor = "#000";
+          this.formInvalid = true;
+          this.editPhase = false;
+          this.currentPhase = null;
+          this.hours = [];
+        },
+
+
+        /*
+        /////////////////
+        // OTHERS
+        /////////////////
+        */
         getRandomColor: function() {
           var letters = '0123456789ABCDEF'.split('');
           var color = ''; //#
@@ -171,7 +370,6 @@
           }
           return this.changeLuminance(color, -0.4);
         },
-
         changeLuminance: function(hex, lum) {
           // validate hex string
           hex = String(hex).replace(/[^0-9a-f]/gi, '');
@@ -194,69 +392,11 @@
             return rgb;
           }
         },
-        validateColor: function(color){
-          // color is considered as the id of a phase --> unique!
-          var colors = _.map(this.phases, "color");
-          console.log("color alreay exists: "+_.contains(colors, color));
-          return _.contains(colors, color);
-        },
-
-        validateInput: function(e){
-          var d = e.target.parentNode;
-          d.isInvalid = !e.target.validity.valid;
-          this.updateFormValidity();
-        },
-
-        updateFormValidity: function(){
-          var myform = this.$.createProjectForm;
-          var invalid = false;
-          // check validity of form fields
-          Array.prototype.forEach.call(myform, function(child) {
-            if (child.validity.valid === false) {
-              invalid = true;
-            }
-          });
-          if(!this.selectedSkills.length){invalid = true};
-          this.formInvalid = invalid;
-        },
-
-        validateForm: function(e) {
-          e.preventDefault();
-          // validate data
-          var valid = true;
-          if(this.phaseName.length > 30 || this.phaseName.length === 0){
-            valid = false;
-          }
-          // strip tags
-          this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
-          // check date format
-          var re = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
-          // console.log(this.phaseStart);
-          if(this.phaseStart.length === 0 || this.phaseEnd.length === 0 || !this.phaseStart.match(re) || !this.phaseEnd.match(re) ){
-            valid = false;
-          }
-          // at least one skill required
-          if(this.selectedSkills.length === 0){
-            valid = false;
-          }
-          // if data valid --> add phase
-          valid === true ? this.addPhase() : this.$.addError.show();
-        },
-
-        clearForm: function(){
-          this.$.createProjectForm.reset();
-          // reset variables
-          this.selectedSkills = [];
-          // pelkkä reset ei riitä --> phase edit ei toimi normisti
-          this.phaseName = "";
-          this.phaseStart = "";
-          this.phaseEnd = "";
-          this.phaseDescription = "";
-          this.phaseColor = "#000";
-          this.formInvalid = true;
-          this.editPhase = false;
-          this.currentPhase = null;
+        parseDate: function(s) {
+          var b = s.split(/\D/);
+          return new Date(b[0], --b[1], b[2]);
         }
+        
       });
     })();
   </script>

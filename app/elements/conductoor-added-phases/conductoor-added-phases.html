@@ -18,7 +18,7 @@
             <div>
               <core-collapse id="phase_content{{phase.color}}" class="phase-content">
                 <template repeat="{{skill in phase.skills}}">
-                  <paper-item class="skill" no-padding>
+                  <paper-item noink class="skill" no-padding>
                     <div flex three class="summary-div">{{skill.name}}</div>
                     <div flex one class="summary-div">{{skill.hours}}</div>
                     <!-- <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div> -->
@@ -30,7 +30,7 @@
       </template>
       <template if="{{!editMode}}">
         <template if="{{phases.length || projectName}}">
-          <paper-button id="createProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{createProject}}">Create Project</paper-button>
+          <paper-button id="createProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{createProject}}">Open Project</paper-button>
         </template>
       </template>
 

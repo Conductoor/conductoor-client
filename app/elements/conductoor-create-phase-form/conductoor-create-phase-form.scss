@@ -8,7 +8,7 @@
 }
 .skill{
 	padding-left: 5%;
-	width: 60%;
+	width: 90%;
 	border-bottom: 1px solid $bg-secondary;
 	float: left;
 	height: 40px;
@@ -16,11 +16,13 @@
 }
 .skill-hours{
 	height: 40px;
-	width: 35%;
+	width: 100%;
 	display: block;
 	margin: 0 auto;
 	float: left;
-	border-bottom: 1px solid $bg-secondary;
+	clear: both;
+	margin-bottom: 1px;
+	//border-bottom: 1px solid $bg-secondary;
 }
 .skill.core-selected{
 	background-color: $secondary;
@@ -30,6 +32,13 @@
 	padding: 15px;
 	margin-bottom: 15px;
 	margin-right: 10px;
+}
+.error{
+	background-color: $negative;
+	color: #fff;
+	font-weight: 700;
+	padding: 7px;
+	display: inline-block;
 }
 
 paper-button{
