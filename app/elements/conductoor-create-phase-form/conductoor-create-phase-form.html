@@ -67,7 +67,7 @@
                     <core-field>
                       <core-icon icon="alarm"></core-icon>
                       <paper-input-decorator label="hours">
-                        <input type="number" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
+                        <input type="number" class="hours" skillName="{{skill.name}}" on-input="{{mapHoursToSkill}}">
                       </paper-input-decorator>
                     </core-field>
                   </div>
@@ -165,27 +165,37 @@
           this.updateFormValidity();
         },
         currentPhaseChanged: function(attrName, oldVal, newVal){
-          var phase = newVal[0][1];
-          console.log(phase.name);
-          //this.phaseBackup = phase;   //backup in case of reset
-          this.phaseName = phase.name;
-          this.phaseStart = phase.start;
-          this.phaseEnd = phase.end;
-          this.phaseDescription = phase.description;
-          this.phaseColor = phase.color;
-
-          for (var i =0 ; i <= phase.skills.length - 1; i++) {
-            this.selectedSkills.push(phase.skills[i].name);
+          if(this.currentPhase){
+            var phase = newVal[0][1];
+            this.phaseName = phase.name;
+            this.phaseStart = phase.start;
+            this.phaseEnd = phase.end;
+            this.phaseDescription = phase.description;
+            this.phaseColor = phase.color;
+            // select skills
+            //var all_hours = this.shadowRoot.querySelectorAll(".hours");
+            var hour_input;
+            for (var i =0 ; i <= phase.skills.length - 1; i++) {
+              hour_input = this.shadowRoot.querySelector(".hours[skillName='"+phase.skills[i].name+"']");
+              hour_input.value = phase.skills[i].hours;
+              this.selectedSkills.push(phase.skills[i].name);
+            }
+            this.formInvalid = false;
+            this.editPhase = true;
           }
-          this.formInvalid = false;
-          this.editPhase = true;
         },
 
         mapHoursToSkill: function(event, detail, sender){
           var hours = sender.value;
           var skill = sender.getAttribute("skillName");
           if(this.isNumeric(hours) && _.contains(this.selectedSkills, skill)){
-            this.hours.push({"skill":skill, "hours":hours});
+            // check if hours has changed
+            if( _.findWhere(this.hours, {skill:skill}) ){
+              var idx = _.indexOf(_.pluck(this.hours, 'skill'), skill);
+              this.hours[idx].hours = hours;
+            }
+            else
+              this.hours.push({"skill":skill, "hours":hours});
           }
         },
         isNumeric: function(n) {
@@ -211,7 +221,7 @@
           var current = this.phaseName;
           // can't have two phases with same name
           for (var i = this.phases.length - 1; i >= 0; i--) {
-            if (this.phases[i].name === current && !this.editPhase && this.phases[i].name != this.phaseBackup.name) {
+            if (this.phases[i].name === current && !this.editPhase) {
               alert("Already phase with that name!");   // REDO alert...
               exists = 1;
             }
@@ -325,6 +335,7 @@
           this.phaseColor = "#000";
           this.formInvalid = true;
           this.editPhase = false;
+          this.currentPhase = null;
         }
       });
     })();
