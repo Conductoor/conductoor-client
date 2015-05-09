@@ -4,11 +4,38 @@
 <polymer-element name="conductoor-create-phase-form" attributes="editMode phases currentPhase">
   <template>
     <link rel="stylesheet" href="conductoor-create-phase-form.css">
+    <core-ajax
+      id = "getSkillList"
+      auto
+      url="https://conductoor-api.herokuapp.com:443/skills/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponseGetSkillList}}"
+      core-error="{{handleErrorGetSkillList}}">
+    </core-ajax>
+    <core-ajax
+      id ="postPhase"
+      url="https://conductoor-api.herokuapp.com:443/phases/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponsePostPhase}}"
+      core-error="{{handleErrorPostPhase}}">
+    </core-ajax>
+    <core-ajax
+      id ="putPhase"
+      url="https://conductoor-api.herokuapp.com:443/phases/1/"
+      handleAs="json"
+      method="PUT"
+      contentType="application/json"
+      on-core-response="{{handleResponsePutPhase}}"
+      core-error="{{handleErrorPutPhase}}">
+    </core-ajax>
 
       <template if="{{!editPhase}}"><h2>New phase: {{phaseName}}</h2></template>
       <template if="{{editPhase}}"><h2>Editing: {{phaseName}}</h2></template>
 
-      
+
       <form id="createProjectForm" on-submit="{{validateForm}}">
         <div layout horizontal>
           <div flex class="card">
@@ -51,10 +78,14 @@
         <br>
         <!-- paper-buttonilla submit ei toimi... -->
         <template if="{{!editPhase}}">
-          <button id="submit" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
+          <button id="submit" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;">
+            <paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button>
+          </button>
         </template>
         <template if="{{editPhase}}">
-          <button id="submit" visible?="{{formInvalid || !editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Save</paper-button></button>
+          <button id="submit" visible?="{{formInvalid || !editPhase}}" type="submit" style="background:transparent;border:none;">
+            <paper-button disabled?="{{formInvalid}}" raised>Save</paper-button>
+          </button>
          <paper-button raised on-click="{{clearForm}}">Reset</paper-button>
         </template>
       </form>
@@ -70,7 +101,7 @@
         created: function(){
           // missä muodossa skillit tulee?
           // TODO fetch skills
-          this.skills = [{"name":"skill1"}, {"name":"skill2"}, {"name":"skill3"}, {"name":"skill4"}, {"name":"skill5"}];
+          this.skills = [];
           this.selectedSkills = [];   // Tyyppiä? [{"name":"skill1", "hours":"40"}, {"name":"skill2", "hours":"40"}];
           this.hours = [];            // Tyyppiä [{"skill":"skill1", "hours": "40"}]
           this.phaseName;
@@ -82,7 +113,54 @@
           //this.phaseBackup;
           this.editPhase = false;
         },
-
+        handleResponseGetSkillList: function(event, response) {
+          console.log(response.response);
+          this.skills = response.response;
+        },
+        handleErrorGetSkillList: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        handleResponsePostPhase: function(event, response) {
+          console.log(response.response);
+          this.skills = response.response;
+        },
+        handleErrorPostPhase: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        handleResponsePutPhase: function(event, response) {
+          console.log(response.response);
+          this.skills = response.response;
+        },
+        handleErrorPutPhase: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        addPhaseApiCall: function(phase) {
+          var ajax = this.$.postPhase;
+          ajax.body = JSON.stringify(
+            {
+              "user": "",
+              "phase": "",
+              "skill": "",
+              "hours": ""
+            }
+          );
+          ajax.go();
+        },
+        updatePhaseApiCall: function(phase) {
+          var ajax = this.$.putPhase;
+          ajax.body = JSON.stringify(
+            {
+              "user": "",
+              "phase": "",
+              "skill": "",
+              "hours": ""
+            }
+          );
+          ajax.go();
+        },
         selectedSkillsChanged: function(){
           this.updateFormValidity();
         },
@@ -141,12 +219,14 @@
           var phase = this.createPhase();
           // Add new phase
           if (!exists && !this.editPhase) {
+            this.addPhaseApiCall(phase);
             this.phases.push(phase);
             this.$.addSuccess.show();
           }
           // Update existing phase
           else if(!exists && this.editPhase){
             //console.log( _.indexOf(_.pluck(this.phases, 'color'), phase.color) );
+            this.updatePhaseApiCall(phase);
             var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
             this.phases[idx] = phase;
           }
