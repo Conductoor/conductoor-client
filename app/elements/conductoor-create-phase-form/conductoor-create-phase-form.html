@@ -217,8 +217,7 @@
             this.phaseEnd = this.currentPhase.end;
             this.phaseDescription = this.currentPhase.description;
             this.phaseColor = this.currentPhase.color;
-            // select skills
-            //var all_hours = this.shadowRoot.querySelectorAll(".hours");
+            
             var hour_input;
             for (var i =0 ; i <= this.currentPhase.skills.length - 1; i++) {
               hour_input = this.shadowRoot.querySelector(".hours[skillName='"+this.currentPhase.skills[i].name+"']");
