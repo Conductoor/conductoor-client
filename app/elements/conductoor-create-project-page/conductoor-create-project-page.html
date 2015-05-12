@@ -1,11 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-create-project-page" attributes="editMode">
+<polymer-element name="conductoor-create-project-page" attributes="projectId editMode">
   <template>
     <link rel="stylesheet" href="conductoor-create-project-page.css">
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="../../styles/main.css">
     <!-- endbuild-->
+    <core-ajax
+      id = "getProject"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponseGetProject}}"
+      core-error="{{handleErrorGetProject}}">
+    </core-ajax>
     <core-ajax
       id ="postProject"
       url="https://conductoor-api.herokuapp.com:443/projects/"
@@ -68,22 +76,22 @@
       <conductoor-project-panel></conductoor-project-panel>
       <!-- autoCloseDisabled -->
       <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
-      <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
-        <h2>Name your project:</h2>
-        <paper-input-decorator  label="required" floatinglabel="" error="input is required!" autovalidate="" layout="" vertical="" class="invalid">
-          <input is="core-input" id="projectName" required="" maxlength="100" placeholder="required" aria-label="required">
-        </paper-input-decorator>
-        <h3>Description for your project:</h3>
-        <paper-input-decorator label="Desription" floatingLabel  error="input is required! Max 200 characters" class="">
-          <paper-autogrow-textarea>
-            <textarea id="projectDescription" value="{{phaseDescription}}"></textarea>
-          <paper-autogrow-textarea>
-        </paper-input-decorator>
-        <br>
-        <paper-button raised on-click="{{createProject}}">Open</paper-button>
-        <paper-button raised on-click="{{cancel}}">Cancel</paper-button>
-      </div>
-    </core-overlay>
+        <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
+          <h2>Name your project:</h2>
+          <paper-input-decorator  label="required" floatinglabel="" error="input is required!" autovalidate="" layout="" vertical="" class="invalid">
+            <input is="core-input" id="projectName" required="" maxlength="100" placeholder="required" aria-label="required">
+          </paper-input-decorator>
+          <h3>Description for your project:</h3>
+          <paper-input-decorator label="Desription" floatingLabel  error="input is required! Max 200 characters" class="">
+            <paper-autogrow-textarea>
+              <textarea id="projectDescription" value="{{projectDescription}}"></textarea>
+            <paper-autogrow-textarea>
+          </paper-input-decorator>
+          <br>
+          <paper-button raised on-click="{{createProject}}">Open</paper-button>
+          <paper-button raised on-click="{{cancel}}">Cancel</paper-button>
+        </div>
+      </core-overlay>
     </core-scaffold>
 
   </template>
@@ -94,23 +102,41 @@
           //local storage
           this.storage = document.querySelector("#currentProject");
           // Uncomment to use the modal
-          // this.$.modalOpen.toggle();
-          console.log(this.$.headerProjectName);
+          if(!this.editMode)
+            this.$.modalOpen.toggle();
+
+          //console.log(this.$.headerProjectName);
           this.$.headerProjectName.addEventListener("keyup", this.handleKeyUp.bind(this));
+          this.phases = this.phases || [];              //remove this
+          this.project = this.project || {};    //{"id": 1} remove this for production
+          this.projectDescription;    // annetaanko mahdollisuus muokata tätä?
+          this.currentPhase = this.currentPhase || null;
+          this.projectId = this.projectId;
+
+          // TARVIIKO NÄITÄ EHTOJA EDES?
+          // if(this.editMode){
+          //   //populate phases and project name
+          //   this.phases = this.phases || [];              //remove this
+          //   this.project = this.project || {"id": 1};    //remove this for production
+          //   this.currentPhase = this.currentPhase || null;
+          // }
+          // else{
+          //   this.phases = this.phases || [];
+          //   this.project = this.project || {"id": 1}; //remove this for production
+          //}
+        },
+        domReady: function(){
+          // tässä kohtaa app-routerin url parametri initialisoituu
           if(this.editMode){
-            //populate phases and project name
-            this.phases = this.phases || [];              //remove this
-            this.project = this.project || {"id": 1};    //remove this for production
-            this.currentPhase = this.currentPhase || {};
+            console.log("from edit project - ID: "+this.projectId);
+            console.log(this.project);
+            this.getProject(this.projectId);
           }
-          else{
-            this.phases = this.phases || [];
-            this.project = this.project || {"id": 1}; //remove this for production
-          }
+          
         },
         handleResponsePostProject: function(event, response) {
-          console.log(response.response);
-          this.project= response.response;
+          console.log("project"+response.response);
+          this.project = response.response;
           this.storage.value = this.project;
           this.$.modalOpen.toggle();
 
@@ -121,14 +147,29 @@
           console.log(response);
         },
         handleResponsePutProject: function(event, response) {
-          console.log(response.response);
-          this.project= response.response;
+          //console.log(response.response);
+          this.project = response.response;
           this.storage.value = this.project;
         },
         handleErrorPutProject: function(event, response) {
           alert(response.response);
           console.log("Error");
           console.log(response);
+        },
+        handleResponseGetProject: function(event, response){
+          console.log("From GetProject:");
+          console.log(response.response);
+          this.project = response.response;
+        },
+        handleErrorGetProject: function(event, response){
+          alert(response.response);
+          console.log("Error");
+          console.log(response);
+        },
+        getProject: function(id){
+          var ajax = this.$.getProject;
+          ajax.url += id;   // on varmaan fiksumpi tapa...
+          ajax.go();
         },
         createProject: function() {
           var ajax = this.$.postProject;
@@ -141,6 +182,8 @@
           ajax.go();
         },
         cancel: function() {
+          this.$.modalOpen.toggle();
+          // miksi redirectaa list-projects?
           window.location.href = "/#/list-projects";
         },
         updateProject: function() {
@@ -158,7 +201,7 @@
           if (this.timeout) {
             clearTimeout(this.timeout);
           }
-          console.log(this);
+          //console.log(this);
           this.timeout = setTimeout(this.updateProject.bind(this), 500);
         },
         validate: function() {

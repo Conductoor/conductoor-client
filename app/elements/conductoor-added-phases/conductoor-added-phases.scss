@@ -9,6 +9,7 @@ paper-button#createProject, paper-button#updateProject{
 .phase{
 	// border-bottom: 1px solid $bg-secondary;
   margin-bottom: 2px;
+  word-wrap: break-word;
 }
 paper-item.skill{
   cursor: initial;

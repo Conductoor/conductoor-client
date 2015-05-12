@@ -3,8 +3,8 @@
 <link rel="import" href="../elements/elements.html">
 <!-- endbuild-->
 
-<polymer-element name="edit-project-page" noscript>
+<polymer-element name="edit-project-page" noscript attributes="projectId">
   <template>
-    <conductoor-create-project-page editMode="{{true}}"></conductoor-create-project-page>
+    <conductoor-create-project-page projectId={{projectId}} editMode="{{true}}"></conductoor-create-project-page>
   </template>
 </polymer-element>

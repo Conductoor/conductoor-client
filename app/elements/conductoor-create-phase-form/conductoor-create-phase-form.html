@@ -138,7 +138,7 @@
         */
 
         handleResponseGetSkillList: function(event, response) {
-          console.log(response.response);
+          //console.log(response.response);
           this.skills = response.response;
         },
         handleErrorGetSkillList: function(event, response) {
@@ -219,6 +219,7 @@
           this.updateFormValidity();
         },
         currentPhaseChanged: function(){
+          console.log("currentPhaseChanged");
           if(this.currentPhase){
             this.phaseName = this.currentPhase.name;
             this.phaseStart = this.currentPhase.start;
@@ -395,9 +396,11 @@
           this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
           this.phaseDescription = this.phaseDescription.replace(/(<([^>]+)>)/ig,"");
 
-          valid = this.validatePhaseName();
-          valid = this.validateDescription();
-          valid = this.validateDate();
+          // valid = this.validatePhaseName();
+          // valid = this.validateDescription();
+          // valid = this.validateDate();
+          valid = (this.validateDate() && this.validateDescription() && this.validatePhaseName());
+          console.log("valid after date:" + valid);
 
           if(this.selectedSkills.length === 0)
             valid = false;

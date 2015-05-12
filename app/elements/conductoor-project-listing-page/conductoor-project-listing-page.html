@@ -6,6 +6,15 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="../../styles/main.css">
     <!-- endbuild-->
+    <core-ajax
+      id = "getProjectList"
+      auto
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
 
     <div layout horizontal fit>
       <core-header-panel mode="seamed" id="core_header_panel" flex relative>
@@ -31,15 +40,15 @@
           <div class="projects-list">
             <template repeat="{{project in projects}}">
               <div layout horizontal center class="project">
-                <div class="label" flex four>{{project.name}}</div>
+                <div class="label" flex four>{{project.title}}</div>
                 <div class="edit" flex one>
-                  <core-icon icon="create" on-click="{{editProject}}"></core-icon>
-                  <paper-ripple fit></paper-ripple>
+                  <core-icon icon="create"></core-icon>
+                  <paper-ripple projectId="{{project.id}}" fit on-click="{{editProject}}"></paper-ripple>
                 </div>
               </div>
             </template>
             <div class="new" layout horizontal center-justified>
-              <core-icon icon="add-circle" on-click="{{newProject}}"></core-icon>
+              <core-icon-button icon="add-circle" on-click="{{newProject}}"></core-icon-button>
             </div>
           </div>
         </div>
@@ -53,20 +62,35 @@
       Polymer({
         // define element prototype here
         created: function(){
-          this.projects = [
-            {id: 1, name: "Project name 1"},
-            {id: 2, name: "Project name 2"},
-            {id: 3, name: "Project name 3"},
-            {id: 4, name: "Project name 4"},
-            {id: 5, name: "Project name 5"},
-            {id: 6, name: "Project name 6"}
+          this.projects = this.projects || 
+          [
+            {id: 1, title: "Project name 1"},
+            {id: 1, title: "Project name 2"},
+            {id: 1, title: "Project name 3"}
           ]
         },
-        editProject: function(){
-          console.log("edit");
+
+
+
+
+        handleResponse: function(event, response) {
+          //console.log(response.response);
+          this.projects = response.response;
+          //this.currentProject = this.storage.value;
+        },
+        handleError: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+
+
+
+        editProject: function(event, detail, sender){
+          var projectId = sender.getAttribute("projectId");
+          window.location.href = "/#/project/edit/"+projectId;
         },
         newProject: function(){
-          console.log("new");
+          window.location.href = "/#/project/create";
         }
       });
     })();
