@@ -31,6 +31,15 @@
       on-core-response="{{handleResponsePutPhase}}"
       core-error="{{handleErrorPutPhase}}">
     </core-ajax>
+    <core-ajax
+      id ="deletePhase"
+      url="https://conductoor-api.herokuapp.com:443/phases/"
+      handleAs="json"
+      method="DELETE"
+      contentType="application/json"
+      on-core-response="{{handleResponseDeletePhase}}"
+      core-error="{{handleErrorDeletePhase}}">
+    </core-ajax>
 
       <template if="{{!editPhase}}"><h2>New phase: {{phaseName}}</h2></template>
       <template if="{{editPhase}}"><h2>Editing: {{phaseName}}</h2></template>
@@ -45,7 +54,7 @@
 
       <form id="createProjectForm" on-submit="{{validateForm}}">
         <div layout horizontal>
-          <div flex class="card">
+          <div flex class="card" style="margin-right:10px;">
             <paper-input-decorator floatingLabel label="Phase name" id="phaseNameDecorator">
               <input is="core-input" required maxlength="30" on-input="{{validatePhaseName}}" error="This field is required" type="text" value="{{phaseName}}">
             </paper-input-decorator>
@@ -61,7 +70,7 @@
             <br>
             <paper-input-decorator label="Desription" floatingLabel>
               <paper-autogrow-textarea>
-                <textarea maxlength="200" value="{{phaseDescription}}"></textarea>
+                <textarea maxlength="200" on-input="{{validateDescription}}" value="{{phaseDescription}}"></textarea>
               <paper-autogrow-textarea>
             </paper-input-decorator>
           </div>
@@ -71,7 +80,7 @@
               <div flex four>
                 <core-selector id="selectSkills" selected="{{selectedSkills}}" multi valueattr="skill">
                   <template repeat="{{skill in skills}}">
-                      <div class="skill" skill="{{skill.name}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
+                      <div class="skill" skill="{{skill.id}}" on-click="{{updateFormValidity}}">{{skill.name}}</div>
                   </template>
                 </core-selector>
               </div>
@@ -81,7 +90,7 @@
                       <core-field>
                         <core-icon icon="alarm"></core-icon>
                         <paper-input-decorator label="hours">
-                          <input min="0" class="hours" skillName="{{skill.name}}" skillId="{{skill.id}}" on-input="{{mapHoursToSkill}}">
+                          <input min="0" class="hours" skillName="{{skill.name}}" to-skill="{{skill.id}}" on-input="{{mapHoursToSkill}}">
                         </paper-input-decorator>
                       </core-field>
                     </div>
@@ -100,10 +109,21 @@
             <paper-button disabled?="{{formInvalid}}" raised>Save</paper-button>
           </button>
          <paper-button raised on-click="{{clearForm}}">Reset</paper-button>
+         <paper-button class="delete-phase" raised on-click="{{confirmPhaseDelete}}" phase-id="{{currentPhase.id}}">Delete phase</paper-button>
         </template>
       </form>
       <paper-toast id="addSuccess" text="Phase added"></paper-toast>
       <paper-toast id="addError" text="Could not add phase. Check your inputs!"></paper-toast>
+
+      <core-overlay id="modalPhaseDelete" layered backdrop transition="core-transition-top">
+        <div style="background:#fff;padding:16px;border-radius:8px;">
+          <h2>Delete phase</h2>
+          <p>Are you sure you want to delete this phase?</p>
+          <p>All data will be lost.</p>
+          <br>
+          <paper-button raised core-overlay-toggle on-click="{{deletePhase}}">Delete</paper-button><paper-button raised core-overlay-toggle>Cancel</paper-button>
+        </div>
+      </core-overlay>
 
   </template>
 
@@ -120,8 +140,11 @@
           this.phaseEnd = "";
           this.phaseDescription = "";
           this.phaseColor = "#000";
+
           this.editPhase = false;
           this.formInvalid = true;
+          this.phaseToDelete;
+
           this.errors = [
             {"error":"dateWrongOrder", "message":"Start date needs to be before end date.", "show":false},
             {"error":"descriptionTooLong", "message":"Maximum length of description is 200 characters.", "show":false},
@@ -136,17 +159,23 @@
         // API CALLS & RESPONSES
         /////////////////////////
         */
-
+        // GET SKILLS
         handleResponseGetSkillList: function(event, response) {
-          //console.log(response.response);
           this.skills = response.response;
         },
         handleErrorGetSkillList: function(event, response) {
+          alert(response.response);
           console.log("Error");
           console.log(response);
         },
+        // CREATE PHASE
         handleResponsePostPhase: function(event, response) {
           console.log(response.response);
+          var phase = response.response;
+          if (this.project.phases)
+            this.project.phases.push(phase);
+          else
+            this.project.phases = [phase];
           this.$.addSuccess.show();
         },
         handleErrorPostPhase: function(event, response) {
@@ -154,43 +183,44 @@
           console.log("Error");
           console.log(response);
         },
+        // UPDATE PHASE
         handleResponsePutPhase: function(event, response) {
           console.log(response.response);
+          //var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
+          //this.phases[idx] = phase;
         },
         handleErrorPutPhase: function(event, response) {
           alert(response.response);
           console.log("Error");
           console.log(response);
         },
+        // DELETE PHASE
+        handleResponseDeletePhase: function(event, response) {
+          console.log(response.response);
+          this.project.phases = _.without( this.project.phases, _.findWhere(this.project.phases, {color: this.phaseToDelete}) );
+        },
+        handleErrorDeletePhase: function(event, response) {
+          alert(response.response);
+          console.log("Error");
+          console.log(response);
+        },
+
         addPhaseApiCall: function(phase) {
-          console.log(this.project);
           var ajax = this.$.postPhase;
-          ajax.body = JSON.stringify(
-            {
-              "title": phase.name,
-              "project": this.project.id,
-              "time_start": phase.start,
-              "time_end": phase.end,
-              "color": phase.color,
-              "required_skills": phase.skills,
-              "description": phase.description
-            }
-          );
+          ajax.body = JSON.stringify(phase);
+          console.log(JSON.stringify(phase));
           ajax.go();
         },
         updatePhaseApiCall: function(phase) {
+          // FIX
           var ajax = this.$.putPhase;
-          ajax.body = JSON.stringify(
-            {
-              "title": phase.name,
-              "project": this.project.id,
-              "time_start": phase.start,
-              "time_end": phase.end,
-              "color": phase.color,
-              "required_skills": phase.skills,
-              "description": phase.description
-            }
-          );
+          ajax.body = JSON.stringify(phase);
+          ajax.go();
+        },
+        deletePhaseApiCall: function(phaseId) {
+          // FIX
+          var ajax = this.$.deletePhase;
+          ajax.url += phaseId;
           ajax.go();
         },
 
@@ -200,7 +230,7 @@
         // CHANGE LISTENERS
         ////////////////////
         */
-        // phaseStartChanged ja phaseEndChanged pitää poistaa kun date input validation toimii...
+        // phaseStartChanged ja phaseEndChanged pitää poistaa kun date input validation toimii paremmin...
         phaseStartChanged: function(){
           var dateFormatError = _.findWhere(this.errors, {error:"dateWrongFormat"});
           var dateWrongOrderError = _.findWhere(this.errors, {error:"dateWrongOrder"});
@@ -220,19 +250,19 @@
         },
         currentPhaseChanged: function(){
           console.log("currentPhaseChanged");
+          this.clearForm();
           if(this.currentPhase){
-            this.phaseName = this.currentPhase.name;
-            this.phaseStart = this.currentPhase.start;
-            this.phaseEnd = this.currentPhase.end;
+            this.phaseName = this.currentPhase.title;
+            this.phaseStart = this.currentPhase.time_start;
+            this.phaseEnd = this.currentPhase.time_end;
             this.phaseDescription = this.currentPhase.description;
             this.phaseColor = this.currentPhase.color;
-            
-            var hour_input;
-            for (var i =0 ; i <= this.currentPhase.skills.length - 1; i++) {
-              hour_input = this.shadowRoot.querySelector(".hours[skillName='"+this.currentPhase.skills[i].name+"']");
-              hour_input.value = this.currentPhase.skills[i].hours;
-              this.hours.push({"skill":this.currentPhase.skills[i].name, "hours":this.currentPhase.skills[i].hours});
-              this.selectedSkills.push(this.currentPhase.skills[i].name);
+
+            for (var i =0 ; i <= this.currentPhase.required_skills.length - 1; i++) {
+              hour_input = this.shadowRoot.querySelector(".hours[to-skill='"+this.currentPhase.required_skills[i].id+"']");
+              hour_input.value = this.currentPhase.required_skills[i].required_hours;
+              this.hours.push({"skill":this.currentPhase.required_skills[i].id, "required_hours":this.currentPhase.required_skills[i].required_hours});
+              this.selectedSkills.push(this.currentPhase.required_skills[i].id);
             }
             this.formInvalid = false;
             this.editPhase = true;
@@ -246,35 +276,36 @@
         ////////////////////
         */
         mapHoursToSkill: function(event, detail, sender){
-          var hours = sender.value;
-          var skill = sender.getAttribute("skillName");
+          var hours = parseInt(sender.value,10);
+          var skill = sender.getAttribute("to-skill");
           if(this.validateHours(hours) && _.contains(this.selectedSkills, skill)){
             // check if hours has changed
             if( _.findWhere(this.hours, {skill:skill}) ){
               var idx = _.indexOf(_.pluck(this.hours, 'skill'), skill);
-              this.hours[idx].hours = hours;
+              this.hours[idx].required_hours = parseInt(hours,10);
             }
             else
-              this.hours.push({"skill":skill, "hours":hours});
+              this.hours.push({"skill":skill, "required_hours":hours});
           }
+          console.log(this.hours);
           this.updateFormValidity();
         },
         createPhase: function(){
           // generate random color --> works as ID?
           this.phaseColor = this.editPhase ? this.phaseColor : this.getRandomColor();
           // create skill objects
-          var skills = [];
+          var required_skills = [];
           for (var i = this.selectedSkills.length - 1; i >= 0; i--) {
             var hours = _.findWhere(this.hours, {skill:this.selectedSkills[i]});
             // add to skills only when skill has hours set!
             if(hours){
-              skills.push({"name":this.selectedSkills[i], "hours":hours.hours});
+              required_skills.push({"skill":parseInt(this.selectedSkills[i],10), "required_hours":hours.required_hours});
             }
             else{
-              skills.push({"skill":this.selectedSkills[i], "hours":0});
+              required_skills.push({"skill":parseInt(this.selectedSkills[i],10), "required_hours":0});
             }
           }
-          var phase = {"name":this.phaseName, "start":this.phaseStart, "end":this.phaseEnd, "description": this.phaseDescription, "color":this.phaseColor, "skills":skills};
+          var phase = {"title":this.phaseName, "project":this.project.id, "time_start":this.phaseStart, "time_end":this.phaseEnd, "description": this.phaseDescription, "color":("#"+this.phaseColor), "required_skills":required_skills};
           return phase;
         },
         addPhase: function(){
@@ -282,15 +313,21 @@
           // Add new phase
           if (!this.editPhase) {
             this.addPhaseApiCall(phase);
-            this.phases.push(phase);
           }
           // Update existing phase
           else if(this.editPhase){
             this.updatePhaseApiCall(phase);
-            var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
-            this.phases[idx] = phase;
           }
           this.clearForm();
+          this.currentPhase = null;
+        },
+        confirmPhaseDelete: function(event, detail, sender){
+          this.phaseToDelete = sender.getAttribute("phase-id");
+          this.$.modalPhaseDelete.toggle();
+        },
+        deletePhase: function(){
+          var phaseId = this.phaseToDelete;
+          this.deletePhaseApiCall(phaseId);
         },
 
 
@@ -331,8 +368,8 @@
           if(is_input)
             this.validateInput(event);
 
-          for (var i = this.phases.length - 1; i >= 0; i--) {
-            if (this.phases[i].name === phaseName && !this.editPhase){
+          for (var i = this.project.phases.length - 1; i >= 0; i--) {
+            if (this.project.phases[i].title === phaseName && !this.editPhase){
               phaseNameError.show = true;
               if(!is_input)
                 return false;
@@ -370,14 +407,28 @@
           }
           return true;
         },
-        validateDescription: function(){
-          if(this.phaseDescription){
-            if (this.phaseDescription.length > 200)
-              return false;
-            else
-              return true
+        validateDescription: function(event, detail, sender){
+          var is_input = (event || detail || sender) ? true : false;
+          var description = is_input ? sender.value : this.phaseDescription;
+          var descriptionTooLong = _.findWhere(this.errors, {error:"descriptionTooLong"});
+
+          if(is_input)
+            this.validateInput(event);
+
+          if(description){
+            if (description.length > 200){
+              descriptionTooLong.show = true;
+              if(!is_input)
+                return false;
+            }
+            else{
+              descriptionTooLong.show = false;
+              if(!is_input)
+                return true;
+            }
           }
-          return true;
+          if(!is_input)
+            return true;
         },
         validateInput: function(e){
           // default validation --> uses inputs own validators (min, required etc.)
@@ -389,16 +440,13 @@
           e.preventDefault();
           // Do final validation of data
           var valid = true;
-          if(this.phaseName.length > 30 || this.phaseName.length === 0){
+          if(this.phaseName.length > 30 || this.phaseName.length === 0)
             valid = false;
-          }
+          
           // strip tags
           this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
           this.phaseDescription = this.phaseDescription.replace(/(<([^>]+)>)/ig,"");
 
-          // valid = this.validatePhaseName();
-          // valid = this.validateDescription();
-          // valid = this.validateDate();
           valid = (this.validateDate() && this.validateDescription() && this.validatePhaseName());
           console.log("valid after date:" + valid);
 
@@ -444,7 +492,6 @@
           this.phaseColor = "#000";
           this.formInvalid = true;
           this.editPhase = false;
-          this.currentPhase = null;
           this.hours = [];
         },
 

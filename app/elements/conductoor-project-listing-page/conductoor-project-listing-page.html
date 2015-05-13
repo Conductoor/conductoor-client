@@ -12,8 +12,16 @@
       url="https://conductoor-api.herokuapp.com:443/projects/"
       params=''
       handleAs="json"
-      on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
+      on-core-response="{{handleResponseGetProjects}}"
+      core-error="{{handleErrorGetProjects}}">
+    </core-ajax>
+    <core-ajax
+      id = "deleteProject"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=''
+      method='DELETE'
+      on-core-response="{{handleResponseDeleteProjects}}"
+      core-error="{{handleErrorDeleteProjects}}">
     </core-ajax>
 
     <div layout horizontal fit>
@@ -45,6 +53,10 @@
                   <core-icon icon="create"></core-icon>
                   <paper-ripple projectId="{{project.id}}" fit on-click="{{editProject}}"></paper-ripple>
                 </div>
+                <div class="delete" flex one>
+                  <core-icon icon="delete"></core-icon>
+                  <paper-ripple projectId="{{project.id}}" fit on-click="{{confirmDelete}}"></paper-ripple>
+                </div>
               </div>
             </template>
             <div class="new" layout horizontal center-justified>
@@ -56,6 +68,15 @@
       </core-header-panel>
     </div>
 
+    <core-overlay id="modalDelete" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px;">
+        <h2>Delete project</h2>
+        <p>Are you sure you want to delete this project?</p>
+        <p>All data will be lost.</p>
+        <br>
+        <paper-button raised core-overlay-toggle on-click="{{deleteProject}}">Delete</paper-button><paper-button raised core-overlay-toggle>Cancel</paper-button>
+      </div>
+    </core-overlay>
   </template>
   <script>
     (function () {
@@ -67,24 +88,43 @@
             {id: 1, title: "Project name 1"},
             {id: 1, title: "Project name 2"},
             {id: 1, title: "Project name 3"}
-          ]
+          ];
+          this.projectToDelete;
         },
 
 
 
 
-        handleResponse: function(event, response) {
-          //console.log(response.response);
+        handleResponseGetProjects: function(event, response) {
+          console.log(response.response);
           this.projects = response.response;
           //this.currentProject = this.storage.value;
         },
-        handleError: function(event, response) {
+        handleErrorGetProjects: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
+        handleResponseDeleteProject: function(event, response) {
+          console.log(response.response);
+          //this.projects = response.response;
+          //this.currentProject = this.storage.value;
+        },
+        handleErrorDeleteProject: function(event, response) {
           console.log("Error");
           console.log(response);
         },
 
-
-
+        confirmDelete: function(event, detail, sender){
+          this.projectToDelete = sender.getAttribute("projectId");
+          console.log(this.projectToDelete);
+          this.$.modalDelete.toggle();
+        },
+        deleteProject: function(){
+          var projectId = this.projectToDelete;
+          var ajax = this.$.deleteProject;
+          ajax.url += projectId;
+          ajax.go();
+        },
         editProject: function(event, detail, sender){
           var projectId = sender.getAttribute("projectId");
           window.location.href = "/#/project/edit/"+projectId;

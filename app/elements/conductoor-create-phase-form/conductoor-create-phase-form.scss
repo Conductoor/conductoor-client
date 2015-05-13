@@ -31,7 +31,6 @@
 	background-color: $bg-primary;
 	padding: 15px;
 	margin-bottom: 15px;
-	margin-right: 10px;
 }
 .error{
 	background-color: $negative;
@@ -39,6 +38,11 @@
 	font-weight: 700;
 	padding: 7px;
 	display: inline-block;
+}
+.delete-phase{
+	float: right;
+	background-color: $negative;
+	color: #fff;
 }
 
 paper-button{

@@ -61,7 +61,7 @@
         </core-toolbar>
 
         <h2 class="phases-title">Phases:</h2>
-        <conductoor-added-phases editMode={{editMode}} projectName={{project.title}} phases={{phases}} currentPhase={{currentPhase}}></conductoor-added-phases>
+        <conductoor-added-phases editMode={{editMode}} project={{project}} projectName={{project.title}} phases={{phases}} currentPhase={{currentPhase}}></conductoor-added-phases>
 
       </core-header-panel>
       <!-- END Left panel -->
@@ -107,8 +107,8 @@
 
           //console.log(this.$.headerProjectName);
           this.$.headerProjectName.addEventListener("keyup", this.handleKeyUp.bind(this));
-          this.phases = this.phases || [];              //remove this
-          this.project = this.project || {};    //{"id": 1} remove this for production
+          this.phases = this.phases || [];
+          this.project = this.project || {};
           this.projectDescription;    // annetaanko mahdollisuus muokata tätä?
           this.currentPhase = this.currentPhase || null;
           this.projectId = this.projectId;
@@ -128,14 +128,14 @@
         domReady: function(){
           // tässä kohtaa app-routerin url parametri initialisoituu
           if(this.editMode){
-            console.log("from edit project - ID: "+this.projectId);
-            console.log(this.project);
             this.getProject(this.projectId);
           }
           
         },
+        // CREATE
         handleResponsePostProject: function(event, response) {
-          console.log("project"+response.response);
+          console.log("PROJECT:")
+          console.log(response.response);
           this.project = response.response;
           this.storage.value = this.project;
           this.$.modalOpen.toggle();
@@ -146,6 +146,7 @@
           console.log("Error");
           console.log(response);
         },
+        // UPDATE
         handleResponsePutProject: function(event, response) {
           //console.log(response.response);
           this.project = response.response;
@@ -156,9 +157,8 @@
           console.log("Error");
           console.log(response);
         },
+        // GET
         handleResponseGetProject: function(event, response){
-          console.log("From GetProject:");
-          console.log(response.response);
           this.project = response.response;
         },
         handleErrorGetProject: function(event, response){

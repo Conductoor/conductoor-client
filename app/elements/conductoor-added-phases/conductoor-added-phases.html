@@ -1,27 +1,26 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-added-phases" attributes="editMode projectName phases currentPhase">
+<polymer-element name="conductoor-added-phases" attributes="project editMode projectName phases currentPhase">
   <template>
     <link rel="stylesheet" href="conductoor-added-phases.css">
     <core-menu class="phases-wrapper" selected="">
-      <template repeat="{{phase in phases}}">
+      <template repeat="{{phase in project.phases}}">
         <div id="{{phase.color}}" class="phase" relative>
-            <paper-item class="phase-header" on-click="{{openPhase}}" target-id="{{phase.color}}">
+            <paper-item class="phase-header" on-click="{{openPhase}}" target-color="{{phase.color | filterHash}}">
               <div vertical layout>
-                <span class="phase-name">{{phase.name}}</span>
+                <span class="phase-name">{{phase.title}}</span>
                 <!-- TODO -->
-                <span class="phase-duration">{{phase.start}} - {{phase.end}}</span>
+                <span class="phase-duration">{{phase.time_start}} - {{phase.time_end}}</span>
               </div>
             </paper-item>
-            <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{editPhase}}" style="background:#{{phase.color}}"><core-icon icon="create"></core-icon></button>
+            <button layout horizontal center center-justified class="phase-color-code" phase-color="{{phase.color}}" on-click="{{editPhase}}" style="background:{{phase.color}}"><core-icon icon="create"></core-icon></button>
             <!-- <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button> -->
             <div>
-              <core-collapse id="phase_content{{phase.color}}" class="phase-content">
-                <template repeat="{{skill in phase.skills}}">
+              <core-collapse id="phase_content{{phase.color | filterHash}}" class="phase-content">
+                <template repeat="{{skill in phase.required_skills}}">
                   <paper-item noink class="skill" no-padding>
                     <div flex three class="summary-div">{{skill.name}}</div>
-                    <div flex one class="summary-div">{{skill.hours}}</div>
-                    <!-- <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div> -->
+                    <div flex one class="summary-div">{{skill.required_hours}}</div>
                   </paper-item>
                 </template>
               </core-collapse>
@@ -71,19 +70,20 @@
         updateProject: function(){
           // TODO
         },
+        // TEMP FUNCTION!! --> phase color pitäis olla ilman #-merkkiä
+        filterHash: function(val){
+          if(val)
+            return val.split('#')[1];
+        },
         openPhase: function(event, detail, sender){
-          // show skills
-          var phaseId = sender.getAttribute("target-id");  //or phaseColor?
-          var querystring = "#phase_content"+phaseId;
+          var phaseColor = sender.getAttribute("target-color");
+          var querystring = "#phase_content"+phaseColor;
           this.shadowRoot.querySelector(querystring).toggle();
         },
         editPhase: function(event, detail, sender){
-          var phaseId = sender.getAttribute("phase-id");  //or phaseColor?
-          var phaseData = _.findWhere(this.phases, {color:phaseId});
+          var phaseColor = sender.getAttribute("phase-color");  //or phaseColor?
+          var phaseData = _.findWhere(this.project.phases, {color:phaseColor});
           this.currentPhase = phaseData;
-        },
-        removePhase: function(){
-          this.phases = _.without( this.phases, _.findWhere(this.phases, {color: this.phaseToRemoveId}) );
         },
         confirmDelete: function(event, detail, sender){
           this.phaseToRemoveId = sender.getAttribute("phase-id");
