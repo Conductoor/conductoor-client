@@ -24,7 +24,7 @@
     </core-ajax>
     <core-ajax
       id ="putPhase"
-      url="https://conductoor-api.herokuapp.com:443/phases/1/"
+      url="https://conductoor-api.herokuapp.com:443/phases/"
       handleAs="json"
       method="PUT"
       contentType="application/json"
@@ -100,7 +100,6 @@
           </div>
         </div>
         <br>
-        <!-- paper-buttonilla submit ei toimi... -->
         <template if="{{!editPhase}}">
           <button id="submit" disabled?="{{formInvalid}}" visible?="{{formInvalid || editPhase}}" type="submit" style="background:transparent;border:none;"><paper-button disabled?="{{formInvalid}}" raised>Add phase to project</paper-button></button>
         </template>
@@ -186,8 +185,9 @@
         // UPDATE PHASE
         handleResponsePutPhase: function(event, response) {
           console.log(response.response);
-          //var idx = _.indexOf(_.pluck(this.phases, 'color'), phase.color);
-          //this.phases[idx] = phase;
+          // päivitä this.project
+          //var idx = _.indexOf(_.pluck(this.project.phases, 'color'), phase.color);
+          //this.project.phases[idx] = phase;
         },
         handleErrorPutPhase: function(event, response) {
           alert(response.response);
@@ -208,19 +208,19 @@
         addPhaseApiCall: function(phase) {
           var ajax = this.$.postPhase;
           ajax.body = JSON.stringify(phase);
-          console.log(JSON.stringify(phase));
           ajax.go();
         },
         updatePhaseApiCall: function(phase) {
-          // FIX
+          // FIX kutsu ei onnistu...
           var ajax = this.$.putPhase;
+          ajax.url += phase.id+'/';
           ajax.body = JSON.stringify(phase);
           ajax.go();
         },
         deletePhaseApiCall: function(phaseId) {
-          // FIX
+          // FIX kutsu ei onnistu...
           var ajax = this.$.deletePhase;
-          ajax.url += phaseId;
+          ajax.url += phaseId+'/';
           ajax.go();
         },
 
@@ -251,6 +251,7 @@
         currentPhaseChanged: function(){
           console.log("currentPhaseChanged");
           this.clearForm();
+          // populate fields
           if(this.currentPhase){
             this.phaseName = this.currentPhase.title;
             this.phaseStart = this.currentPhase.time_start;
