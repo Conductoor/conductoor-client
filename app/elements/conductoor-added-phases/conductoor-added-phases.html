@@ -6,7 +6,7 @@
     <core-menu class="phases-wrapper" selected="">
       <template repeat="{{phase in project.phases}}">
         <div id="{{phase.color}}" class="phase" relative>
-            <paper-item class="phase-header" on-click="{{openPhase}}" target-color="{{phase.color | filterHash}}">
+            <paper-item class="phase-header" on-click="{{openPhase}}" target-color="{{phase.color}}">
               <div vertical layout>
                 <span class="phase-name">{{phase.title}}</span>
                 <!-- TODO -->
@@ -16,7 +16,7 @@
             <button layout horizontal center center-justified class="phase-color-code" phase-color="{{phase.color}}" on-click="{{editPhase}}" style="background:{{phase.color}}"><core-icon icon="create"></core-icon></button>
             <!-- <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button> -->
             <div>
-              <core-collapse id="phase_content{{phase.color | filterHash}}" class="phase-content">
+              <core-collapse id="phase_content{{phase.color}}" class="phase-content">
                 <template repeat="{{skill in phase.required_skills}}">
                   <paper-item noink class="skill" no-padding>
                     <div flex three class="summary-div">{{skill.name}}</div>

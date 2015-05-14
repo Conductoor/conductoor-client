@@ -306,7 +306,7 @@
               required_skills.push({"skill":parseInt(this.selectedSkills[i],10), "required_hours":0});
             }
           }
-          var phase = {"title":this.phaseName, "project":this.project.id, "time_start":this.phaseStart, "time_end":this.phaseEnd, "description": this.phaseDescription, "color":("#"+this.phaseColor), "required_skills":required_skills};
+          var phase = {"title":this.phaseName, "project":this.project.id, "time_start":this.phaseStart, "time_end":this.phaseEnd, "description": this.phaseDescription, "color":(this.phaseColor), "required_skills":required_skills};
           return phase;
         },
         addPhase: function(){
