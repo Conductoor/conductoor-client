@@ -33,22 +33,63 @@
           <span flex id="app-name">Conductoor</span>
         </core-toolbar>
 
+        <div layout vertical fit id="section-triggers">
+          <paper-item target-section="0" on-click="{{changeSection}}">Ensimmäinen aihe</paper-item>
+          <paper-item target-section="1" on-click="{{changeSection}}">Toinen aihe</paper-item>
+          <paper-item target-section="2" on-click="{{changeSection}}">Kolmas aihe</paper-item>
+        </div>
+
 
       </core-header-panel>
       <!-- END Left panel -->
 
       <!-- Right panel -->
-      <div vertical layout fit class="right-panel" >
-        
-
+      <div vertical layout class="right-panel" >
+        <core-animated-pages id="sections" transitions="hero-transition cross-fade">
+          <section id="section1" fit>
+            <div class="section-content" id="hero1" hero-id="hero" hero>
+              <h1>Ensimmäinen aihe</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
+              <h2>Ala otsikko</h2>
+              <img src="../../images/documentation/projectlist.png">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
+              <h2>Ala otsikko</h2>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
+            </div>
+          </section>
+          <section id="section2">
+            <div class="section-content" id="hero2" hero-id="hero" hero>
+              <h1>Toinen aihe</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
+              <h2>Ala otsikko</h2>
+            </div>
+          </section>
+          <section id="section3">
+            <div class="section-content" id="hero2" hero-id="hero" hero>
+              <h1>Kolmas aihe</h1>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
+              <h2>Ala otsikko</h2>
+            </div>
+          </section>
+        </core-animated-pages>
       </div>
       <!-- END Right panel -->
+
+
     </core-scaffold>
   </template>
   <script>
     (function () {
       Polymer({
-        // define element prototype here
+        created: function(){
+          
+        },  
+        changeSection: function(event, detail, sender) {
+          var section = sender.getAttribute("target-section");
+          var pages = this.$.sections;
+          pages.selected = section;
+        }
+
       });
     })();
   </script>

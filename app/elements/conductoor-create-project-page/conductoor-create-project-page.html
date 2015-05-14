@@ -72,7 +72,7 @@
       <!-- END Right panel -->
       <conductoor-project-panel></conductoor-project-panel>
       <!-- autoCloseDisabled -->
-      <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
+      <core-overlay id="modalOpen" layered backdrop autoCloseDisabled transition="core-transition-top">
         <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
           <h2>Name your project:</h2>
           <paper-input-decorator  label="required" floatinglabel="" error="input is required!" autovalidate="" layout="" vertical="" class="invalid">
@@ -180,7 +180,6 @@
         },
         cancel: function() {
           this.$.modalOpen.toggle();
-          // miksi redirectaa list-projects?
           window.location.href = "/#/list-projects";
         },
         updateProject: function() {

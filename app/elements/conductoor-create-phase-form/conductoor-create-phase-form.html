@@ -14,6 +14,15 @@
       core-error="{{handleErrorGetSkillList}}">
     </core-ajax>
     <core-ajax
+      id ="getPhase"
+      url=""
+      params=''
+      handleAs="json"
+      method="GET"
+      on-core-response="{{handleResponseGetPhase}}"
+      core-error="{{handleErrorGetPhase}}">
+    </core-ajax>
+    <core-ajax
       id ="postPhase"
       url="https://conductoor-api.herokuapp.com:443/phases/"
       handleAs="json"
@@ -24,7 +33,7 @@
     </core-ajax>
     <core-ajax
       id ="putPhase"
-      url="https://conductoor-api.herokuapp.com:443/phases/"
+      url=""
       handleAs="json"
       method="PUT"
       contentType="application/json"
@@ -33,10 +42,8 @@
     </core-ajax>
     <core-ajax
       id ="deletePhase"
-      url="https://conductoor-api.herokuapp.com:443/phases/"
-      handleAs="json"
+      url=""
       method="DELETE"
-      contentType="application/json"
       on-core-response="{{handleResponseDeletePhase}}"
       core-error="{{handleErrorDeletePhase}}">
     </core-ajax>
@@ -112,6 +119,7 @@
         </template>
       </form>
       <paper-toast id="addSuccess" text="Phase added"></paper-toast>
+      <paper-toast id="updateSuccess" text="Phase updated"></paper-toast>
       <paper-toast id="addError" text="Could not add phase. Check your inputs!"></paper-toast>
 
       <core-overlay id="modalPhaseDelete" layered backdrop transition="core-transition-top">
@@ -139,6 +147,7 @@
           this.phaseEnd = "";
           this.phaseDescription = "";
           this.phaseColor = "#000";
+          this.phaseId;
 
           this.editPhase = false;
           this.formInvalid = true;
@@ -167,15 +176,41 @@
           console.log("Error");
           console.log(response);
         },
+        // GET PHASE
+        handleResponseGetPhase: function(event, response) {
+          console.log(response.response);
+          var phase = response.response;
+          var idx = _.indexOf(_.pluck(this.project.phases, 'color'), phase.color);
+          console.log(idx);
+          // päivitä this.project
+          if(idx >= 0){
+            this.project.phases[idx] = phase;
+            this.$.updateSuccess.show();
+          }
+          // lisää phase listaan
+          else{
+            if (this.project.phases)
+              this.project.phases.push(phase);
+            // jos tyhjä
+            else
+              this.project.phases = [phase];
+            this.$.addSuccess.show();
+          }
+          
+          
+        },
+        // CREATE ja UPDATE vaatii tällä hetkellä sen että pitää phasen id:llä hakea phase uudestaan
+        // jotta saadaan se oikeassa muodossa takaisin (required_skills lähinnä...)
+        handleErrorGetPhase: function(event, response) {
+          alert(response.response);
+          console.log("Error");
+          console.log(response);
+        },
         // CREATE PHASE
         handleResponsePostPhase: function(event, response) {
           console.log(response.response);
-          var phase = response.response;
-          if (this.project.phases)
-            this.project.phases.push(phase);
-          else
-            this.project.phases = [phase];
-          this.$.addSuccess.show();
+          var phaseId = response.response.id;
+          this.getPhaseApiCall(phaseId);
         },
         handleErrorPostPhase: function(event, response) {
           alert(response.response);
@@ -185,9 +220,8 @@
         // UPDATE PHASE
         handleResponsePutPhase: function(event, response) {
           console.log(response.response);
-          // päivitä this.project
-          //var idx = _.indexOf(_.pluck(this.project.phases, 'color'), phase.color);
-          //this.project.phases[idx] = phase;
+          var phaseId = response.response.id;
+          this.getPhaseApiCall(phaseId);
         },
         handleErrorPutPhase: function(event, response) {
           alert(response.response);
@@ -197,7 +231,9 @@
         // DELETE PHASE
         handleResponseDeletePhase: function(event, response) {
           console.log(response.response);
-          this.project.phases = _.without( this.project.phases, _.findWhere(this.project.phases, {color: this.phaseToDelete}) );
+          this.project.phases = _.without(this.project.phases, _.findWhere(this.project.phases, {id: parseInt(this.phaseToDelete,10)}));
+          this.clearForm();
+          this.currentPhase = null;
         },
         handleErrorDeletePhase: function(event, response) {
           alert(response.response);
@@ -205,22 +241,29 @@
           console.log(response);
         },
 
+        getPhaseApiCall: function(phaseid) {
+          var ajax = this.$.getPhase;
+          ajax.url = "https://conductoor-api.herokuapp.com:443/phases/"+phaseid;
+          ajax.go();
+        },
         addPhaseApiCall: function(phase) {
           var ajax = this.$.postPhase;
+          console.log(JSON.stringify(phase));
           ajax.body = JSON.stringify(phase);
           ajax.go();
         },
         updatePhaseApiCall: function(phase) {
-          // FIX kutsu ei onnistu...
+          console.log("this.phaseId: "+this.phaseId);
+          console.log(JSON.stringify(phase));
           var ajax = this.$.putPhase;
-          ajax.url += phase.id+'/';
+          ajax.url = "https://conductoor-api.herokuapp.com:443/phases/"+this.phaseId+'/';
           ajax.body = JSON.stringify(phase);
           ajax.go();
         },
         deletePhaseApiCall: function(phaseId) {
-          // FIX kutsu ei onnistu...
+          console.log(phaseId);
           var ajax = this.$.deletePhase;
-          ajax.url += phaseId+'/';
+          ajax.url = "https://conductoor-api.herokuapp.com:443/phases/"+phaseId+'/';
           ajax.go();
         },
 
@@ -259,6 +302,7 @@
             this.phaseEnd = this.currentPhase.time_end;
             this.phaseDescription = this.currentPhase.description;
             this.phaseColor = this.currentPhase.color;
+            this.phaseId = this.currentPhase.id;
 
             for (var i =0 ; i <= this.currentPhase.required_skills.length - 1; i++) {
               hour_input = this.shadowRoot.querySelector(".hours[to-skill='"+this.currentPhase.required_skills[i].id+"']");
@@ -277,6 +321,7 @@
         // FUNCTIONALITIES
         ////////////////////
         */
+        
         mapHoursToSkill: function(event, detail, sender){
           var hours = parseInt(sender.value,10);
           var skill = sender.getAttribute("to-skill");
@@ -329,6 +374,7 @@
         },
         deletePhase: function(){
           var phaseId = this.phaseToDelete;
+          console.log(this.phaseToDelete);
           this.deletePhaseApiCall(phaseId);
         },
 
@@ -366,20 +412,21 @@
           var phaseNameError = _.findWhere(this.errors, {error:"phaseNameExists"});
           var is_input = (event || detail || sender) ? true : false;
           var phaseName = is_input ? sender.value : this.phaseName;
+          var found = 0;
 
           if(is_input)
             this.validateInput(event);
           if (this.project.phases) {
             for (var i = this.project.phases.length - 1; i >= 0; i--) {
-              if (this.project.phases[i].title === phaseName && !this.editPhase){
+              if ( (this.project.phases[i].title === phaseName) && !this.editPhase ){
                 phaseNameError.show = true;
+                found = 1;
                 if(!is_input)
                   return false;
               }
-              else{
-                phaseNameError.show = false;
-              }
             }
+            if (!found)
+              phaseNameError.show = false;
           }
           this.updateFormValidity();
 

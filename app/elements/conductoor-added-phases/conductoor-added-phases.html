@@ -13,7 +13,7 @@
                 <span class="phase-duration">{{phase.time_start}} - {{phase.time_end}}</span>
               </div>
             </paper-item>
-            <button layout horizontal center center-justified class="phase-color-code" phase-color="{{phase.color}}" on-click="{{editPhase}}" style="background:{{phase.color}}"><core-icon icon="create"></core-icon></button>
+            <button layout horizontal center center-justified class="phase-color-code" phase-color="{{phase.color}}" on-click="{{editPhase}}" style="background:#{{phase.color}}"><core-icon icon="create"></core-icon></button>
             <!-- <button layout horizontal center center-justified class="phase-color-code" phase-id="{{phase.color}}" on-click="{{confirmDelete}}" style="background:#{{phase.color}}"><core-icon icon="clear"></core-icon></button> -->
             <div>
               <core-collapse id="phase_content{{phase.color}}" class="phase-content">
@@ -69,11 +69,6 @@
         },
         updateProject: function(){
           // TODO
-        },
-        // TEMP FUNCTION!! --> phase color pitäis olla ilman #-merkkiä
-        filterHash: function(val){
-          if(val)
-            return val.split('#')[1];
         },
         openPhase: function(event, detail, sender){
           var phaseColor = sender.getAttribute("target-color");
