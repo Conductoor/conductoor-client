@@ -20,8 +20,8 @@
       url="https://conductoor-api.herokuapp.com:443/projects/"
       params=''
       method='DELETE'
-      on-core-response="{{handleResponseDeleteProjects}}"
-      core-error="{{handleErrorDeleteProjects}}">
+      on-core-response="{{handleResponseDeleteProject}}"
+      core-error="{{handleErrorDeleteProject}}">
     </core-ajax>
 
     <div layout horizontal fit>
@@ -34,7 +34,7 @@
             <core-icon-button icon="more-vert"></core-icon-button>
             <core-dropdown halign="right" class="dropdown" layered>
               <core-menu>
-                  <paper-item noink><a href="#/project">Current project</a></paper-item>
+                  <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
                   <paper-item noink><a href="#logout">Logout</a></paper-item>
               </core-menu>
@@ -52,6 +52,10 @@
                 <div class="edit" flex one>
                   <core-icon icon="create"></core-icon>
                   <paper-ripple projectId="{{project.id}}" fit on-click="{{editProject}}"></paper-ripple>
+                </div>
+                <div class="edit" flex one>
+                  <core-icon icon="accessibility"></core-icon>
+                  <paper-ripple projectId="{{project.id}}" fit on-click="{{allocateResources}}"></paper-ripple>
                 </div>
                 <div class="delete" flex one>
                   <core-icon icon="delete"></core-icon>
@@ -83,18 +87,9 @@
       Polymer({
         // define element prototype here
         created: function(){
-          this.projects = this.projects || 
-          [
-            {id: 1, title: "Project name 1"},
-            {id: 1, title: "Project name 2"},
-            {id: 1, title: "Project name 3"}
-          ];
+          this.projects = this.projects ||[];
           this.projectToDelete;
         },
-
-
-
-
         handleResponseGetProjects: function(event, response) {
           console.log(response.response);
           this.projects = response.response;
@@ -106,8 +101,8 @@
         },
         handleResponseDeleteProject: function(event, response) {
           console.log(response.response);
-          //this.projects = response.response;
-          //this.currentProject = this.storage.value;
+          var ajax = this.$.getProjectList;
+          ajax.go();
         },
         handleErrorDeleteProject: function(event, response) {
           console.log("Error");
@@ -122,12 +117,17 @@
         deleteProject: function(){
           var projectId = this.projectToDelete;
           var ajax = this.$.deleteProject;
-          ajax.url += projectId;
+          ajax.url += projectId +"/";
           ajax.go();
         },
         editProject: function(event, detail, sender){
           var projectId = sender.getAttribute("projectId");
           window.location.href = "/#/project/edit/"+projectId;
+        },
+        allocateResources: function(event, detail, sender) {
+          var projectId = sender.getAttribute("projectId");
+          console.log(projectId);
+          window.location.href = "/#/project/allocate/"+ projectId;
         },
         newProject: function(){
           window.location.href = "/#/project/create";

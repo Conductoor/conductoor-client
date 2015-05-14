@@ -36,15 +36,12 @@
 
       <!-- Toolbar: brand, links to pages, logout -->
       <core-toolbar fullbleed tool flex>
-        <h1 horizontal flex>
-          <paper-input label="Project's name" id="headerProjectName" value="{{project.title}}"></paper-input>
-        </h1>
+        <paper-input flex label="Project's name" id="headerProjectName" value="{{project.title}}"></paper-input>
         <core-menu-button>
             <core-icon-button icon="more-vert"></core-icon-button>
             <core-dropdown halign="right" class="dropdown" layered>
               <core-menu>
                   <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
-                  <paper-item noink><a href="#/project">Current Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
                   <paper-item noink><a href="#logout">Logout</a></paper-item>
               </core-menu>
@@ -130,7 +127,7 @@
           if(this.editMode){
             this.getProject(this.projectId);
           }
-          
+
         },
         // CREATE
         handleResponsePostProject: function(event, response) {
@@ -148,9 +145,8 @@
         },
         // UPDATE
         handleResponsePutProject: function(event, response) {
-          //console.log(response.response);
-          this.project = response.response;
-          this.storage.value = this.project;
+          console.log(response.response);
+          this.storage.value.title = response.response.title;
         },
         handleErrorPutProject: function(event, response) {
           alert(response.response);
@@ -160,6 +156,7 @@
         // GET
         handleResponseGetProject: function(event, response){
           this.project = response.response;
+          this.storage.value = this.project;
         },
         handleErrorGetProject: function(event, response){
           alert(response.response);
@@ -201,7 +198,6 @@
           if (this.timeout) {
             clearTimeout(this.timeout);
           }
-          //console.log(this);
           this.timeout = setTimeout(this.updateProject.bind(this), 500);
         },
         validate: function() {

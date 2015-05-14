@@ -11,15 +11,6 @@
     <!-- endbuild-->
     <!-- ajax functionality -->
     <core-ajax
-      id = "projectAjax"
-      auto
-      url="http://conductoor-api.herokuapp.com/projects/1/"
-      params=''
-      handleAs="json"
-      on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
-    </core-ajax>
-    <core-ajax
       id ="projectAjaxPost"
       url="/"
       handleAs="json"
@@ -38,14 +29,14 @@
               <!-- TODO -->
               <span class="phase-duration">{{phase.time_start}} - {{phase.time_end}}</span>
             </div>
-            <div class="phase-color-code" style="background:{{phase.color}}"></div>
+            <div class="phase-color-code" style="background:#{{phase.color}}"></div>
           </paper-item>
           <div>
             <core-collapse id="phase_content{{phase.id}}" class="phase-content">
               <template repeat="{{skill in phase.required_skills}}">
-                <paper-item class="skill" no-padding>
+                <paper-item noink class="skill" no-padding>
                   <div flex class="summary-div">{{skill.name}}</div>
-                  <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:{{phase.color}}">{{skill.required_hours}}</div>
+                  <div title="Required resources {{skill.required_hours}} (work hours)" class="work-hours" style="background:#{{phase.color}}">{{skill.required_hours}}</div>
                 </paper-item>
               </template>
             </core-collapse>
@@ -73,21 +64,9 @@
       created: function() {
         //
       },
-      handleResponse: function(event, res) {
-        console.log("ORDER");
-        console.dir(res.response);
-        this.project = res.response;
-        this.userSelection.phase = this.project.phases[0];
-        this.fire('load-skill', {msg: 'Load-skill event fired'});
-        this.fire('show-timeline', {msg: 'Load-skill event fired'});
-
-      },
       handleResponsePost: function(event, response) {
         console.log(response);
         console.log("post");
-      },
-      handleError: function(event, response) {
-        console.log(response);
       },
       handleErrorPost: function(event, response) {
         console.log(response);

@@ -38,6 +38,10 @@ var ONE_DAY = 1000 * 60 * 60 * 24;
     for (var n = 0, m = this.data.length; n < m; n++) {
       var cur = this.data[n];
       var bubble = new Bubble(widthMonth, this.year.start_date, cur.start, cur.end, this.divider );
+      console.log(cur.type);
+      if (cur.type === "#null") {
+        cur.type = "";
+      }
       var line = [
         '<span style="background-color:'+(cur.type || '#000')+'; margin-left: ' + bubble.getStartOffset() + 'px; width: ' + bubble.getWidth() + 'px;" class="bubble" data-duration="' + (cur.end ? Math.round((cur.end-cur.start)/1000/60/60/24/39) : '') + '"></span>',
         '<span class="label">' + cur.label + '</span> ',
@@ -199,12 +203,8 @@ var ONE_DAY = 1000 * 60 * 60 * 24;
    * Get the bubble's label
    */
   Bubble.prototype.getDateLabel = function() {
-    // return ['w' + (parseInt(this.start)+1),  'w' + this.end].join(' - ');
-    return [this.start.toDateString(), this.end.toDateString()].join(' - ');
-    // return [
-    //   (this.start.hasMonth ? this.formatMonth(this.start.getMonth() + 1) + '/' : '' ) + this.start.getFullYear(),
-    //   (this.end ? '-' + ((this.end.hasMonth ? this.formatMonth(this.end.getMonth() + 1) + '/' : '' ) + this.end.getFullYear()) : '')
-    // ].join('');
+    return [this.start.getDate() + "/" + (this.start.getMonth() + 1) + "/" + this.start.getFullYear(),
+            this.end.getDate() + "/" + (this.end.getMonth() + 1) + "/" + this.end.getFullYear()].join(' - ');
   };
 
   window.Timesheet = Timesheet;

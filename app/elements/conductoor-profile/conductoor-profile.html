@@ -7,7 +7,7 @@
 
     <core-ajax
       id ="addEmployeeAjax"
-      url="/"
+      url="https://conductoor-api.herokuapp.com/allocations/"
       handleAs="json"
       method="POST"
       contentType="application/json"
@@ -27,14 +27,8 @@
           </div>
         </div>
       </div>
-
-      <div relative class="profile-main-skill">
-        <div horizontal layout center  center-justified>
-          <div>Main skill: {{userSelection.selectedPerson.mainSkill}}</div>
-        </div>
-      </div>
-
       <div flex one relative class="profile-skills">
+        <p class="skill-header">Main Skills:</p>
         <div horizontal layout >
           <div flex>
             <ul class="skill-list">
@@ -45,15 +39,21 @@
           </div>
         </div>
       </div>
-      <div flex one relative class="profile-add">
-        <div horizontal layout center center-justified fit>
-          <paper-button title="Add selected employee to {{userSelection.phase.title phase}}" raised on-click="{{addEmployee}}">
-            <core-icon icon="add"></core-icon>
-            Add
-          </paper-button>
+      <div class="allocate-hours" layout horizontal>
+        <paper-input-decorator flex label="Allocation hours" floatinglabel="" error="Input a positive number!" autovalidate="" layout="" vertical="" class="invalid">
+          <input is="core-input" id="allocatedHours" required="" type="number" min="0" placeholder="required" aria-label="required">
+        </paper-input-decorator>
         </div>
-      </div>
+      <div flex one relative class="profile-add">
+          <div horizontal layout center center-justified fit>
+            <paper-button title="Add selected employee to {{userSelection.phase.title phase}}" raised on-click="{{addEmployee}}">
+              <core-icon icon="add"></core-icon>
+                Add
+            </paper-button>
+          </div>
+        </div>
     </div>
+    <paper-toast id="error" text=""></paper-toast>
     <!-- <core-localstorage name="project-backup" value="{{project}}"></core-localstorage>
     <core-localstorage name="userSelectionBackup" value="{{userSelection}}"></core-localstorage> -->
   </template>
@@ -61,42 +61,40 @@
     (function () {
       Polymer({
         created: function() {
-          console.log(this.userSelection);
+          //
+        },
+        ready: function() {
+          //
         },
         addEmployee: function() {
-          var ajax = this.$.addEmployeeAjax;
-          ajax.body = JSON.stringify(
-            {
-              "user": "",
-              "phase": "",
-              "skill": "",
-              "hours": ""
-            }
-          );
-          ajax.go();
-          // ADD USER TO LOCAL DATA
-          this.storage = document.querySelector("#projectBackup");
-          if (this.storage) {
-            this.storage.value = this.project;
+          var ajax, hours;
+          hours = this.$.allocatedHours.value;
+          ajax = this.$.addEmployeeAjax;
+          console.log(this.userSelection.selectedSkill);
+          if (hours >= 0) {
+              ajax.body = JSON.stringify(
+              {
+                "user": this.userSelection.selectedPerson.id,
+                "phase": this.userSelection.phase.id,
+                "skill": this.userSelection.selectedSkill.rs.id,
+                "hours": hours
+              }
+            );
+            this.userSelection.selectedSkill.as.hours += parseInt(hours);
+            ajax.go();
           }
-          this.storageUser = document.querySelector("#userSelectionBackup");
-          if (this.storageUser) {
-            this.storageUser.value = this.userSelection;
+          else {
+            this.$.error.text = "Please select skill to add";
+            this.$.error.show();
           }
         },
-        handleResponse: function() {
-          console.log("jooasda");
+        handleResponse: function(event, res) {
+          console.log(res);
+          //
           //TODO
         },
-        handleError: function() {
-          console.log("joo2");
-          if (this.storage) {
-            console.log("joo");
-            this.project = this.storage.value;
-          }
-          if (this.storageUser) {
-            this.project = this.storageUser.value;
-          }
+        handleError: function(event, res) {
+          this.fire('load-project', {msg: 'Load-project event fired'});
         }
       });
     })();

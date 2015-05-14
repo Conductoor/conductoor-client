@@ -19,9 +19,9 @@
 
     <core-selector selected="0">
     <template repeat="{{skill in skills}}">
-      <paper-item title="Select a skill" on-click={{selectSkill}} class="skill" no-padding>
+      <paper-item title="Select a skill. Allocation status: {{ skill.rs.required_hours - skill.as.hours }} h" on-click={{selectSkill}} class="skill" no-padding>
         <div flex >{{ skill.rs.name }}</div>
-        <div class="">{{ skill.rs.required_hours - skill.as.allocated_hours }}</div>
+        <div class="">{{ skill.rs.required_hours - skill.as.hours }} h</div>
       </paper-item>
     </template>
     </core-selector>
@@ -30,12 +30,19 @@
 
   <script>
     var skillCombine = function(rs, as) {
-      for (var k=0; k<as.length; i++) {
-        if (rs.id === as[k].id) {
-          return {"rs": rs, "as": as[k]};
+      var skill = {
+        "name": rs.name,
+        "hours": 0,
+        "id": rs.id
+      };
+      for (var k=0; k<as.length; k++) {
+        console.log(as[k]);
+        if (rs.id === as[k].skill.id) {
+          skill.hours += as[k].hours;
         }
       }
-      return {"rs": rs, "as": {"name": "", "allocated_hours": 0}};
+      console.log(skill);
+      return {"rs": rs, "as": skill};
     };
     (function () {
       Polymer( "skill-list", {
@@ -51,13 +58,13 @@
 
         },
         skill: function() {
-          console.log("jou");
-          this.userSelection.phase.required_skills.map(function(rs) {
-            console.dir(rs);
-            console.log(this);
-            this.skills.push(skillCombine(rs, this.userSelection.phase.allocations));
-          }.bind(this));
-          this.userSelection.selectedSkill = this.skills[0];
+          if (this.userSelection.phase) {
+            this.userSelection.phase.required_skills.map(function(rs) {
+              this.skills.push(skillCombine(rs, this.userSelection.phase.allocations));
+            }.bind(this));
+            this.userSelection.selectedSkill = this.skills[0];
+            console.log(this.skills);
+          }
         },
         handleResponse: function(event, response) {
           //console.log(response);

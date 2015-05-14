@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<polymer-element name="conductoor-project-page" attributes="">
+<polymer-element name="conductoor-project-page" attributes="projectId">
   <template>
     <link rel="stylesheet" href="conductoor-project-page.css">
     <!-- build:css styles/main.css -->
@@ -9,6 +9,14 @@
     <!-- <core-localstorage name="conductoor-project-data" id="storage" value="{{project}}"></core-localstorage> -->
     <!-- <core-localstorage name="project-backup" value="{{project}}"></core-localstorage> -->
     <!-- <core-localstorage name="user-selection-backup" value="{{userSelection}}"></core-localstorage> -->
+    <core-ajax
+      id = "projectAjax"
+      url="http://conductoor-api.herokuapp.com/projects/"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
 
     <core-scaffold id="core_scaffold">
 
@@ -98,7 +106,36 @@
             reserved: 0,
           }
           this.project = [];
-        }
+          this.storage = document.querySelector("#currentProject");
+        },
+        ready: function() {
+          document.addEventListener('load-project', (function(e) {
+            this.loadProject();
+          }).bind(this));
+        },
+        domReady: function(){
+          var ajax = this.$.projectAjax;
+          ajax.url += this.projectId +"/";
+          this.loadProject();
+        },
+        loadProject: function() {
+          console.log("projet loaded");
+          var ajax = this.$.projectAjax;
+          ajax.go();
+        },
+        handleResponse: function(event, res) {
+          this.project = res.response;
+          this.storage.value = this.project;
+          if (this.project.phases) {
+            this.userSelection.phase = this.project.phases[0];
+            this.fire('load-skill', {msg: 'Load-skill event fired'});
+            this.fire('show-timeline', {msg: 'Load-skill event fired'});
+          }
+          else {this.userSelection.phase = [];}
+        },
+        handleError: function(event, response) {
+          console.log(response);
+        },
       });
     })();
   </script>

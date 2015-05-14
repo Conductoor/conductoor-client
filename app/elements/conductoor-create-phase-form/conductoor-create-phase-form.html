@@ -249,6 +249,7 @@
           this.updateFormValidity();
         },
         currentPhaseChanged: function(){
+          var hour_input;
           console.log("currentPhaseChanged");
           this.clearForm();
           // populate fields
@@ -368,15 +369,16 @@
 
           if(is_input)
             this.validateInput(event);
-
-          for (var i = this.project.phases.length - 1; i >= 0; i--) {
-            if (this.project.phases[i].title === phaseName && !this.editPhase){
-              phaseNameError.show = true;
-              if(!is_input)
-                return false;
-            }
-            else{
-              phaseNameError.show = false;
+          if (this.project.phases) {
+            for (var i = this.project.phases.length - 1; i >= 0; i--) {
+              if (this.project.phases[i].title === phaseName && !this.editPhase){
+                phaseNameError.show = true;
+                if(!is_input)
+                  return false;
+              }
+              else{
+                phaseNameError.show = false;
+              }
             }
           }
           this.updateFormValidity();
@@ -443,7 +445,7 @@
           var valid = true;
           if(this.phaseName.length > 30 || this.phaseName.length === 0)
             valid = false;
-          
+
           // strip tags
           this.phaseName = this.phaseName.replace(/(<([^>]+)>)/ig,"");
           this.phaseDescription = this.phaseDescription.replace(/(<([^>]+)>)/ig,"");

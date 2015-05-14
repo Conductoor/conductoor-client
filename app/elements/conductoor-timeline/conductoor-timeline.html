@@ -28,10 +28,7 @@
       // define element prototype here
       ready: function() {
         document.addEventListener('show-timeline', (function(e) {
-          if (this.project.phases) {
-            // console.log(this.getData(this.project));
-            console.log(this.$.timeline);
-            console.log(this.project);
+          if (this.project.phases.length > 0) {
             timesheet = new Timesheet(
               this.$.timeline,
               new Date(this.project.phases[0].time_start),
@@ -42,14 +39,16 @@
       },
       getData: function(project) {
         var data = [];
-        for (var i=0; i<project.phases.length; i++) {
-          data.push(
-            [
-              new Date(project.phases[i].time_start),
-              new Date(project.phases[i].time_end),
-              project.phases[i].title,
-              project.phases[i].color
-            ]);
+        if (this.project.phases.length > 0) {
+          for (var i=0; i<project.phases.length; i++) {
+            data.push(
+              [
+                new Date(project.phases[i].time_start),
+                new Date(project.phases[i].time_end),
+                project.phases[i].title,
+                "#" + project.phases[i].color
+              ]);
+          }
         }
         return data;
       },
