@@ -33,13 +33,7 @@
         </template>
       </template>
 
-      <template if="{{editMode}}">
-        <template if="{{phases.length || projectName}}">
-          <paper-button id="updateProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{updateProject}}">Update Project</paper-button>
-        </template>
-      </template>
 
-      
     </core-menu>
 
     <!-- PopUp for delete action-->

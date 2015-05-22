@@ -27,7 +27,6 @@ core-drawer-panel core-header-panel{
 }
 
 #currentProject{
-	height: 50px;
 	border: 3px solid $bg-primary;
 	/*border-top: 3px solid $bg-primary;*/
 	/*background-color: $primary;*/
@@ -38,14 +37,17 @@ core-drawer-panel core-header-panel{
 box-shadow:         inset 0px 0px 15px 0px rgba(50, 50, 50, 0.5);*/
 
 	.projectName{
-		font-size: 18px;
+		font-size: 16px;
 		font-weight: 700;
+		margin: 0px 0px 5px 0px
 	}
 	.projectDescription{
 		font-size: 13px;
+		margin: 0px 0px 5px 0px
 	}
 	.projectDuration{
-		font-size: 14px;
+		font-size: 10px;
+		margin: 0px 0px 5px 0px
 	}
 }
 .project{

@@ -19,17 +19,21 @@
           <!-- get the current project -->
           <h2>Current project:</h2 >
           <div layout vertical id="currentProject">
-            <span flex class="projectName current">{{currentProject.title}}</span>
-            <span class="projectDescription">{{currentProject.description}}</span>
-            <span flex class="projectDuration current">{{currentProject.time_start}} - {{currentProject.time_end}}</span>
+            <p  class="projectName current">{{currentProject.title}}</p>
+            <p class="projectDescription">{{currentProject.description}}</p>
+            <template if="{{ currentProject.time_start && currentProject.time_end }}">
+              <p  class="projectDuration current">{{currentProject.time_start}} - {{currentProject.time_end}}</p>
+            </template>
           </div>
           <h3 style="margin-top:32px;">Other projects:</h3>
           <template repeat="{{project in projects | filterCurrent}}">
-            <paper-item class="project" on-click="{{confirmProjectOpen}}" project="{{project}}">
+            <paper-item class="project" on-click="{{confirmProjectOpen}}" project="{{project.id}}">
               <div vertical layout>
                 <span class="projectName">{{project.title}}</span>
                 <span class="projectDescription">{{project.description}}</span>
-                <span class="projectDuration">{{project.time_start}} - {{project.time_end}}</span>
+                <template if="{{ project.time_start && project.time_end }}">
+                  <span class="projectDuration">{{project.time_start}} - {{project.time_end}}</span>
+                </template>
               </div>
             </paper-item>
           </template>
@@ -67,7 +71,7 @@
           this.projects = this.projects || [];
           //console.log(this.storage);
           this.currentProject = this.storage.value|| {};
-          this.projectToOpen;
+          this.projectIdToOpen;
 
         },
         handleResponse: function(event, response) {
@@ -113,14 +117,16 @@
 
         openProject: function(){
           //TODO
-          console.log("Open project"+this.projectToOpen);
+          console.log("Open project"+this.projectIdToOpen);
+          window.location.href = "/#/project/edit/"+ this.projectIdToOpen;
         },
         createProject: function(){
           //TODO
           console.log("Create project");
+          window.location.href = "/#/project/create";
         },
         confirmProjectOpen: function(event, detail, sender){
-          this.projectToOpen = sender.getAttribute("project");
+          this.projectIdToOpen = sender.getAttribute("project");
           this.$.modalOpen.toggle();
         },
         confirmNewProject: function(){

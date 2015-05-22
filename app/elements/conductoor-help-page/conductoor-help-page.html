@@ -34,9 +34,10 @@
         </core-toolbar>
 
         <div layout vertical fit id="section-triggers">
-          <paper-item target-section="0" on-click="{{changeSection}}">Ensimmäinen aihe</paper-item>
-          <paper-item target-section="1" on-click="{{changeSection}}">Toinen aihe</paper-item>
-          <paper-item target-section="2" on-click="{{changeSection}}">Kolmas aihe</paper-item>
+          <paper-item target-section="0" on-click="{{changeSection}}">My projects</paper-item>
+          <paper-item target-section="1" on-click="{{changeSection}}">Create project</paper-item>
+          <paper-item target-section="2" on-click="{{changeSection}}">Edit project</paper-item>
+          <paper-item target-section="3" on-click="{{changeSection}}">Allocate hours</paper-item>
         </div>
 
 
@@ -48,27 +49,88 @@
         <core-animated-pages id="sections" transitions="hero-transition cross-fade">
           <section id="section1" fit>
             <div class="section-content" id="hero1" hero-id="hero" hero>
-              <h1>Ensimmäinen aihe</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
-              <h2>Ala otsikko</h2>
+              <h1>My projects</h1>
+              <p>
+                This page shows a list containing all the organizations projects.
+              </p>
+              <p>
+                Functionalities:
+              </p>
+              <p>
+                <core-icon icon="create"></core-icon> Modify the project. Pushing the icon directs the user to the "edit profile" page.
+              </p>
+              <p>
+                <core-icon icon="accessibility"></core-icon> Allocate resource hours to the project. Pushing the icon directs the user to the "allocate hours" page.
+              </p>
+              <p>
+                <core-icon icon="delete"></core-icon> Delete the project. Project will be removed from the project list.
+              </p>
+              <p>
+                <core-icon icon="add-circle"></core-icon> Create a new project. Pushing the icon directs the users to the "create a new project" page.
+              </p>
               <img src="../../images/documentation/projectlist.png">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
-              <h2>Ala otsikko</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
             </div>
           </section>
           <section id="section2">
             <div class="section-content" id="hero2" hero-id="hero" hero>
-              <h1>Toinen aihe</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
-              <h2>Ala otsikko</h2>
+              <h1>Create project</h1>
+              <p>
+                In this page user creates a project with phases. Before this page a modal will appear.
+                User inputs project name and description to the modal. After that user adds new phases to
+                the project. Different functionalities are categoriesed with color codes.
+              </p>
+              <p>
+                <svg width="25" height="10">
+                  <rect width="20" height="10" style="fill:rgb(122,188,66);" />
+                </svg>
+                These actions modify the project.
+              </p>
+              <p>
+                <svg width="25" height="10">
+                  <rect width="20" height="10" style="fill:rgb(42,199,249);" />
+                </svg>
+                These actions modify project's phase.
+              </p>
+              <img src="../../images/documentation/create-project.png">
             </div>
           </section>
           <section id="section3">
             <div class="section-content" id="hero2" hero-id="hero" hero>
-              <h1>Kolmas aihe</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet urna sit amet metus imperdiet vulputate. Curabitur feugiat diam vitae tortor luctus tincidunt. Duis a eleifend lectus. Vivamus rutrum hendrerit nisi, non pulvinar justo ornare a. Morbi nisi mauris, sodales aliquet turpis eu, luctus pharetra justo. Morbi egestas, magna pulvinar rutrum consequat, sem enim sodales nunc, in imperdiet metus turpis in nibh. Ut imperdiet, quam non ultricies facilisis, velit risus ornare dolor, et pretium quam metus quis odio. Sed congue nunc sed orci consequat, sed interdum nisi tristique. Suspendisse a aliquam augue. Integer eget laoreet risus, eu convallis leo.</p>
-              <h2>Ala otsikko</h2>
+              <h1>Edit project</h1>
+              <p>
+                User edits project and its phases in this page. This page includes functionality from "create project"
+                page. Different functionalities are categoriesed with color codes.
+              </p>
+              <p>
+                <svg width="25" height="10">
+                  <rect width="20" height="10" style="fill:rgb(42,199,249);" />
+                </svg>
+                These actions modify project's phase.
+              </p>
+              <p>
+                <svg width="25" height="10">
+                  <rect width="20" height="10" style="fill:rgb(221,47,38);" />
+                </svg>
+                Opens a side panel containing the project list.
+              </p>
+              <p>
+                <core-icon icon="create"></core-icon> Modify the phase
+              </p>
+              <img src="../../images/documentation/edit-project.png">
+            </div>
+          </section>
+          <section id="section4">
+            <div class="section-content" id="hero2" hero-id="hero" hero>
+              <h1>Allocate hours</h1>
+              <p>
+                In this page user can allocate hours to different phases of the project. User selects a phase from
+                the container on the left side of the page. After that user selects a skill and a resource. After that
+                the user can input the amount of hours he/she wants to allocate to the phase.
+              </p>
+              <p>
+                User can remove allocated hours from a resource.
+              </p>
+              <img src="../../images/documentation/projectlist.png">
             </div>
           </section>
         </core-animated-pages>
@@ -82,8 +144,8 @@
     (function () {
       Polymer({
         created: function(){
-          
-        },  
+
+        },
         changeSection: function(event, detail, sender) {
           var section = sender.getAttribute("target-section");
           var pages = this.$.sections;
