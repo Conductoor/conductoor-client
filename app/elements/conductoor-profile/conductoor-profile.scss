@@ -61,6 +61,19 @@ paper-radio-button[checked]::shadow #offRadio {
 }
 .skill-list {
   font-size: 12px;
+  //padding-left: 20px;
+}
+.allocation-list li {
+  border-bottom: solid 1px;
+  margin-right: 15px;
+  padding-left: 10px;
+}
+.allocation-list .hours {
+  line-height: 25px;
+  font-size: 14px;
+}
+.allocation-list core-icon {
+  padding-right: 25px;
 }
 .select-style {
     padding: 0 3px;

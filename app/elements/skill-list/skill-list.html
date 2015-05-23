@@ -7,16 +7,6 @@
     <link rel="stylesheet" type="text/css" href="skill-list.css">
     <!-- endbuild-->
 
-    <core-ajax
-      id = "getSkillList"
-      auto
-      url="http://google.fi"
-      params=''
-      handleAs="json"
-      on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
-    </core-ajax>
-
     <core-selector selected="0">
     <template repeat="{{skill in skills}}">
       <paper-item title="Select a skill. Allocation status: {{ skill.rs.required_hours - skill.as.hours }} h" on-click={{selectSkill}} class="skill" no-padding>

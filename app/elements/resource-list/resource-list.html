@@ -9,12 +9,18 @@
     <core-localstorage name="conductoor-project-data" value="{{project}}"></core-localstorage>
     <core-ajax
       id = "getResources"
-      auto
-      url="http://conductoor-api.herokuapp.com/users/"
+      url="https://conductoor-api.herokuapp.com/users/"
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
       core-error="{{handleError}}">
+    </core-ajax>
+    <core-ajax
+      id = "getFreeResources"
+      params=''
+      handleAs="json"
+      on-core-response="{{handleFreeResponse}}"
+      core-error="{{handleFreeError}}">
     </core-ajax>
 
     <core-selector selected="0">
@@ -23,10 +29,13 @@
         title="Select a resource"
         no-padding
         on-click={{selectPerson}}
-        class="resource {{ {free: resource.free, reserved: !resource.free} | tokenList}}">
+        class="resource {{ {free: resource.free_now, reserved: !resource.free_now} | tokenList}}">
         <span flex>{{resource.first_name}} {{resource.last_name}}</span>
-        <template if="{{ !resource.free }}" >
+        <template if="{{ !resource.free_now && userSelection.phase.id !== resource.phase_id }}" >
           <core-icon icon="block"></core-icon>
+        </template>
+        <template if="{{ userSelection.phase.id === resource.phase_id }}" >
+          <core-icon icon="create"></core-icon>
         </template>
 
       </paper-item>
@@ -39,19 +48,53 @@
     (function () {
       Polymer( "resource-list", {
         created: function() {
-          // TODO
+          this.url = "https://conductoor-api.herokuapp.com/available-users/?";
+          document.addEventListener('load-resource', (function(e) {
+            this.loadResources();
+          }).bind(this));
+        },
+        loadFree: function() {
+          var ajax = this.$.getFreeResources;
+          ajax.url = this.url + "time_start=" + this.userSelection.phase.time_start + "&time_end=" + this.userSelection.phase.time_end;
+          ajax.go();
+        },
+        loadResources: function() {
+          var ajax = this.$.getResources;
+          ajax.go();
+        },
+        mapFreeUsers: function() {
+          var item;
+          for (var i=0; i<this.resources.length; i++) {
+            item = _.findWhere(this.freeResources, {"id": this.resources[i].id});
+            if (item) {
+              _.extend(this.resources[i], item);
+              console.log(this.resources[i]);
+            }
+          }
         },
         handleResponse: function(event, res) {
           console.log(res.response);
           this.resources = res.response
           this.userSelection.selectedPerson = this.resources[0];
+          this.loadFree();
+          this.fire('person-selected', {msg: 'person-selected'});
         },
         handleError: function(event, response) {
           console.log("Error");
           console.log(response);
         },
+        handleFreeResponse: function(event, res) {
+          console.log(res.response);
+          this.freeResources = res.response;
+          this.mapFreeUsers();
+        },
+        handleFreeError: function(event, response) {
+          console.log("Error");
+          console.log(response);
+        },
         selectPerson: function(event, detail, sender) {
           this.userSelection.selectedPerson = sender.templateInstance.model.resource;
+          this.fire('person-selected', {msg: 'person-selected'});
         }
       });
     })();

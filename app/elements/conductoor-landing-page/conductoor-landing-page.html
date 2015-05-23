@@ -1,15 +1,21 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- <link rel="import" href="../../bower_components/polymer/polymer.html"> -->
 <!-- <link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html">
 <link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html"> -->
 
-<polymer-element name="conductoor-landing-page" attributes="">
+<polymer-element name="conductoor-landing-page" attributes="session">
   <template>
     <link rel="stylesheet" href="conductoor-landing-page.css">
 
+    <user-session session="{{session}}"></user-session>
+
     <div class="nav secondary" layout horizontal center end-justified>
       <div>
-        <a href="#/list-projects">My Projects</a>
-        <a href="#/project">Current Project</a>
+        <template if="{{ !loggedIn }}">
+          <a id="login-button" on-click="{{openLogin}}">Log in</a>
+        </template>
+        <template if="{{ loggedIn }}">
+          <a href="#/list-projects">My Projects</a>
+        </template>
         <a href="#/help">Help</a>
       </div>
     </div>
@@ -41,14 +47,45 @@
 
     <div class="section secondary" layout horizontal center-justified>
       <div flex>
-        
+
       </div>
     </div>
+    <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
+      <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
+        <h2>Email:</h2>
+        <paper-input-decorator id="decorator" label="{{label}}" floatinglabel="{{floatingLabel}}" value="" layout="" vertical="">
+          <input is="core-input" id="inputEmail" committedvalue="{{email}}" placeholder="Input email" aria-label="label">
+        </paper-input-decorator>
+        <h3>Password:</h3>
+        <paper-input-decorator id="decorator" label="{{label}}" floatinglabel="{{floatingLabel}}" value="" layout="" vertical="">
+          <input is="core-input" id="inputPassword" committedvalue="{{password}}" placeholder="Input password" aria-label="label">
+        </paper-input-decorator>
+        <br>
+        <paper-button raised on-click="{{login}}">Log in</paper-button>
+        <paper-button raised on-click="{{cancel}}">Cancel</paper-button>
+      </div>
+    </core-overlay>
 
   </template>
   <script>
     (function () {
       Polymer({
+        created: function() {
+          this.session = document.querySelector("#session");
+          this.loggedIn = this.session.loggedIn;
+          console.log(this.session);
+        },
+        openLogin: function() {
+          this.$.modalOpen.toggle();
+        },
+        cancel: function() {
+          this.$.modalOpen.toggle();
+        },
+        login: function() {
+          this.session.loggedIn = true;
+          this.loggedIn = true;
+          this.$.modalOpen.toggle();
+        }
         // define element prototype here
       });
     })();

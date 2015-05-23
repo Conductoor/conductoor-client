@@ -14,6 +14,10 @@
     <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
     <!-- endbuild -->
     <script src="bower_components/underscore/underscore-min.js"></script>
+    <link rel="import" href="../../bower_components/polymer/polymer.html">
+    <!-- build:vulcanized elements/elements.vulcanized.html -->
+    <link rel="import" href="../elements/elements.html">
+    <!-- endbuild-->
 
     <link rel="import" href="../bower_components/app-router/app-router.html">
   </head>
@@ -21,26 +25,53 @@
     <core-localstorage id="projectBackup" name="project-backup"></core-localstorage>
     <core-localstorage id="currentProject" name="currentProject"></core-localstorage>
     <core-localstorage id="userSelectionBackup" name="userSelectionBackup"></core-localstorage>
-    <app-router>
-      <!-- Project page -->
-      <app-route path="/project/allocate/:projectId" import="/pages/project-page.html"></app-route>
+    <core-localstorage id="session" name="session"></core-localstorage>
 
-      <!-- Project listing page -->
-      <app-route path="/list-projects" import="/pages/project-listing-page.html"></app-route>
 
-      <!-- Create project page -->
-      <app-route path="/project/create" import="/pages/create-project-page.html"></app-route>
+    <polymer-element name="conductoor-app">
+      <template>
+        <user-session session="{{session}}"></user-session>
 
-      <!-- Create project page -->
-      <app-route path="/project/edit/:projectId" import="/pages/edit-project-page.html"></app-route>
+        <app-router on-state-change="{{stateChange}}">
+          <!-- Project page -->
+          <app-route path="/project/allocate/:projectId" import="/pages/project-page.html"></app-route>
 
-      <!-- Help page -->
-      <app-route path="/help" import="/pages/help-page.html"></app-route>
+          <!-- Project listing page -->
+          <app-route path="/list-projects" import="/pages/project-listing-page.html"></app-route>
 
-      <!-- matches using a wildcard -->
-      <app-route path="*" import="/pages/landing-page.html"></app-route>
+          <!-- Create project page -->
+          <app-route path="/project/create" import="/pages/create-project-page.html"></app-route>
 
-    </app-router>
+          <!-- Create project page -->
+          <app-route path="/project/edit/:projectId" import="/pages/edit-project-page.html"></app-route>
+
+          <!-- Help page -->
+          <app-route path="/help" import="/pages/help-page.html"></app-route>
+
+          <!-- matches using a wildcard -->
+          <app-route path="*" import="/pages/landing-page.html" bindRouter></app-route>
+
+        </app-router>
+
+      </template>
+      <script>
+        Polymer('conductoor-app', {
+          created: function() {
+            this.session = document.querySelector("#session");
+          },
+          stateChange: function(event) {
+            // redirect to the login page if not signed in
+            if (!this.session.loggedIn && event.detail.path !== '/help' && event.detail.path !== '/') {
+              console.log("unauthorized");
+              // event.preventDefault();
+              // this.querySelector('::shadow app-router').go('/');
+            }
+          }
+        });
+      </script>
+    </polymer-element>
+
+    <conductoor-app></conductoor-app>
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
     <!-- endbuild-->

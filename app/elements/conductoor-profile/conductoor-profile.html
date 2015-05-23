@@ -14,6 +14,15 @@
       on-core-response="{{handleResponse}}"
       core-error="{{handleError}}">
     </core-ajax>
+    <core-ajax
+      id ="deleteAllocation"
+      url="https://conductoor-api.herokuapp.com/allocations/"
+      handleAs="json"
+      method="DELETE"
+      contentType="application/json"
+      on-core-response="{{handleDeleteResponse}}"
+      core-error="{{handleDeleteError}}">
+    </core-ajax>
 
     <div layout vertical fit class="section profile">
       <div relative class="profile-header">
@@ -28,7 +37,7 @@
         </div>
       </div>
       <div flex one relative class="profile-skills">
-        <p class="skill-header">Main Skills:</p>
+        <p class="skill-header">Main Skills: {{userSelection.selectedPerson.available_hours}}</p>
         <div horizontal layout >
           <div flex>
             <ul class="skill-list">
@@ -38,6 +47,18 @@
             </ul>
           </div>
         </div>
+      </div>
+      <div horizontal layout center-justified >
+        <ul class="allocation-list" flex>
+          <template repeat="{{ allocation, index in allocations}}">
+            <li layout horizontal>
+            <div flex class="hours">
+              Hours: {{allocation.hours}}
+            </div>
+            <core-icon title="Remove allocation" allocationId="{{allocation.id}}" index="{{index}}" on-click="{{removeAllocation}}" icon="clear"></core-icon>
+            </li>
+          </template>
+        </ul>
       </div>
       <div class="allocate-hours" layout horizontal>
         <paper-input-decorator flex label="Allocation hours" floatinglabel="" error="Input a positive number!" autovalidate="" layout="" vertical="" class="invalid">
@@ -61,10 +82,12 @@
     (function () {
       Polymer({
         created: function() {
-          //
+          this.allocations = [];
         },
         ready: function() {
-          //
+          document.addEventListener('person-selected', (function(e) {
+            this.listHours();
+          }).bind(this));
         },
         addEmployee: function() {
           var ajax, hours;
@@ -88,12 +111,34 @@
             this.$.error.show();
           }
         },
+        listHours: function() {
+          this.allocations = [];
+          for (var i=0; i<this.userSelection.phase.allocations.length; i++) {
+            if (this.userSelection.phase.allocations[i].user.id === this.userSelection.selectedPerson.id) {
+              this.allocations.push(this.userSelection.phase.allocations[i]);
+            }
+          }
+        },
+        removeAllocation: function(event, detail, sender) {
+          var ajax = this.$.deleteAllocation;
+          ajax.url = "https://conductoor-api.herokuapp.com/allocations/" + sender.attributes.allocationId.value + "/";
+          ajax.go();
+          this.allocations.splice(sender.attributes.index.value, 1);
+        },
         handleResponse: function(event, res) {
-          console.log(res);
+          console.dir(res);
+          this.allocations.push(res.response);
           //
           //TODO
         },
         handleError: function(event, res) {
+          this.fire('load-project', {msg: 'Load-project event fired'});
+        },
+        handleDeleteResponse: function(event, res) {
+          console.log(res);
+
+        },
+        handleDeleteError: function(event, res) {
           this.fire('load-project', {msg: 'Load-project event fired'});
         }
       });

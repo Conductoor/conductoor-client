@@ -27,10 +27,8 @@
             </div>
           </div>
       </template>
-      <template if="{{!editMode}}">
-        <template if="{{phases.length || projectName}}">
-          <paper-button id="createProject" raised disabled?="{{!phases.length || !projectName}}" on-click="{{createProject}}">Open Project</paper-button>
-        </template>
+      <template if="{{phases.length || projectName}}">
+        <paper-button id="allocateHours" raised disabled?="{{!project.phases.length}}" on-click="{{allocateHours}}">Allocate hours</paper-button>
       </template>
 
 
@@ -53,13 +51,8 @@
         created: function(){
           this.phaseToRemoveId;
         },
-        createProject: function(){
-          // create only when phases exist
-          if (this.phases.length && this.projectName){
-            console.log("Created project:");
-            console.log("phases: " + JSON.stringify(this.phases) );
-            console.log("name: " + this.projectName);
-          }
+        allocateHours: function(){
+          window.location.href = "/#/project/allocate/"+ this.project.id;
         },
         updateProject: function(){
           // TODO
@@ -70,6 +63,7 @@
           this.shadowRoot.querySelector(querystring).toggle();
         },
         editPhase: function(event, detail, sender){
+          console.log(this.project.phases.length);
           var phaseColor = sender.getAttribute("phase-color");  //or phaseColor?
           var phaseData = _.findWhere(this.project.phases, {color:phaseColor});
           this.currentPhase = phaseData;
