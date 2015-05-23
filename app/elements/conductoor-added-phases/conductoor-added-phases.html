@@ -20,7 +20,7 @@
                 <template repeat="{{skill in phase.required_skills}}">
                   <paper-item noink class="skill" no-padding>
                     <div flex three class="summary-div">{{skill.name}}</div>
-                    <div flex one class="summary-div">{{skill.required_hours}}</div>
+                    <div class="work-hours" style="background-color:#{{phase.color}};">{{skill.required_hours}}</div>
                   </paper-item>
                 </template>
               </core-collapse>

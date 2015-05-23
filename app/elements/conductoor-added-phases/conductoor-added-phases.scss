@@ -11,9 +11,6 @@ paper-button#createProject, paper-button#updateProject{
   margin-bottom: 2px;
   word-wrap: break-word;
 }
-paper-item.skill{
-  cursor: initial;
-}
 #phase_content > div{
   margin: 5px;
 }
@@ -32,12 +29,13 @@ paper-item.skill{
   right: 0;
   width: 20px;
   height: 100%;
-  max-height: 62px; //keksi parempi tapa...
+  // max-height: 62px; //keksi parempi tapa...
   border:none;
   margin: 0;
   padding: 0;
   color: #fff;
   cursor: pointer;
+  z-index: 99;
 }
 // .phase > div{
 //   border-left: 1px solid $bg-secondary;
@@ -46,6 +44,29 @@ paper-item.skill{
 // }
 .phase.core-selected .phase-header{
   background: $primary;
+}
+
+paper-item.skill::shadow .button-content {
+  padding: 0px;
+  font-size: 10px;
+  padding-top: 3px;
+}
+paper-item.skill{
+  cursor: initial;
+}
+.skill{
+  height: 30px;
+  line-height: 22px;
+  padding-right: 2px;
+  padding-left: 2px;
+  margin-bottom: 2px;
+}
+.work-hours{
+  // margin-top: 2px;
+  margin-right: 25px;
+  border-radius: 2px;
+  color: white;
+  padding: 2px 4px;
 }
 
 core-icon{
