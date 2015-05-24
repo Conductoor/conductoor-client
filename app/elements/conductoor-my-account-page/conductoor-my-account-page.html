@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="../../styles/main.css">
     <!-- endbuild-->
 
-    <!-- <core-ajax
+     <core-ajax
       id = "getAccountInfo"
-      url="https://conductoor-api.herokuapp.com:443/projects/"
+      url="https://conductoor-api.herokuapp.com:443/users/"
       params=""
       auto
       handleAs="json"
@@ -18,12 +18,23 @@
     </core-ajax>
     <core-ajax
       id = "updateAccountInfo"
-      url="https://conductoor-api.herokuapp.com:443/projects/"
+      url="https://conductoor-api.herokuapp.com:443/users/"
       params=""
       handleAs="json"
+      method="PUT"
+      contentType="application/json"
       on-core-response="{{handleResponseUpdateAccountInfo}}"
       core-error="{{handleErrorUpdateAccountInfo}}">
-    </core-ajax> -->
+    </core-ajax>
+    <core-ajax
+      id="sendInvite"
+      url="https://conductoor-api.herokuapp.com:443/request-user/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponseSendInvite}}"
+      core-error="{{handleErrorSendInvite}}">
+    </core-ajax>
 
     <div layout horizontal fit>
       <core-header-panel mode="seamed" id="core_header_panel" flex relative>
@@ -131,9 +142,9 @@
           this.edit = false;
           this.session = document.querySelector("#session");
 
-          this.email = this.email || "jee@jee.com";
-          this.firstName = this.firstName || "jee";
-          this.lastName = this.lastName || "jeejee";
+          this.email = this.email || "";
+          this.firstName = this.firstName || "";
+          this.lastName = this.lastName || "";
           this.workingHours = this.workingHours || 0;
 
           this.inviteEmail = "";
@@ -148,14 +159,22 @@
           ];
         },
         ready: function() {
-          // console.log(JSON.stringify({"Authorization": "Token " + this.session.token}));
-          // this.$.getAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          // this.$.updateAccounInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.updateAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+
+          this.$.getAccountInfo.url = "https://conductoor-api.herokuapp.com:443/users/" + this.session.user_id + '/';
+          this.$.updateAccountInfo.url = "https://conductoor-api.herokuapp.com:443/users/" + this.session.user_id + '/';
+
+          this.$.sendInvite.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
 
 
         handleResponseGetAccountInfo: function(event, response){
           console.log(response.response);
+          this.email = response.response.email;
+          this.firstName = response.response.first_name;
+          this.lastName = response.response.last_name;
+          this.workingHours = response.response.working_hours;
         },
         handleErrorGetAccountInfo: function(event, response){
           console.log(response.response);
@@ -176,17 +195,35 @@
         },
         updateInfo: function(){
           // make ajax call to update account info
+          var user = {"email": this.email, "first_name": this.firstName, "last_name": this.lastName, "working_hours": this.workingHours};
+
+          var ajax = this.$.updateAccountInfo;
+          ajax.body = JSON.stringify(user);
+          ajax.go();
         },
         resetAccountInfo: function(){
           this.shadowRoot.querySelector("#accountInfoForm").reset();
           this.edit = false;
         },
         sendInvite: function(){
+          var user = {"email": this.inviteEmail, "first_name": this.inviteFirstName, "last_name": this.inviteLastName};
 
+          var ajax = this.$.sendInvite;
+          ajax.body = JSON.stringify(user);
+          ajax.go();
+        },
+        handleErrorSendInvite: function(event, response) {
+          console.log(response.response);
+          console.log("Error");
+        },
+        handleResponseSendInvite: function(event, response) {
+          console.log(response.response);
+          console.log("Error");
         },
 
 
-        validateAccountInfoForm: function(){
+        validateAccountInfoForm: function(e){
+          e.preventDefault();
           var emailError = _.findWhere(this.errors, {error:"emailError"});
           var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
           var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
@@ -199,11 +236,12 @@
           if(valid)
             this.updateInfo();
         },
-        validateInviteForm: function(){
+        validateInviteForm: function(e){
+          e.preventDefault();
           var emailError = _.findWhere(this.errors, {error:"emailError"});
           var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
           var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
-          var valid = false;
+          var valid = true;
           // validations here
           // näytä errorit --> esim emailError.show = true;
 
