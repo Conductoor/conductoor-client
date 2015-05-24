@@ -56,3 +56,31 @@ h3{
 .info-box{
 	padding: 30px;
 }
+#requestBetaWrapper{
+	padding: 30px;
+	paper-input-decorator{
+		max-width: 400px;
+		/*display: inline-block;*/
+	}
+	h2{
+		text-align: left;
+		color: #fff;
+	}
+	form > div{
+		background-color: #fff;
+		color: $text-color;
+		padding: 15px;
+		border-radius: 10px;
+	}
+	button#submit{
+		padding: 0;
+	}
+}
+
+@media(max-width: 800px){
+	.section.default{
+		flex-direction: column !important;
+	}
+}
+
+
