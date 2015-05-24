@@ -13,7 +13,7 @@
       auto
       handleAs="json"
       on-core-response="{{handleResponseGetProjects}}"
-      core-error="{{handleErrorGetProjects}}">
+      on-core-error="{{handleErrorGetProjects}}">
     </core-ajax>
     <core-ajax
       id = "deleteProject"
@@ -21,7 +21,7 @@
       params=''
       method='DELETE'
       on-core-response="{{handleResponseDeleteProject}}"
-      core-error="{{handleErrorDeleteProject}}">
+      on-core-error="{{handleErrorDeleteProject}}">
     </core-ajax>
 
     <div layout horizontal fit>

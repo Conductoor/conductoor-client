@@ -14,7 +14,7 @@
       auto
       handleAs="json"
       on-core-response="{{handleResponseGetAccountInfo}}"
-      core-error="{{handleErrorGetAccountInfo}}">
+      on-core-error="{{handleErrorGetAccountInfo}}">
     </core-ajax>
     <core-ajax
       id = "updateAccountInfo"
@@ -24,7 +24,7 @@
       method="PUT"
       contentType="application/json"
       on-core-response="{{handleResponseUpdateAccountInfo}}"
-      core-error="{{handleErrorUpdateAccountInfo}}">
+      on-core-error="{{handleErrorUpdateAccountInfo}}">
     </core-ajax>
     <core-ajax
       id="sendInvite"
@@ -133,7 +133,6 @@
               <paper-button raised>Change</paper-button></button>
             </form>
           </div>
-
 
           <div id="invite-wrapper">
             <h2>Invite people</h2>

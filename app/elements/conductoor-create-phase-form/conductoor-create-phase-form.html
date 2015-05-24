@@ -11,7 +11,7 @@
       params=''
       handleAs="json"
       on-core-response="{{handleResponseGetSkillList}}"
-      core-error="{{handleErrorGetSkillList}}">
+      on-core-error="{{handleErrorGetSkillList}}">
     </core-ajax>
     <core-ajax
       id ="getPhase"
@@ -20,7 +20,7 @@
       handleAs="json"
       method="GET"
       on-core-response="{{handleResponseGetPhase}}"
-      core-error="{{handleErrorGetPhase}}">
+      on-core-error="{{handleErrorGetPhase}}">
     </core-ajax>
     <core-ajax
       id ="postPhase"
@@ -29,7 +29,7 @@
       method="POST"
       contentType="application/json"
       on-core-response="{{handleResponsePostPhase}}"
-      core-error="{{handleErrorPostPhase}}">
+      on-core-error="{{handleErrorPostPhase}}">
     </core-ajax>
     <core-ajax
       id ="putPhase"
@@ -38,14 +38,14 @@
       method="PUT"
       contentType="application/json"
       on-core-response="{{handleResponsePutPhase}}"
-      core-error="{{handleErrorPutPhase}}">
+      on-core-error="{{handleErrorPutPhase}}">
     </core-ajax>
     <core-ajax
       id ="deletePhase"
       url=""
       method="DELETE"
       on-core-response="{{handleResponseDeletePhase}}"
-      core-error="{{handleErrorDeletePhase}}">
+      on-core-error="{{handleErrorDeletePhase}}">
     </core-ajax>
 
       <template if="{{!editPhase}}"><h2>New phase: {{phaseName}}</h2></template>

@@ -9,7 +9,7 @@
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
+      on-core-error="{{handleError}}">
     </core-ajax>
     <div id="showProjectPanel"><core-icon-button icon="view-list" on-click="{{showPanel}}"></core-icon-button></div>
     <core-drawer-panel forceNarrow id="projectPanel" rightDrawer style="left:100%;opacity:0">

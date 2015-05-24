@@ -30,8 +30,6 @@
 
     <polymer-element name="conductoor-app">
       <template>
-        <user-session session="{{session}}"></user-session>
-
         <app-router on-state-change="{{stateChange}}">
           <!-- Project page -->
           <app-route path="/project/allocate/:projectId" import="/pages/project-page.html"></app-route>
@@ -52,7 +50,7 @@
           <app-route path="/my-account" import="/pages/my-account-page.html"></app-route>
 
           <!-- matches using a wildcard -->
-          <app-route path="*" import="/pages/landing-page.html" bindRouter></app-route>
+          <app-route path="*" import="/pages/landing-page.html"></app-route>
 
         </app-router>
 
@@ -64,11 +62,11 @@
           },
           stateChange: function(event) {
             // redirect to the login page if not signed in
-            // if (!this.session.loggedIn && event.detail.path !== '/') {
-            //   console.log("unauthorized");
-            //   event.preventDefault();
-            //   this.querySelector('::shadow app-router').go('/');
-            // }
+            if (!this.session.loggedIn && event.detail.path !== '/' && event.detail.path !== '/help' ) {
+              alert("Unauthorized! Please log in");
+              event.preventDefault();
+              this.querySelector('::shadow app-router').go('/');
+            }
           }
         });
       </script>
