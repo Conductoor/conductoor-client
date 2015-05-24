@@ -35,6 +35,15 @@
       on-core-response="{{handleResponseSendInvite}}"
       core-error="{{handleErrorSendInvite}}">
     </core-ajax>
+    <core-ajax
+      id="changePassword"
+      url="https://conductoor-api.herokuapp.com:443/change-password/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponseChangePassword}}"
+      core-error="{{handleErrorChangePassword}}">
+    </core-ajax>
 
     <div layout horizontal fit>
       <core-header-panel mode="seamed" id="core_header_panel" flex relative>
@@ -101,7 +110,31 @@
             </template>
           </div>
 
-          
+          <div id="change-password-wrapper">
+            <h2>Change password</h2>
+
+            <div id="error_messages">
+              <template repeat="{{error in errors}}">
+                <template if="{{error.show}}">
+                  <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
+                </template>
+              </template>
+            </div>
+
+            <form id="changePasswordForm" on-submit="{{validateChangePasswordForm}}">
+              <paper-input-decorator flex>
+                <label>New password:</label><input is="core-input" type="password" required value="{{newPassword}}"></input>
+              </paper-input-decorator>
+              <paper-input-decorator flex>
+                <label>New password again:</label><input is="core-input" type="password" required value="{{newPasswordAgain}}"></input>
+              </paper-input-decorator>
+
+              <button id="submit" type="submit" style="background:transparent;border:none;">
+              <paper-button raised>Change</paper-button></button>
+            </form>
+          </div>
+
+
           <div id="invite-wrapper">
             <h2>Invite people</h2>
 
@@ -151,6 +184,9 @@
           this.inviteFirstName = "";
           this.inviteLastName = "";
 
+          this.newPassword = "";
+          this.newPasswordAgain = "";
+
           this.errors = [
             {"error":"emailError", "message":"Email address is in wrong format.", "show":false},
             {"error":"firstNameError", "message":"Maximum length of first name is 20 characters.", "show":false},
@@ -166,6 +202,9 @@
           this.$.updateAccountInfo.url = "https://conductoor-api.herokuapp.com:443/users/" + this.session.user_id + '/';
 
           this.$.sendInvite.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+
+          this.$.changePassword.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.changePassword.url = "https://conductoor-api.herokuapp.com:443/change-password/" + this.session.user_id + '/';
         },
 
 
@@ -220,8 +259,31 @@
           console.log(response.response);
           console.log("Error");
         },
+        handleResponseChangePassword: function(event, response) {
+          console.log(response.response);
+        },
+        handleErrorChangePassword: function(event, response) {
+          console.log(response.response);
+          console.log("Error");
+        },
+        changePassword: function() {
+          var data = {"password": this.newPassword, "password_validate": this.newPasswordAgain};
+
+          var ajax = this.$.changePassword;
+          ajax.body = JSON.stringify(data);
+          ajax.go();
+        },
 
 
+        validateChangePasswordForm: function(e) {
+          e.preventDefault();
+          var newPasswordError = _.findWhere(this.errors, {error:"newPasswordError"});
+          var newPasswordAgainError = _.findWhere(this.errors, {error:"newPasswordAgainError"});
+          var valid = true;
+
+          if (valid)
+            this.changePassword();
+        },
         validateAccountInfoForm: function(e){
           e.preventDefault();
           var emailError = _.findWhere(this.errors, {error:"emailError"});
