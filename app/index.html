@@ -83,7 +83,7 @@
               window.location.href = "/";
               return;
             }
-            if (this.ajax && this.session.value) {
+            if (this.ajax && this.session.value && event.detail.path !== '/help' && event.detail.path !== '/') {
               console.log(this.ajax);
               console.log(this.session.value);
               this.ajax.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
