@@ -8,7 +8,8 @@
     "timesheet.js": "https://github.com/sbstjn/timesheet.js.git",
     "app-router": "~2.6.0",
     "ajax-form": "~1.6.0",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "jquery": "~2.1.4"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^2.0.0"

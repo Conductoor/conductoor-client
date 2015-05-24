@@ -8,9 +8,9 @@
     <!-- endbuild-->
     <core-ajax
       id = "getProjectList"
-      auto
       url="https://conductoor-api.herokuapp.com:443/projects/"
       params=""
+      auto
       handleAs="json"
       on-core-response="{{handleResponseGetProjects}}"
       core-error="{{handleErrorGetProjects}}">
@@ -93,9 +93,8 @@
           console.log(this.session.token);
         },
         ready: function() {
-          // var ajax = this.$.getProjectList;
-          // ajax.headers = JSON.stringify({ "Authorization": "Token asd"} );
-          // ajax.go();
+          console.log(JSON.stringify({"Authorization": "Token " + this.session.token}));
+          this.$.getProjectList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         handleResponseGetProjects: function(event, response) {
           console.log(response.response);
