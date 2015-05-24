@@ -52,6 +52,11 @@
           document.addEventListener('load-resource', (function(e) {
             this.loadResources();
           }).bind(this));
+          this.session = document.querySelector("#session");
+        },
+        ready: function() {
+          this.$.getResources.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getFreeResources.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         loadFree: function() {
           var ajax = this.$.getFreeResources;

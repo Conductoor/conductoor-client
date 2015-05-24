@@ -95,6 +95,9 @@
   <script>
     (function () {
       Polymer({
+        created: function() {
+          this.session = document.querySelector("#session");
+        },
         ready: function(){
           //local storage
           this.storage = document.querySelector("#currentProject");
@@ -110,17 +113,9 @@
           this.currentPhase = this.currentPhase || null;
           this.projectId = this.projectId;
 
-          // TARVIIKO NÄITÄ EHTOJA EDES?
-          // if(this.editMode){
-          //   //populate phases and project name
-          //   this.phases = this.phases || [];              //remove this
-          //   this.project = this.project || {"id": 1};    //remove this for production
-          //   this.currentPhase = this.currentPhase || null;
-          // }
-          // else{
-          //   this.phases = this.phases || [];
-          //   this.project = this.project || {"id": 1}; //remove this for production
-          //}
+          this.$.getProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.postProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.putProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         domReady: function(){
           // tässä kohtaa app-routerin url parametri initialisoituu

@@ -9,16 +9,6 @@
     <!-- build:css phases-menu.css -->
     <link rel="stylesheet" type="text/css" href="phases-menu.css">
     <!-- endbuild-->
-    <!-- ajax functionality -->
-    <core-ajax
-      id ="projectAjaxPost"
-      url="/"
-      handleAs="json"
-      method="POST"
-      contentType="application/json"
-      on-core-response="{{handleResponsePost}}"
-      core-error="{{handleErrorPost}}">
-    </core-ajax>
 
     <core-menu class="phases-wrapper" selected="0">
       <template repeat="{{phase in project.phases}}">
@@ -50,16 +40,7 @@
   <script>
     Polymer( "phases-menu", {
       ready: function() {
-        // var ajax = this.$.projectAjaxPost;
-        // ajax.body = JSON.stringify(
-        //   {
-        //     "email": "kekkonen@aalto.fi",
-        //     "first_name": "Urho",
-        //     "last_name": "Kekkonen"
-        //   }
-        // );
-        // ajax.go();
-        // console.log(this.$.phase_content1);
+        //
       },
       created: function() {
         //

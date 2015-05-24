@@ -83,11 +83,14 @@
       Polymer({
         created: function() {
           this.allocations = [];
+          this.session = document.querySelector("#session");
         },
         ready: function() {
           document.addEventListener('person-selected', (function(e) {
             this.listHours();
           }).bind(this));
+          this.$.addEmployeeAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.deleteAllocation.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         addEmployee: function() {
           var ajax, hours;

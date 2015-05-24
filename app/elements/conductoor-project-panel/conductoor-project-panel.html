@@ -72,7 +72,12 @@
           //console.log(this.storage);
           this.currentProject = this.storage.value|| {};
           this.projectIdToOpen;
+          this.session = document.querySelector("#session");
+          console.log(this.session.token);
 
+        },
+        ready: function() {
+          this.$.getProjectList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         handleResponse: function(event, response) {
           console.log(response.response);

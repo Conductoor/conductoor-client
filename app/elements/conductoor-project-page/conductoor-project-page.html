@@ -11,7 +11,7 @@
     <!-- <core-localstorage name="user-selection-backup" value="{{userSelection}}"></core-localstorage> -->
     <core-ajax
       id = "projectAjax"
-      url="http://conductoor-api.herokuapp.com/projects/"
+      url="https://conductoor-api.herokuapp.com/projects/"
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
@@ -108,11 +108,14 @@
           }
           this.project = [];
           this.storage = document.querySelector("#currentProject");
+          this.session = document.querySelector("#session");
         },
         ready: function() {
           document.addEventListener('load-project', (function(e) {
             this.loadProject();
           }).bind(this));
+          this.$.projectAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+
         },
         domReady: function(){
           var ajax = this.$.projectAjax;

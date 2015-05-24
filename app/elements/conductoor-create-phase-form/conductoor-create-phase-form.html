@@ -152,6 +152,7 @@
           this.editPhase = false;
           this.formInvalid = true;
           this.phaseToDelete;
+          this.session = document.querySelector("#session");
 
           this.errors = [
             {"error":"dateWrongOrder", "message":"Start date needs to be before end date.", "show":false},
@@ -160,6 +161,13 @@
             {"error":"hoursError", "message":"Hour needs to be a positive number.", "show":false},
             {"error":"dateWrongFormat", "message":"Select date with the date picker.", "show":false}
           ];
+        },
+        ready: function() {
+          this.$.getSkillList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.postPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getPhaseApiCall.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.deletePhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.putPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
 
         /*
@@ -196,8 +204,8 @@
               this.project.phases = [phase];
             this.$.addSuccess.show();
           }
-          
-          
+
+
         },
         // CREATE ja UPDATE vaatii tällä hetkellä sen että pitää phasen id:llä hakea phase uudestaan
         // jotta saadaan se oikeassa muodossa takaisin (required_skills lähinnä...)
@@ -321,7 +329,7 @@
         // FUNCTIONALITIES
         ////////////////////
         */
-        
+
         mapHoursToSkill: function(event, detail, sender){
           var hours = parseInt(sender.value,10);
           var skill = sender.getAttribute("to-skill");

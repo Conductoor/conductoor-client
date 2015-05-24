@@ -90,11 +90,12 @@
           this.projects = this.projects ||[];
           this.projectToDelete;
           this.session = document.querySelector("#session");
-          console.log(this.session.token);
+
         },
         ready: function() {
           console.log(JSON.stringify({"Authorization": "Token " + this.session.token}));
           this.$.getProjectList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.deleteProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
         },
         handleResponseGetProjects: function(event, response) {
           console.log(response.response);
