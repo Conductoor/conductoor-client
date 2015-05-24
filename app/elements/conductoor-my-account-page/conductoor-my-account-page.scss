@@ -26,3 +26,10 @@
 		color: $text-color;
 	}
 }
+.error{
+	background-color: $negative;
+	color: #fff;
+	font-weight: 700;
+	padding: 7px;
+	display: inline-block;
+}

@@ -129,6 +129,7 @@
           </div>
 
         </div>
+        <paper-toast id="inviteSuccessful" text="Invite sent!"></paper-toast>
 
       </core-header-panel>
     </div>
@@ -153,8 +154,8 @@
 
           this.errors = [
             {"error":"emailError", "message":"Email address is in wrong format.", "show":false},
-            {"error":"firstNameError", "message":"Maximum length of first name is 20 characters.", "show":false},
-            {"error":"lastNameError", "message":"Maximum length of last name is 30 characters.", "show":false},
+            {"error":"firstNameError", "message":"First name is required. Maximum length of first name is 20 characters.", "show":false},
+            {"error":"lastNameError", "message":"Last name is required. Maximum length of last name is 30 characters.", "show":false},
             {"error":"workingHoursError", "message":"Hour needs to be a positive number.", "show":false}
           ];
         },
@@ -188,6 +189,14 @@
           console.log(response.response);
           console.log("Error");
         },
+        handleErrorSendInvite: function(event, response) {
+          console.log(response.response);
+          console.log("Error");
+        },
+        handleResponseSendInvite: function(event, response) {
+          console.log(response.response);
+          this.$.inviteSuccessful.show();
+        },
 
 
         editInfo: function(){
@@ -212,14 +221,6 @@
           ajax.body = JSON.stringify(user);
           ajax.go();
         },
-        handleErrorSendInvite: function(event, response) {
-          console.log(response.response);
-          console.log("Error");
-        },
-        handleResponseSendInvite: function(event, response) {
-          console.log(response.response);
-          console.log("Error");
-        },
 
 
         validateAccountInfoForm: function(e){
@@ -228,12 +229,41 @@
           var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
           var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
           var workingHoursError = _.findWhere(this.errors, {error:"workingHoursError"});
-          var valid = false;
-          // validations here
 
+          emailError.show = false;
+          firstNameError.show = false;
+          lastNameError.show = false;
+          workingHoursError.show = false;
+          
+          var emailValid = false;
+          var firstNameValid = false;
+          var lastNameValid = false;
+          var hoursValid = false;
+
+          var re = /^[^@]+@[^@]+\.[^@]+$/;
+          // validations here
+          if( this.email.match(re) )
+            emailValid = true;
+          else
+            emailError.show = true;
+
+          if( this.firstName )
+            firstNameValid = true;
+          else
+            firstNameError.show = true;
+
+          if( this.lastName )
+            lastNameValid = true;
+          else
+            lastNameError.show = true;
+
+          if( this.workingHours > 0 )
+            hoursValid = true;
+          else
+            workingHoursError.show = true;
 
           // ajax call
-          if(valid)
+          if(emailValid && firstNameValid && lastNameValid && hoursValid)
             this.updateInfo();
         },
         validateInviteForm: function(e){
@@ -243,9 +273,24 @@
           var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
           var valid = true;
           // validations here
-          // näytä errorit --> esim emailError.show = true;
+          var re = /^[^@]+@[^@]+\.[^@]+$/;
+          // validations here
+          if( this.inviteEmail.match(re) )
+            emailValid = true;
+          else
+            emailError.show = true;
 
-          if(valid)
+          if( this.inviteFirstName )
+            firstNameValid = true;
+          else
+            firstNameError.show = true;
+
+          if( this.inviteLastName )
+            lastNameValid = true;
+          else
+            lastNameError.show = true;
+
+          if(emailValid && firstNameValid && lastNameValid)
             this.sendInvite();
         }
       });
