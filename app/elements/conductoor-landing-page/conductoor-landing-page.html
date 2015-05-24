@@ -117,6 +117,7 @@
           this.logginError = false;
           this.session.loggedIn = true;
           this.session.token = res.response.token;
+          this.session.user_id = res.response.user_id;
           console.log(res.response.token);
           ajaxToken = res.response.token;
           this.loggedIn = true;
