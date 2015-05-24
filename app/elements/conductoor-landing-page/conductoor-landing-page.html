@@ -15,6 +15,15 @@
       on-core-response="{{handleResponse}}"
       on-core-error="{{handleError}}">
     </core-ajax>
+    <core-ajax
+      id ="requestBeta"
+      url="https://conductoor-api.herokuapp.com/request-beta/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleBetaRequestResponse}}"
+      core-error="{{handleBetaRequestError}}">
+    </core-ajax>
 
     <div class="nav secondary" layout horizontal center end-justified>
       <div>
@@ -23,8 +32,8 @@
         </template>
         <template if="{{ loggedIn }}">
           <a href="#/list-projects">My Projects</a>
+          <a href="#/help">Help</a>
         </template>
-        <a href="#/help">Help</a>
       </div>
     </div>
 
@@ -62,10 +71,24 @@
     </div>
 
     <div class="section secondary" layout horizontal center-justified>
-      <div flex>
+      <div flex id="requestBetaWrapper">
+        <h2>Want to test out Conductoor?</h2>
+        <h3>Join Beta phase:</h3>
+        
+        <form id="requestBetaForm" on-submit="{{sendEmail}}">
+          <div>
+            <p>Send your email address to us and we will reply with username and password that you use to try out Conductoor.</p>
+            <paper-input-decorator flex two floatingLabel label="Email" isInvalid="{{!$.emailForBetaInput.validity.valid}}">
+              <input id="emailForBetaInput" is="core-input" type="email" value="{{emailForBeta}}">
+            </paper-input-decorator>
+            <button id="submit" type="submit" style="background:transparent;border:none;"><paper-button raised>Join Beta</paper-button></button>
+          </div>
+        </form>
 
       </div>
     </div>
+
+
     <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
       <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
         <template if="{{ logginError}}">
@@ -86,6 +109,8 @@
       </div>
     </core-overlay>
 
+    <paper-toast id="requestSuccessful" text="Request sent!"></paper-toast>
+
   </template>
   <script>
     (function () {
@@ -95,6 +120,7 @@
           this.loggedIn = this.session.loggedIn;
           console.log(this.session);
           this.logginError = false;
+          this.emailForBeta = "";
         },
         openLogin: function() {
           this.$.modalOpen.toggle();
@@ -112,10 +138,34 @@
           );
           ajax.go();
         },
+        sendEmail: function(e){
+          e.preventDefault();
+          if(this.emailForBeta){
+            var ajax = this.$.requestBeta;
+            ajax.body = JSON.stringify(
+              {
+                "email": this.emailForBeta
+              }
+            );
+            ajax.go();
+          }
+        },
+
+
+        handleBetaRequestResponse: function(event, response) {
+          console.log(response.response);
+          this.$.requestSuccessful.show();
+          this.$.requestBetaForm.reset();
+        },
+        handleBetaRequestError: function(event, response) {
+          console.log("Error");
+          console.log(response.response);
+        },
         handleResponse: function(event, res) {
           this.logginError = false;
           this.session.loggedIn = true;
           this.session.token = res.response.token;
+          this.session.user_id = res.response.user_id;
           console.log(res.response.token);
           ajaxToken = res.response.token;
           this.loggedIn = true;
@@ -124,8 +174,8 @@
         handleError: function(event, res) {
           //this.fire('load-project', {msg: 'Load-project event fired'});
           this.logginError = true;
-        },
-        // define element prototype here
+        }
+
       });
     })();
   </script>
