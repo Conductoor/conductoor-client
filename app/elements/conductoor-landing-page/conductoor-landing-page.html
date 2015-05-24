@@ -6,7 +6,15 @@
   <template>
     <link rel="stylesheet" href="conductoor-landing-page.css">
 
-    <user-session session="{{session}}"></user-session>
+    <core-ajax
+      id ="loginAjax"
+      url="https://conductoor-api.herokuapp.com/login/"
+      handleAs="json"
+      method="POST"
+      contentType="application/json"
+      on-core-response="{{handleResponse}}"
+      core-error="{{handleError}}">
+    </core-ajax>
 
     <div class="nav secondary" layout horizontal center end-justified>
       <div>
@@ -33,15 +41,23 @@
     <div class="section default" layout horizontal around-justified>
       <div class="info-box">
         <h3>Visually clear</h3>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis.</p>
+        <p>
+          With mellow colors and clear color grouping Conductoors aims to keep UI simple and clear for
+          you. All the functionalities can be found easily and used with natural intuition.
+        </p>
       </div>
       <div class="info-box">
         <h3>Easy to use</h3>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis, ipsum erat vehicula risus, eu suscipit sem libero nec erat. Aliquam erat volutpat. Sed congue augue vitae neque.</p>
+        <p>
+          Less bullshit more action. Conductoor aims for high efficiency. Fast and easy workflow makes
+          resource allocation easy. Managing project has never been easier.
+        </p>
       </div>
       <div class="info-box">
         <h3>Built with Polymer</h3>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis, ipsum erat.</p>
+        <p>
+        Web Components usher in a new era of web development based on encapsulated and interoperable custom elements that extend HTML itself. Built atop these new standards, Polymer makes it easier and faster to create anything from a button to a complete application across desktop, mobile, and beyond.
+        </p>
       </div>
     </div>
 
@@ -58,7 +74,7 @@
         </paper-input-decorator>
         <h3>Password:</h3>
         <paper-input-decorator id="decorator" label="{{label}}" floatinglabel="{{floatingLabel}}" value="" layout="" vertical="">
-          <input is="core-input" id="inputPassword" committedvalue="{{password}}" placeholder="Input password" aria-label="label">
+          <input is="core-input" type="password" id="inputPassword" committedvalue="{{password}}" placeholder="Input password" aria-label="label">
         </paper-input-decorator>
         <br>
         <paper-button raised on-click="{{login}}">Log in</paper-button>
@@ -82,10 +98,26 @@
           this.$.modalOpen.toggle();
         },
         login: function() {
+          var ajax = this.$.loginAjax;
+          ajax.body = JSON.stringify(
+            {
+              "password": this.$.inputPassword.value,
+              "email": this.$.inputEmail.value
+            }
+          );
+          ajax.go();
+        },
+        handleResponse: function(event, res) {
           this.session.loggedIn = true;
+          this.session.token = res.response.token;
+          console.log(res.response.token);
+          ajaxToken = res.response.token;
           this.loggedIn = true;
           this.$.modalOpen.toggle();
-        }
+        },
+        handleError: function(event, res) {
+          this.fire('load-project', {msg: 'Load-project event fired'});
+        },
         // define element prototype here
       });
     })();

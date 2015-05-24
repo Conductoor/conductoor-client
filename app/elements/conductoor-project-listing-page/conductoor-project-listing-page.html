@@ -10,7 +10,7 @@
       id = "getProjectList"
       auto
       url="https://conductoor-api.herokuapp.com:443/projects/"
-      params=''
+      params=""
       handleAs="json"
       on-core-response="{{handleResponseGetProjects}}"
       core-error="{{handleErrorGetProjects}}">
@@ -89,6 +89,13 @@
         created: function(){
           this.projects = this.projects ||[];
           this.projectToDelete;
+          this.session = document.querySelector("#session");
+          console.log(this.session.token);
+        },
+        ready: function() {
+          // var ajax = this.$.getProjectList;
+          // ajax.headers = JSON.stringify({ "Authorization": "Token asd"} );
+          // ajax.go();
         },
         handleResponseGetProjects: function(event, response) {
           console.log(response.response);

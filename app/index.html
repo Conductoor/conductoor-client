@@ -63,8 +63,8 @@
             // redirect to the login page if not signed in
             if (!this.session.loggedIn && event.detail.path !== '/help' && event.detail.path !== '/') {
               console.log("unauthorized");
-              // event.preventDefault();
-              // this.querySelector('::shadow app-router').go('/');
+              event.preventDefault();
+              this.querySelector('::shadow app-router').go('/');
             }
           }
         });
