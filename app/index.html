@@ -27,9 +27,17 @@
     <core-localstorage id="userSelectionBackup" name="userSelectionBackup"></core-localstorage>
     <core-localstorage id="session" name="session"></core-localstorage>
 
-
     <polymer-element name="conductoor-app">
       <template>
+        <core-ajax
+          id = "sessionAjax"
+          url="https://conductoor-api.herokuapp.com:443/users/1/"
+          params=""
+          handleAs="json"
+          on-core-response="{{handleResponse}}"
+          on-core-error="{{handleError}}">
+        </core-ajax>
+
         <app-router on-state-change="{{stateChange}}">
           <!-- Project page -->
           <app-route path="/project/allocate/:projectId" import="/pages/project-page.html"></app-route>
@@ -62,6 +70,10 @@
         Polymer('conductoor-app', {
           created: function() {
             this.session = document.querySelector("#session");
+            this.ajax = {};
+          },
+          ready: function() {
+            this.ajax = this.$.sessionAjax;
           },
           stateChange: function(event) {
             // redirect to the login page if not signed in
@@ -71,20 +83,40 @@
               window.location.href = "/";
               return;
             }
-            console.log(this.session.value);
+            if (this.ajax && this.session.value) {
+              console.log(this.ajax);
+              console.log(this.session.value);
+              this.ajax.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+              this.ajax.go();
+            }
             try {
               if (event.detail.path !== '/' && event.detail.path !== '/help' && !this.session.value.loggedIn) {
-                alert("Unauthorized! Please log in");
+                console.log(this.session.value.loggedIn);
+                // alert("Unauthorized! Please log in");
                 event.preventDefault();
                 this.querySelector('::shadow app-router').go('/');
               }
             }
             catch(err) {
-              alert("Unauthorized! Please log in");
-              event.preventDefault();
-              this.querySelector('::shadow app-router').go('/');
+              if (!this.session.value.loggedIn) {
+                // alert("Unauthorized! Please log in");
+                event.preventDefault();
+                this.querySelector('::shadow app-router').go('/');
+              }
+            }
+          },
+          handleResponse: function() {
+            console.log("session ok");
+          },
+          handleError: function(event, response) {
+            if (response.response.statusCode === 401) {
+              this.session.value = {};
+              alert("Outdated session. Reloading browser");
+              window.location.href = "/";
+
             }
           }
+
         });
       </script>
     </polymer-element>
