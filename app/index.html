@@ -72,7 +72,14 @@
               return;
             }
             console.log(this.session.value);
-            if (event.detail.path !== '/' && event.detail.path !== '/help' && !this.session.value.loggedIn) {
+            try {
+              if (event.detail.path !== '/' && event.detail.path !== '/help' && !this.session.value.loggedIn) {
+                alert("Unauthorized! Please log in");
+                event.preventDefault();
+                this.querySelector('::shadow app-router').go('/');
+              }
+            }
+            catch(err) {
               alert("Unauthorized! Please log in");
               event.preventDefault();
               this.querySelector('::shadow app-router').go('/');

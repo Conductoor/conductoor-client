@@ -32,6 +32,7 @@
         </template>
         <template if="{{ loggedIn }}">
           <a href="#/list-projects">My Projects</a>
+          <a href="#/my-account">My Account</a>
         </template>
         <a href="#/help">Help</a>
       </div>
@@ -84,9 +85,10 @@
             <button id="submit" type="submit" style="background:transparent;border:none;"><paper-button raised>Join Beta</paper-button></button>
           </div>
         </form>
-
       </div>
+      <br>
     </div>
+    <footer>&copy; Teemu Taskula, Ville Tainio, Ville Toiviainen</footer>
 
 
     <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
@@ -117,7 +119,9 @@
       Polymer({
         created: function() {
           this.session = document.querySelector("#session");
-          this.loggedIn = this.session.value.loggedIn;
+          if (this.session.value) {
+            this.loggedIn = this.session.value.loggedIn;
+          }
           this.logginError = false;
           this.emailForBeta = "";
         },
@@ -162,9 +166,9 @@
         },
         handleResponse: function(event, res) {
           this.logginError = false;
-          this.session.value = {"loggedIn": true, "token": res.response.token};
+          this.session.value = {"loggedIn": true, "token": res.response.token, "user_id": ""};
           // this.session.value.token = res.response.token;
-          this.session.user_id = res.response.user_id;
+          this.session.value.user_id = res.response.user_id;
           console.log(res.response.token);
           ajaxToken = res.response.token;
           this.loggedIn = true;

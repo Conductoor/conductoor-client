@@ -26,3 +26,15 @@
 		color: $text-color;
 	}
 }
+.error{
+	background-color: $negative;
+	color: #fff;
+	font-weight: 700;
+	padding: 7px;
+	display: inline-block;
+}
+#change-password-wrapper{
+	min-width: 400px;
+	margin-top: 15px;
+	text-align: left;
+}
