@@ -68,6 +68,9 @@
     </div>
     <core-overlay id="modalOpen" layered backdrop transition="core-transition-top">
       <div style="background:#fff;padding:16px;border-radius:8px; width: 400px;">
+        <template if="{{ logginError}}">
+          <p style="color: red;">Wrong email or password</p>
+        </template>
         <h2>Email:</h2>
         <paper-input-decorator id="decorator" label="{{label}}" floatinglabel="{{floatingLabel}}" value="" layout="" vertical="">
           <input is="core-input" id="inputEmail" committedvalue="{{email}}" placeholder="Input email" aria-label="label">
@@ -76,6 +79,7 @@
         <paper-input-decorator id="decorator" label="{{label}}" floatinglabel="{{floatingLabel}}" value="" layout="" vertical="">
           <input is="core-input" type="password" id="inputPassword" committedvalue="{{password}}" placeholder="Input password" aria-label="label">
         </paper-input-decorator>
+        <p></p>
         <br>
         <paper-button raised on-click="{{login}}">Log in</paper-button>
         <paper-button raised on-click="{{cancel}}">Cancel</paper-button>
@@ -90,6 +94,7 @@
           this.session = document.querySelector("#session");
           this.loggedIn = this.session.loggedIn;
           console.log(this.session);
+          this.logginError = false;
         },
         openLogin: function() {
           this.$.modalOpen.toggle();
@@ -98,6 +103,7 @@
           this.$.modalOpen.toggle();
         },
         login: function() {
+          this.logginError = true;
           var ajax = this.$.loginAjax;
           ajax.body = JSON.stringify(
             {
@@ -108,6 +114,7 @@
           ajax.go();
         },
         handleResponse: function(event, res) {
+          this.logginError = false;
           this.session.loggedIn = true;
           this.session.token = res.response.token;
           console.log(res.response.token);
@@ -116,7 +123,9 @@
           this.$.modalOpen.toggle();
         },
         handleError: function(event, res) {
-          this.fire('load-project', {msg: 'Load-project event fired'});
+          console.log("lol");
+          //this.fire('load-project', {msg: 'Load-project event fired'});
+          this.logginError = true;
         },
         // define element prototype here
       });
