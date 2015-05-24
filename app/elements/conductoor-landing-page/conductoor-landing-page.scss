@@ -76,6 +76,11 @@ h3{
 		padding: 0;
 	}
 }
+footer{
+	background-color: $secondary;
+	padding: 10px;
+	color: #fff;
+}
 
 @media(max-width: 800px){
 	.section.default{
