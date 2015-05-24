@@ -13,7 +13,7 @@
       method="POST"
       contentType="application/json"
       on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
+      on-core-error="{{handleError}}">
     </core-ajax>
 
     <div class="nav secondary" layout horizontal center end-justified>
@@ -103,7 +103,6 @@
           this.$.modalOpen.toggle();
         },
         login: function() {
-          this.logginError = true;
           var ajax = this.$.loginAjax;
           ajax.body = JSON.stringify(
             {
@@ -123,7 +122,6 @@
           this.$.modalOpen.toggle();
         },
         handleError: function(event, res) {
-          console.log("lol");
           //this.fire('load-project', {msg: 'Load-project event fired'});
           this.logginError = true;
         },

@@ -12,7 +12,7 @@
       method="POST"
       contentType="application/json"
       on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
+      on-core-error="{{handleError}}">
     </core-ajax>
     <core-ajax
       id ="deleteAllocation"
@@ -21,7 +21,7 @@
       method="DELETE"
       contentType="application/json"
       on-core-response="{{handleDeleteResponse}}"
-      core-error="{{handleDeleteError}}">
+      on-core-error="{{handleDeleteError}}">
     </core-ajax>
 
     <div layout vertical fit class="section profile">
@@ -142,8 +142,7 @@
           this.fire('load-project', {msg: 'Load-project event fired'});
         },
         handleDeleteResponse: function(event, res) {
-          console.log(res);
-
+          console.log(res.response);
         },
         handleDeleteError: function(event, res) {
           this.fire('load-project', {msg: 'Load-project event fired'});

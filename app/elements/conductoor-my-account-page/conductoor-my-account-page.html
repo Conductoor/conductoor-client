@@ -14,7 +14,7 @@
       auto
       handleAs="json"
       on-core-response="{{handleResponseGetAccountInfo}}"
-      core-error="{{handleErrorGetAccountInfo}}">
+      on-core-error="{{handleErrorGetAccountInfo}}">
     </core-ajax>
     <core-ajax
       id = "updateAccountInfo"
@@ -22,7 +22,7 @@
       params=""
       handleAs="json"
       on-core-response="{{handleResponseUpdateAccountInfo}}"
-      core-error="{{handleErrorUpdateAccountInfo}}">
+      on-core-error="{{handleErrorUpdateAccountInfo}}">
     </core-ajax> -->
 
     <div layout horizontal fit>
@@ -90,7 +90,7 @@
             </template>
           </div>
 
-          
+
           <div id="invite-wrapper">
             <h2>Invite people</h2>
 

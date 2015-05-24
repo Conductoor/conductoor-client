@@ -13,14 +13,14 @@
       params=''
       handleAs="json"
       on-core-response="{{handleResponse}}"
-      core-error="{{handleError}}">
+      on-core-error="{{handleError}}">
     </core-ajax>
     <core-ajax
       id = "getFreeResources"
       params=''
       handleAs="json"
       on-core-response="{{handleFreeResponse}}"
-      core-error="{{handleFreeError}}">
+      on-core-error="{{handleFreeError}}">
     </core-ajax>
 
     <core-selector selected="0">

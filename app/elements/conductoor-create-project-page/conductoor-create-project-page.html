@@ -12,7 +12,7 @@
       params=''
       handleAs="json"
       on-core-response="{{handleResponseGetProject}}"
-      core-error="{{handleErrorGetProject}}">
+      on-core-error="{{handleErrorGetProject}}">
     </core-ajax>
     <core-ajax
       id ="postProject"
@@ -21,7 +21,7 @@
       method="POST"
       contentType="application/json"
       on-core-response="{{handleResponsePostProject}}"
-      core-error="{{handleErrorPostProject}">
+      on-core-error="{{handleErrorPostProject}">
     </core-ajax>
     <core-ajax
       id ="putProject"
@@ -30,7 +30,7 @@
       method="PUT"
       contentType="application/json"
       on-core-response="{{handleResponsePutProject}}"
-      core-error="{{handleErrorPutProject}}">
+      on-core-error="{{handleErrorPutProject}}">
     </core-ajax>
     <core-scaffold id="core_scaffold">
 
