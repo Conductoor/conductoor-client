@@ -69,7 +69,7 @@
           <div id="account-info">
 
             <div id="error_messages">
-              <template repeat="{{error in errors}}">
+              <template repeat="{{error in accountErrors}}">
                 <template if="{{error.show}}">
                   <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
                 </template>
@@ -114,7 +114,7 @@
             <h2>Change password</h2>
 
             <div id="error_messages">
-              <template repeat="{{error in errors}}">
+              <template repeat="{{error in passwordErrors}}">
                 <template if="{{error.show}}">
                   <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
                 </template>
@@ -138,7 +138,7 @@
             <h2>Invite people</h2>
 
             <div id="error_messages">
-              <template repeat="{{error in errors}}">
+              <template repeat="{{error in inviteErrors}}">
                 <template if="{{error.show}}">
                   <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
                 </template>
@@ -162,6 +162,8 @@
 
         </div>
         <paper-toast id="inviteSuccessful" text="Invite sent!"></paper-toast>
+        <paper-toast id="passSuccessful" text="Password changed"></paper-toast>
+        <paper-toast id="accInfoSuccessful" text="Account information saved"></paper-toast>
 
       </core-header-panel>
     </div>
@@ -187,11 +189,19 @@
           this.newPassword = "";
           this.newPasswordAgain = "";
 
-          this.errors = [
+          this.accountErrors = [
             {"error":"emailError", "message":"Email address is in wrong format.", "show":false},
             {"error":"firstNameError", "message":"First name is required. Maximum length of first name is 20 characters.", "show":false},
             {"error":"lastNameError", "message":"Last name is required. Maximum length of last name is 30 characters.", "show":false},
             {"error":"workingHoursError", "message":"Hour needs to be a positive number.", "show":false}
+          ];
+          this.inviteErrors = [
+            {"error":"emailError", "message":"Email address is in wrong format.", "show":false},
+            {"error":"firstNameError", "message":"First name is required. Maximum length of first name is 20 characters.", "show":false},
+            {"error":"lastNameError", "message":"Last name is required. Maximum length of last name is 30 characters.", "show":false}
+          ];
+          this.passwordErrors = [
+            {"error":"passwordError", "message":"Passwords don't match.", "show":false}
           ];
         },
         ready: function() {
@@ -222,6 +232,7 @@
         handleResponseUpdateAccountInfo: function(event, response){
           console.log(response.response);
           this.edit = false;
+          this.$.accInfoSuccessful.show();
         },
         handleErrorUpdateAccountInfo: function(event, response){
           console.log(response.response);
@@ -237,6 +248,7 @@
         },
         handleResponseChangePassword: function(event, response) {
           console.log(response.response);
+          this.$.passSuccessful.show();
         },
         handleErrorChangePassword: function(event, response) {
           console.log(response.response);
@@ -277,19 +289,20 @@
 
         validateChangePasswordForm: function(e) {
           e.preventDefault();
-          var newPasswordError = _.findWhere(this.errors, {error:"newPasswordError"});
-          var newPasswordAgainError = _.findWhere(this.errors, {error:"newPasswordAgainError"});
-          var valid = true;
+          var passwordError = _.findWhere(this.passwordErrors, {error:"passwordError"});
+          passwordError.show = false;
 
-          if (valid)
+          if( this.newPassword === this.newPasswordAgain )
             this.changePassword();
+          else
+            passwordError.show = true;
         },
         validateAccountInfoForm: function(e){
           e.preventDefault();
-          var emailError = _.findWhere(this.errors, {error:"emailError"});
-          var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
-          var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
-          var workingHoursError = _.findWhere(this.errors, {error:"workingHoursError"});
+          var emailError = _.findWhere(this.accountErrors, {error:"emailError"});
+          var firstNameError = _.findWhere(this.accountErrors, {error:"firstNameError"});
+          var lastNameError = _.findWhere(this.accountErrors, {error:"lastNameError"});
+          var workingHoursError = _.findWhere(this.accountErrors, {error:"workingHoursError"});
 
           emailError.show = false;
           firstNameError.show = false;
@@ -329,9 +342,9 @@
         },
         validateInviteForm: function(e){
           e.preventDefault();
-          var emailError = _.findWhere(this.errors, {error:"emailError"});
-          var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
-          var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
+          var emailError = _.findWhere(this.inviteErrors, {error:"emailError"});
+          var firstNameError = _.findWhere(this.inviteErrors, {error:"firstNameError"});
+          var lastNameError = _.findWhere(this.inviteErrors, {error:"lastNameError"});
           var valid = true;
           // validations here
           var re = /^[^@]+@[^@]+\.[^@]+$/;
