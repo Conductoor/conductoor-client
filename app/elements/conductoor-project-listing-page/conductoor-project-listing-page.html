@@ -36,7 +36,7 @@
               <core-menu>
                   <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
-                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+                  <paper-item noink><a href="#/logout">Logout</a></paper-item>
               </core-menu>
             </core-dropdown>
           </core-menu-button>
@@ -93,9 +93,9 @@
 
         },
         ready: function() {
-          console.log(JSON.stringify({"Authorization": "Token " + this.session.token}));
-          this.$.getProjectList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.deleteProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          console.log(JSON.stringify({"Authorization": "Token " + this.session.value.token}));
+          this.$.getProjectList.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.deleteProject.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
         handleResponseGetProjects: function(event, response) {
           console.log(response.response);

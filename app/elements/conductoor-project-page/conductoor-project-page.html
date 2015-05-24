@@ -30,7 +30,7 @@
               <core-menu>
                   <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
-                  <!-- <paper-item noink><a href="#Logout">Logout</a></paper-item> -->
+                  <paper-item noink><a href="#/logout">Logout</a></paper-item>
               </core-menu>
             </core-dropdown>
         </core-menu-button>
@@ -41,7 +41,7 @@
       <core-header-panel mode="seamed" id="core_header_panel" class="left-panel" navigation flex>
 
         <core-toolbar tool>
-          <a flex id="app-name" href="/list-projects">Conductoor</a>
+          <a flex id="app-name" href="#/list-projects">Conductoor</a>
         </core-toolbar>
 
         <!-- Phases -->
@@ -114,7 +114,7 @@
           document.addEventListener('load-project', (function(e) {
             this.loadProject();
           }).bind(this));
-          this.$.projectAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.projectAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
 
         },
         domReady: function(){

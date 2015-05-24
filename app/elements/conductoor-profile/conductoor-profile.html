@@ -17,7 +17,6 @@
     <core-ajax
       id ="deleteAllocation"
       url="https://conductoor-api.herokuapp.com/allocations/"
-      handleAs="json"
       method="DELETE"
       contentType="application/json"
       on-core-response="{{handleDeleteResponse}}"
@@ -89,8 +88,8 @@
           document.addEventListener('person-selected', (function(e) {
             this.listHours();
           }).bind(this));
-          this.$.addEmployeeAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.deleteAllocation.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.addEmployeeAjax.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.deleteAllocation.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
         addEmployee: function() {
           var ajax, hours;
@@ -135,6 +134,7 @@
         handleResponse: function(event, res) {
           console.dir(res);
           this.allocations.push(res.response);
+          this.fire('add-icon', {resourceId: res.response.user});
           //
           //TODO
         },
@@ -142,7 +142,10 @@
           this.fire('load-project', {msg: 'Load-project event fired'});
         },
         handleDeleteResponse: function(event, res) {
-          console.log(res.response);
+          if (!this.allocations.length) {
+            console.log(this.allocations);
+            this.fire('remove-icon', {resourceId: this.userSelection.selectedPerson.id});
+          }
         },
         handleDeleteError: function(event, res) {
           this.fire('load-project', {msg: 'Load-project event fired'});

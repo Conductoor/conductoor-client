@@ -52,11 +52,19 @@
           document.addEventListener('load-resource', (function(e) {
             this.loadResources();
           }).bind(this));
+          document.addEventListener('add-icon', (function(e) {
+            console.dir(e);
+            this.addIcon(e.detail.resourceId);
+          }).bind(this));
+          document.addEventListener('remove-icon', (function(e) {
+            console.dir(e);
+            this.removeIcon(e.detail.resourceId);
+          }).bind(this));
           this.session = document.querySelector("#session");
         },
         ready: function() {
-          this.$.getResources.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.getFreeResources.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getResources.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.getFreeResources.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
         loadFree: function() {
           var ajax = this.$.getFreeResources;
@@ -100,6 +108,24 @@
         selectPerson: function(event, detail, sender) {
           this.userSelection.selectedPerson = sender.templateInstance.model.resource;
           this.fire('person-selected', {msg: 'person-selected'});
+        },
+        addIcon: function(resourceId) {
+          console.log(resourceId);
+          for (var i=0; i<this.resources.length; i++) {
+            if (this.resources[i].id===resourceId) {
+              this.resources[i].phase_id = this.userSelection.phase.id;
+              this.resources[i].free_now = false;
+            }
+          }
+        },
+        removeIcon: function(resourceId) {
+          console.log(resourceId);
+          for (var i=0; i<this.resources.length; i++) {
+            if (this.resources[i].id===resourceId) {
+              this.resources[i].phase_id = "";
+              this.resources[i].free_now = true;
+            }
+          }
         }
       });
     })();

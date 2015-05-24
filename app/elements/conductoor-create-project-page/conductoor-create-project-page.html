@@ -43,7 +43,7 @@
               <core-menu>
                   <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
-                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+                  <paper-item noink><a href="#/logout">Logout</a></paper-item>
               </core-menu>
             </core-dropdown>
         </core-menu-button>
@@ -113,9 +113,9 @@
           this.currentPhase = this.currentPhase || null;
           this.projectId = this.projectId;
 
-          this.$.getProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.postProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.putProject.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getProject.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.postProject.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.putProject.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
         domReady: function(){
           // tässä kohtaa app-routerin url parametri initialisoituu

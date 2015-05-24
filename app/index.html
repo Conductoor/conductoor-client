@@ -49,6 +49,9 @@
           <!-- My account page -->
           <app-route path="/my-account" import="/pages/my-account-page.html"></app-route>
 
+          <app-route path="logout"></app-route>
+
+
           <!-- matches using a wildcard -->
           <app-route path="*" import="/pages/landing-page.html"></app-route>
 
@@ -62,7 +65,14 @@
           },
           stateChange: function(event) {
             // redirect to the login page if not signed in
-            if (!this.session.loggedIn && event.detail.path !== '/' && event.detail.path !== '/help' ) {
+            console.log(event.detail.path);
+            if (event.detail.path === '/logout') {
+              this.session.value = {};
+              window.location.href = "/";
+              return;
+            }
+            console.log(this.session.value);
+            if (event.detail.path !== '/' && event.detail.path !== '/help' && !this.session.value.loggedIn) {
               alert("Unauthorized! Please log in");
               event.preventDefault();
               this.querySelector('::shadow app-router').go('/');

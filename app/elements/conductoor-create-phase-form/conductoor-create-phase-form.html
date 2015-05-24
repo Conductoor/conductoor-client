@@ -163,11 +163,11 @@
           ];
         },
         ready: function() {
-          this.$.getSkillList.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.postPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.deletePhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.getPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.putPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getSkillList.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.postPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.deletePhase.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.getPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.putPhase.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
 
         /*

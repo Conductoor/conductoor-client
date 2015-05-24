@@ -17,9 +17,15 @@
             <core-icon-button icon="more-vert"></core-icon-button>
             <core-dropdown halign="right" class="dropdown" layered>
               <core-menu>
-                  <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
+                  <template if="{{ loggedIn }}">
+                    <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
+                    <paper-item noink><a href="#/logout">Logout</a></paper-item>
+                  </template>
+                  <template if="{{  !loggedIn }}">
+                    <paper-item noink><a href="#/">Home</a></paper-item>
+                  </template>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
-                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+
               </core-menu>
             </core-dropdown>
         </core-menu-button>
@@ -147,6 +153,8 @@
     (function () {
       Polymer({
         created: function(){
+          this.session = document.querySelector("#session");
+          this.loggedIn = this.session.loggedIn;
 
         },
         changeSection: function(event, detail, sender) {

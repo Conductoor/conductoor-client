@@ -48,7 +48,7 @@
               <core-menu>
                   <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
                   <paper-item noink><a href="#/help">Help</a></paper-item>
-                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+                  <paper-item noink><a href="#/logout">Logout</a></paper-item>
               </core-menu>
             </core-dropdown>
           </core-menu-button>
@@ -159,13 +159,13 @@
           ];
         },
         ready: function() {
-          this.$.getAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
-          this.$.updateAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.getAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
+          this.$.updateAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
 
           this.$.getAccountInfo.url = "https://conductoor-api.herokuapp.com:443/users/" + this.session.user_id + '/';
           this.$.updateAccountInfo.url = "https://conductoor-api.herokuapp.com:443/users/" + this.session.user_id + '/';
 
-          this.$.sendInvite.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          this.$.sendInvite.headers = JSON.stringify({"Authorization": "Token " + this.session.value.token});
         },
 
 

@@ -32,8 +32,8 @@
         </template>
         <template if="{{ loggedIn }}">
           <a href="#/list-projects">My Projects</a>
-          <a href="#/help">Help</a>
         </template>
+        <a href="#/help">Help</a>
       </div>
     </div>
 
@@ -74,7 +74,7 @@
       <div flex id="requestBetaWrapper">
         <h2>Want to test out Conductoor?</h2>
         <h3>Join Beta phase:</h3>
-        
+
         <form id="requestBetaForm" on-submit="{{sendEmail}}">
           <div>
             <p>Send your email address to us and we will reply with username and password that you use to try out Conductoor.</p>
@@ -117,8 +117,7 @@
       Polymer({
         created: function() {
           this.session = document.querySelector("#session");
-          this.loggedIn = this.session.loggedIn;
-          console.log(this.session);
+          this.loggedIn = this.session.value.loggedIn;
           this.logginError = false;
           this.emailForBeta = "";
         },
@@ -163,13 +162,14 @@
         },
         handleResponse: function(event, res) {
           this.logginError = false;
-          this.session.loggedIn = true;
-          this.session.token = res.response.token;
+          this.session.value = {"loggedIn": true, "token": res.response.token};
+          // this.session.value.token = res.response.token;
           this.session.user_id = res.response.user_id;
           console.log(res.response.token);
           ajaxToken = res.response.token;
           this.loggedIn = true;
           this.$.modalOpen.toggle();
+          window.location.href = "/#/list-projects";
         },
         handleError: function(event, res) {
           //this.fire('load-project', {msg: 'Load-project event fired'});
