@@ -1,0 +1,28 @@
+@import "../../styles/palette";
+
+:host {
+  display: block;
+}
+#account-wrapper{
+	padding-bottom: 30px;
+}
+#account-info{
+	min-width: 400px;
+	border-top: 4px solid $secondary;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#invite-wrapper{
+	min-width: 400px;
+	margin-top: 15px;
+	text-align: left;
+}
+.info-row{
+	width: 100%;
+	border-bottom: 1px solid #000;
+	margin-bottom: 10px;
+
+	p{
+		color: $text-color;
+	}
+}

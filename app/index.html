@@ -48,6 +48,9 @@
           <!-- Help page -->
           <app-route path="/help" import="/pages/help-page.html"></app-route>
 
+          <!-- My account page -->
+          <app-route path="/my-account" import="/pages/my-account-page.html"></app-route>
+
           <!-- matches using a wildcard -->
           <app-route path="*" import="/pages/landing-page.html" bindRouter></app-route>
 
@@ -61,11 +64,11 @@
           },
           stateChange: function(event) {
             // redirect to the login page if not signed in
-            if (!this.session.loggedIn && event.detail.path !== '/help' && event.detail.path !== '/') {
-              console.log("unauthorized");
-              event.preventDefault();
-              this.querySelector('::shadow app-router').go('/');
-            }
+            // if (!this.session.loggedIn && event.detail.path !== '/') {
+            //   console.log("unauthorized");
+            //   event.preventDefault();
+            //   this.querySelector('::shadow app-router').go('/');
+            // }
           }
         });
       </script>

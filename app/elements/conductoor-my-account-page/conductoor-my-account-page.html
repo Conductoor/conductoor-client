@@ -1,0 +1,216 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<polymer-element name="conductoor-my-account-page" attributes="">
+  <template>
+    <link rel="stylesheet" href="conductoor-my-account-page.css">
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="../../styles/main.css">
+    <!-- endbuild-->
+
+    <!-- <core-ajax
+      id = "getAccountInfo"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=""
+      auto
+      handleAs="json"
+      on-core-response="{{handleResponseGetAccountInfo}}"
+      core-error="{{handleErrorGetAccountInfo}}">
+    </core-ajax>
+    <core-ajax
+      id = "updateAccountInfo"
+      url="https://conductoor-api.herokuapp.com:443/projects/"
+      params=""
+      handleAs="json"
+      on-core-response="{{handleResponseUpdateAccountInfo}}"
+      core-error="{{handleErrorUpdateAccountInfo}}">
+    </core-ajax> -->
+
+    <div layout horizontal fit>
+      <core-header-panel mode="seamed" id="core_header_panel" flex relative>
+
+        <core-toolbar tool>
+        <span flex id="app-name">Conductoor</span>
+
+          <core-menu-button>
+            <core-icon-button icon="more-vert"></core-icon-button>
+            <core-dropdown halign="right" class="dropdown" layered>
+              <core-menu>
+                  <paper-item noink><a href="#/list-projects">My Projects</a></paper-item>
+                  <paper-item noink><a href="#/help">Help</a></paper-item>
+                  <paper-item noink><a href="#logout">Logout</a></paper-item>
+              </core-menu>
+            </core-dropdown>
+          </core-menu-button>
+
+        </core-toolbar>
+
+        <div vertical layout fit center id="account-wrapper">
+          <h1>My Account</h1>
+          <div id="account-info">
+
+            <div id="error_messages">
+              <template repeat="{{error in errors}}">
+                <template if="{{error.show}}">
+                  <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
+                </template>
+              </template>
+            </div>
+
+            <template if="{{!edit}}">
+              <div>
+                <div class="info-row"><label>Email:</label><p>{{email}}</p></div>
+                <div class="info-row"><label>First name:</label><p>{{firstName}}</p></div>
+                <div class="info-row"><label>Last name:</label><p>{{lastName}}</p></div>
+                <div class="info-row"><label>Working hours:</label><p>{{workingHours}}</p></div>
+              </div>
+            </template>
+            <br>
+            <template if="{{!edit}}">
+              <paper-button raised on-click="{{editInfo}}">Edit</paper-button>
+            </template>
+
+            <template if="{{edit}}">
+              <form id="accountInfoForm" on-submit="{{validateAccountInfoForm}}">
+                <paper-input-decorator flex>
+                  <label>Email:</label><input is="core-input" type="email" required value="{{email}}"></input>
+                </paper-input-decorator>
+                <paper-input-decorator flex>
+                  <label>First name:</label><input is="core-input" type="text" maxlength="20" required value="{{firstName}}"></input>
+                </paper-input-decorator>
+                <paper-input-decorator flex>
+                  <label>Last name:</label><input is="core-input" type="text" maxlength="30" required value="{{lastName}}"></input>
+                </paper-input-decorator>
+                <paper-input-decorator flex>
+                  <label>Working hours:</label><input is="core-input" type="number" min="0" required on-input="{{validateInput}}" value="{{workingHours}}"></input>
+                </paper-input-decorator>
+                <br>
+                <button id="submit" type="submit" style="background:transparent;border:none;"><paper-button raised>Save</paper-button></button>
+                <paper-button on-click="{{resetAccountInfo}}" raised>Reset</paper-button>
+              </form>
+            </template>
+          </div>
+
+          
+          <div id="invite-wrapper">
+            <h2>Invite people</h2>
+
+            <div id="error_messages">
+              <template repeat="{{error in errors}}">
+                <template if="{{error.show}}">
+                  <div class="error" visible?="{{!error.show}}">{{error.message}}</div>
+                </template>
+              </template>
+            </div>
+
+            <form id="inviteForm" on-submit="{{validateInviteForm}}">
+              <paper-input-decorator flex>
+                <label>Email:</label><input is="core-input" type="email" required value="{{inviteEmail}}"></input>
+              </paper-input-decorator>
+              <paper-input-decorator flex>
+                <label>First name:</label><input is="core-input" type="text" maxlength="20"required value="{{inviteFirstName}}"></input>
+              </paper-input-decorator>
+              <paper-input-decorator flex>
+                <label>Last name:</label><input is="core-input" type="text" maxlength="30" required value="{{inviteLastName}}"></input>
+              </paper-input-decorator>
+
+              <button id="submit" type="submit" style="background:transparent;border:none;"><paper-button raised>Invite</paper-button></button>
+            </form>
+          </div>
+
+        </div>
+
+      </core-header-panel>
+    </div>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+        created: function(){
+          this.edit = false;
+          this.session = document.querySelector("#session");
+
+          this.email = this.email || "jee@jee.com";
+          this.firstName = this.firstName || "jee";
+          this.lastName = this.lastName || "jeejee";
+          this.workingHours = this.workingHours || 0;
+
+          this.inviteEmail = "";
+          this.inviteFirstName = "";
+          this.inviteLastName = "";
+
+          this.errors = [
+            {"error":"emailError", "message":"Email address is in wrong format.", "show":false},
+            {"error":"firstNameError", "message":"Maximum length of first name is 20 characters.", "show":false},
+            {"error":"lastNameError", "message":"Maximum length of last name is 30 characters.", "show":false},
+            {"error":"workingHoursError", "message":"Hour needs to be a positive number.", "show":false}
+          ];
+        },
+        ready: function() {
+          // console.log(JSON.stringify({"Authorization": "Token " + this.session.token}));
+          // this.$.getAccountInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+          // this.$.updateAccounInfo.headers = JSON.stringify({"Authorization": "Token " + this.session.token});
+        },
+
+
+        handleResponseGetAccountInfo: function(event, response){
+          console.log(response.response);
+        },
+        handleErrorGetAccountInfo: function(event, response){
+          console.log(response.response);
+          console.log("Error");
+        },
+        handleResponseUpdateAccountInfo: function(event, response){
+          console.log(response.response);
+          this.edit = false;
+        },
+        handleErrorUpdateAccountInfo: function(event, response){
+          console.log(response.response);
+          console.log("Error");
+        },
+
+
+        editInfo: function(){
+          this.edit = true;
+        },
+        updateInfo: function(){
+          // make ajax call to update account info
+        },
+        resetAccountInfo: function(){
+          this.shadowRoot.querySelector("#accountInfoForm").reset();
+          this.edit = false;
+        },
+        sendInvite: function(){
+
+        },
+
+
+        validateAccountInfoForm: function(){
+          var emailError = _.findWhere(this.errors, {error:"emailError"});
+          var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
+          var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
+          var workingHoursError = _.findWhere(this.errors, {error:"workingHoursError"});
+          var valid = false;
+          // validations here
+
+
+          // ajax call
+          if(valid)
+            this.updateInfo();
+        },
+        validateInviteForm: function(){
+          var emailError = _.findWhere(this.errors, {error:"emailError"});
+          var firstNameError = _.findWhere(this.errors, {error:"firstNameError"});
+          var lastNameError = _.findWhere(this.errors, {error:"lastNameError"});
+          var valid = false;
+          // validations here
+          // näytä errorit --> esim emailError.show = true;
+
+          if(valid)
+            this.sendInvite();
+        }
+      });
+    })();
+  </script>
+</polymer-element>
