@@ -37,7 +37,7 @@
         </div>
       </div>
       <div flex one relative class="profile-skills">
-        <p class="skill-header">Main Skills: {{userSelection.selectedPerson.available_hours}}</p>
+        <p class="skill-header">Main Skills:</p>
         <div horizontal layout >
           <div flex>
             <ul class="skill-list">
@@ -55,13 +55,13 @@
             <div flex class="hours">
               Hours: {{allocation.hours}}
             </div>
-            <core-icon title="Remove allocation" allocationId="{{allocation.id}}" index="{{index}}" on-click="{{removeAllocation}}" icon="clear"></core-icon>
+            <core-icon title="Remove allocation" allocationId="{{allocation.id}}" index="{{index}}" hours="{{allocation.hours}}" on-click="{{removeAllocation}}" icon="clear"></core-icon>
             </li>
           </template>
         </ul>
       </div>
       <div class="allocate-hours" layout horizontal>
-        <paper-input-decorator flex label="Allocation hours" floatinglabel="" error="Input a positive number!" autovalidate="" layout="" vertical="" class="invalid">
+        <paper-input-decorator flex label="{{userSelection.selectedPerson.available_hours}} free hours to allocate" floatinglabel="" error="Input a positive number!" autovalidate="" layout="" vertical="" class="invalid">
           <input is="core-input" id="allocatedHours" required="" type="number" min="0" placeholder="required" aria-label="required">
         </paper-input-decorator>
         </div>
@@ -104,6 +104,7 @@
               }
             );
             this.userSelection.selectedSkill.as.hours += parseInt(hours);
+            this.userSelection.selectedPerson.available_hours -= parseInt(hours);
             ajax.go();
           }
           else {
@@ -123,7 +124,10 @@
           var ajax = this.$.deleteAllocation;
           ajax.url = "https://conductoor-api.herokuapp.com/allocations/" + sender.attributes.allocationId.value + "/";
           ajax.go();
+          // update user data values
           this.allocations.splice(sender.attributes.index.value, 1);
+          this.userSelection.selectedSkill.as.hours -= parseInt(sender.attributes.hours.value);
+          this.userSelection.selectedPerson.available_hours += parseInt(sender.attributes.hours.value);
         },
         handleResponse: function(event, res) {
           console.dir(res);
