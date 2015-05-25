@@ -130,12 +130,12 @@
         },
         editProject: function(event, detail, sender){
           var projectId = sender.getAttribute("projectId");
-          window.location.href = "/#/project/edit/"+projectId;
+          window.location.href = "/#/project/edit/"+projectId +"/";
         },
         allocateResources: function(event, detail, sender) {
           var projectId = sender.getAttribute("projectId");
           console.log(projectId);
-          window.location.href = "/#/project/allocate/"+ projectId;
+          window.location.href = "/#/project/allocate/"+ projectId + "/";
         },
         newProject: function(){
           window.location.href = "/#/project/create";
