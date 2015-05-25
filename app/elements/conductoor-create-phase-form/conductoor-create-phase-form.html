@@ -251,7 +251,7 @@
 
         getPhaseApiCall: function(phaseid) {
           var ajax = this.$.getPhase;
-          ajax.url = "https://conductoor-api.herokuapp.com:443/phases/"+phaseid;
+          ajax.url = "https://conductoor-api.herokuapp.com:443/phases/"+ phaseid +"/";
           ajax.go();
         },
         addPhaseApiCall: function(phase) {
