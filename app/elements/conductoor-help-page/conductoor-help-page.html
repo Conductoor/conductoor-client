@@ -155,7 +155,7 @@
       Polymer({
         created: function(){
           this.session = document.querySelector("#session");
-          this.loggedIn = this.session.loggedIn;
+          this.loggedIn = this.session.value.loggedIn;
 
         },
         changeSection: function(event, detail, sender) {
